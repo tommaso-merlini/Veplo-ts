@@ -1,11 +1,10 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
+
 import apolloserver from "../apollo/apolloserver";
 import chalk from "chalk";
 
 const app = express();
 const port = process.env.PORT;
-const prisma = new PrismaClient();
 
 async function startServer() {
   await apolloserver.start();

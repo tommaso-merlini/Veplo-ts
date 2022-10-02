@@ -10,8 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
+model Product {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  title    String
-  body     String
+  name     String
+  price    Float
+  colors   String[]
+  sizes    String[]
+  description   String?
 }
+

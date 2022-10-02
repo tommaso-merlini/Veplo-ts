@@ -1,16 +1,9 @@
-//=============/Apollo/=============//
 import { ApolloServer } from "apollo-server-express";
 import depthLimit from "graphql-depth-limit";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "../src/graphQL/typeDefs";
 import resolvers from "../src/graphQL/resolvers";
-
-const context = ({ req }: { req: Request }) => {
-  return {
-    req,
-    resolvers,
-  }; //* context variables for apollo
-};
+import { context } from "./context";
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
