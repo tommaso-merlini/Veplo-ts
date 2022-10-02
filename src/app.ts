@@ -1,21 +1,25 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import apolloserver from "../apollo/apolloserver";
+import chalk from "chalk";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 const prisma = new PrismaClient();
 
-prisma.post.create({
-  data: {
-    title: "2",
-    body: "2",
-  },
-});
+async function startServer() {
+  await apolloserver.start();
+  await apolloserver.applyMiddleware({ app });
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+  app.get("/", (req, res) => {
+    res.send("Hello World");
+  });
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
-});
+  app.listen(port, () => {
+    console.log(
+      chalk.bgGreen.black(`Express is listening at http://localhost:${port}`)
+    );
+  });
+}
+
+startServer();
