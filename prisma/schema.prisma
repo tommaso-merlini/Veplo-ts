@@ -10,12 +10,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  price    Float
-  colors   String[]
-  sizes    String[]
-  description   String?
+type Location {
+  type String
+  coordinates Float[]
 }
+
+
+model Product {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  price         Float
+  colors        String[]
+  sizes         String[] //EX: ["xl (50)", "s(38)"]
+  category      String //EX: "Giacca"
+  types         String[] //EX: ["In flanella", "in pelle", "di pile"]
+  genders       String[] //EX: ["F", "M"]
+  brand         String
+  location      Location
+  descritipon   String?
+}
+
+//{
+//  "mappings": {
+//    "dynamic": false,
+//    "fields": {
+//       "location": {
+//         "type": "geo"
+//       },
+//       "name": {
+//         "analyzer": "lucene.italian",
+//         "type": "string"
+//       }
+//     }
+//   }
+// }
 
