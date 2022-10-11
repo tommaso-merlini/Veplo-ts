@@ -5,7 +5,10 @@ import typeDefs from "../src/graphQL/typeDefs";
 import resolvers from "../src/graphQL/resolvers";
 import { context } from "./context";
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
 
 const apolloserver = new ApolloServer({
   schema,
