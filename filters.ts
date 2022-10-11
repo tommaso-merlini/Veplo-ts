@@ -5,8 +5,6 @@ size:
     - 30-50 (scarpe) -> shoes
 ***/
 
-import { printSourceLocation } from "graphql";
-
 /*SITO: 
   https://www.blitzresults.com/it/abbigliamento-donna/
   https://www.zalando-prive.it/sizehelper/women/measure/#/

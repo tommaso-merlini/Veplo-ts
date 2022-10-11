@@ -11,23 +11,64 @@ datasource db {
 }
 
 type Location {
-  type String
+  type        String
   coordinates Float[]
 }
 
+//HOW THE WEEK IS ORGANIZED
+// {
+//   giorno: lunedi,
+//   orario: {  
+//     apertura,
+//     chiusura
+//   }
+// }
+
+type Schedule {
+  opening  DateTime
+  closing   DateTime
+
+}
+
+type Day {
+  name String
+  schedule Schedule
+}
+
+type Week {
+  monday      Day
+  tuesday     Day
+  wednesday   Day
+  thursday    Day
+  friday      Day
+  saturday    Day
+  sunday      Day
+}
 
 model Product {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  price         Float
-  colors        String[]
-  sizes         String[] //EX: ["xl (50)", "s(38)"]
-  category      String //EX: "Giacca"
-  types         String[] //EX: ["In flanella", "in pelle", "di pile"]
-  genders       String[] //EX: ["F", "M"]
-  brand         String
-  location      Location
-  descritipon   String?
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  price       Float
+  colors      String[]
+  sizes       String[] //EX: ["xl (50)", "s(38)"]
+  category    String //EX: "Giacca"
+  types       String[] //EX: ["In flanella", "in pelle", "di pile"]
+  genders     String[] //EX: ["F", "M"]
+  brand       String
+  location    Location
+  descritipon String?
+  shop        Shop    @relation(fields: [shopId], references: [id])
+  shopId      String  @db.ObjectId
+}
+
+model Shop {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  location    Location
+  week        Week?
+  street      String
+  status      String
+  products    Product[]
 }
 
 //{
@@ -44,4 +85,3 @@ model Product {
 //     }
 //   }
 // }
-
