@@ -7,7 +7,14 @@ async function main() {
       data: {
         name: `name Product${i}`,
         price: i,
+        sizes: [`${i}`],
+        category: `${i}`,
+        types: [`${i}`],
         colors: [`colors Product${i}`],
+        location: {
+          type: "Point",
+          coordinates: [42.562309, 12.64576],
+        },
       },
     });
   }
