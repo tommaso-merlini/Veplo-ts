@@ -28,6 +28,36 @@ const typeDefs = gql`
     brand: String
   }
 
+  type Schedule {
+    opening: String!
+    closing: String!
+  }
+
+  type Day {
+    name: String!
+    schedule: Schedule!
+  }
+
+  type Week {
+    monday: Day!
+    tuesday: Day!
+    wednesday: Day!
+    thursday: Day!
+    friday: Day!
+    saturday: Day!
+    sunday: Day!
+  }
+
+  type Shop {
+    id: ID
+    name: String
+    location: Location
+    week: Week
+    street: String
+    status: String
+    products: [Product!]
+  }
+
   type Query {
     prova: String!
 
@@ -39,6 +69,8 @@ const typeDefs = gql`
       range: Float!
       filters: Filters
     ): [Product!]
+
+    shop(id: ID!): Shop
   }
 `;
 

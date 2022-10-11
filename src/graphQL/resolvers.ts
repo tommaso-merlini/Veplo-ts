@@ -1,5 +1,6 @@
 import { Context } from "../../apollo/context";
 import { GraphQLError } from "graphql";
+import { ProvidedRequiredArgumentsOnDirectivesRule } from "graphql/validation/rules/ProvidedRequiredArgumentsRule";
 
 const change_IdToId = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -14,6 +15,7 @@ const resolvers = {
       return "ciao";
     },
     product: async (_, { id }, { prisma }: Context) => {
+      console.log(id);
       const product = await prisma.product.findFirst({
         where: {
           id,
@@ -68,6 +70,27 @@ const resolvers = {
         console.log(e.message);
         throw new GraphQLError(e.message);
       }
+    },
+    shop: async (_, { id }, { prisma }: Context) => {
+      const shop = await prisma.shop.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      return shop;
+    },
+  },
+
+  Shop: {
+    products: async (shop, _, { prisma }: Context) => {
+      const products = await prisma.product.findMany({
+        where: {
+          shopId: shop.id,
+        },
+      });
+
+      return products;
     },
   },
 };

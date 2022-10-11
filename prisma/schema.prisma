@@ -25,8 +25,8 @@ type Location {
 // }
 
 type Schedule {
-  opening  DateTime
-  closing   DateTime
+  opening String 
+  closing   String
 
 }
 
@@ -57,7 +57,6 @@ model Product {
   brand       String
   location    Location
   descritipon String?
-  shop        Shop    @relation(fields: [shopId], references: [id])
   shopId      String  @db.ObjectId
 }
 
@@ -68,7 +67,6 @@ model Shop {
   week        Week?
   street      String
   status      String
-  products    Product[]
 }
 
 //{
