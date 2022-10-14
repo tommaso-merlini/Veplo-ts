@@ -17,15 +17,8 @@ const typeDefs = gql`
     genders: [String!]
     brand: String
     location: Location
+    shopId: ID!
     description: String
-    #//TODO query SHOP all'interno della query PRODUCT
-  }
-
-  input Filters {
-    colors: [String!]
-    sizes: [String!]
-    genders: [String!]
-    brand: String
   }
 
   type Schedule {
@@ -58,6 +51,27 @@ const typeDefs = gql`
     products: [Product!]
   }
 
+  input Filters {
+    colors: [String!]
+    sizes: [String!]
+    genders: [String!]
+    brand: String
+  }
+
+  input ProductInput {
+    id: ID!
+    name: String!
+    price: Float!
+    colors: [String!]!
+    sizes: [String!]!
+    category: String!
+    types: [String!]!
+    genders: [String!]!
+    brand: String!
+    shopId: ID!
+    description: String
+  }
+
   type Query {
     prova: String!
 
@@ -71,6 +85,10 @@ const typeDefs = gql`
     ): [Product!]
 
     shop(id: ID!): Shop
+  }
+
+  type Mutation {
+    createProduct(id: ID!, options: ProductInput!): Boolean!
   }
 `;
 

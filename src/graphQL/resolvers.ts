@@ -2,10 +2,14 @@ import { Context } from "../../apollo/context";
 import { GraphQLError } from "graphql";
 import { ProvidedRequiredArgumentsOnDirectivesRule } from "graphql/validation/rules/ProvidedRequiredArgumentsRule";
 
-const change_IdToId = (products) => {
+const fixIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
+    //change _id to id
     products[i].id = products[i]["_id"]["$oid"];
     delete products[i]._id;
+
+    //delete the $oid object
+    products[i].shopId = products[i].shopId.$oid;
   }
 };
 
@@ -25,7 +29,7 @@ const resolvers = {
     },
     products: async (_, { name, coordinates, range }, { prisma }: Context) => {
       try {
-        const products: any = await prisma.product.aggregateRaw({
+        let products: any = await prisma.product.aggregateRaw({
           pipeline: [
             {
               $search: {
@@ -63,7 +67,7 @@ const resolvers = {
             // },
           ],
         });
-        change_IdToId(products);
+        fixIdNaming(products);
 
         return products;
       } catch (e: any) {
