@@ -1,6 +1,8 @@
 import { Context } from "../../apollo/context";
 import { GraphQLError } from "graphql";
 import { ProvidedRequiredArgumentsOnDirectivesRule } from "graphql/validation/rules/ProvidedRequiredArgumentsRule";
+import { constants } from "../../constants/constants";
+import checkConstants from "../controllers/checkConstants";
 
 const fixIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -83,6 +85,37 @@ const resolvers = {
       });
 
       return shop;
+    },
+  },
+
+  Mutation: {
+    createProduct: async (_, { shopId, options }, { prisma }: Context) => {
+      try {
+        //TODO check the integrity of the filter using the constants
+        checkConstants(options, "product");
+
+        const shop = await prisma.shop.findFirst({
+          where: {
+            id: shopId,
+          },
+        });
+
+        //TODO get the id from the jwt and check if shopId = jwt.id
+
+        const newProduct = await prisma.product.create({
+          data: {
+            ...options,
+            location: {
+              type: "Point",
+              coordinates: shop.location.coordinates,
+            },
+            shopId: shopId,
+          },
+        });
+      } catch (e: any) {
+        throw new GraphQLError(e.message);
+      }
+      return true;
     },
   },
 
