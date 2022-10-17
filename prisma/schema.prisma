@@ -53,10 +53,10 @@ model Product {
   sizes       String[] //EX: ["xl (50)", "s(38)"]
   category    String //EX: "Giacca"
   types       String[] //EX: ["In flanella", "in pelle", "di pile"]
-  genders     String[] //EX: ["F", "M"]
+  gender      String //EX: ["F", "M"]
   brand       String
   location    Location
-  descritipon String?
+  description String?
   shopId      String  @db.ObjectId
 }
 
