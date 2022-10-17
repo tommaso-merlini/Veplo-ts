@@ -14,7 +14,7 @@ const typeDefs = gql`
     sizes: [String!]
     category: String
     types: [String!]
-    genders: [String!]
+    gender: String
     brand: String
     location: Location
     shopId: ID!
@@ -59,16 +59,14 @@ const typeDefs = gql`
   }
 
   input ProductInput {
-    id: ID!
     name: String!
     price: Float!
     colors: [String!]!
     sizes: [String!]!
     category: String!
     types: [String!]!
-    genders: [String!]!
+    gender: String!
     brand: String!
-    shopId: ID!
     description: String
   }
 
@@ -88,7 +86,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createProduct(id: ID!, options: ProductInput!): Boolean!
+    createProduct(shopId: ID!, options: ProductInput!): Boolean!
   }
 `;
 
