@@ -2,6 +2,7 @@ import express from "express";
 
 import apolloserver from "../apollo/apolloserver";
 import chalk from "chalk";
+require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT;
