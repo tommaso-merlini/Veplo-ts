@@ -12,8 +12,8 @@ const typeDefs = gql`
     price: Float
     colors: [String!]
     sizes: [String!]
-    category: String
-    types: [String!]
+    macroCategory: String
+    microCategory: String
     gender: String
     brand: String
     location: Location
@@ -63,8 +63,8 @@ const typeDefs = gql`
     price: Float!
     colors: [String!]!
     sizes: [String!]!
-    category: String!
-    types: [String!]!
+    macroCategory: String!
+    microCategory: String!
     gender: String!
     brand: String!
     description: String

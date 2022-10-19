@@ -47,18 +47,18 @@ type Week {
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  price       Float
-  colors      String[]
-  sizes       String[] //EX: ["xl (50)", "s(38)"]
-  category    String //EX: "Giacca"
-  types       String[] //EX: ["In flanella", "in pelle", "di pile"]
-  gender      String //EX: ["F", "M"]
-  brand       String
-  location    Location
-  description String?
-  shopId      String  @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  price             Float
+  colors            String[]
+  sizes             String[] //EX: ["xl (50)", "s(38)"]
+  macroCategory     String //EX: "Giacca"
+  microCategory     String  //EX: ["In flanella", "in pelle", "di pile"]
+  gender            String //EX: ["F", "M"]
+  brand             String
+  location          Location
+  description       String?
+  shopId            String  @db.ObjectId
 }
 
 model Shop {

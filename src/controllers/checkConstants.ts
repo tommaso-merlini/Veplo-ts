@@ -8,27 +8,30 @@ const checkConstants = (obj, is: String) => {
   if (is === "product") {
     const product = obj;
 
-    let categoryIndex;
-    let category;
+    let macroCategoryIndex;
+    let macroCategory;
 
     //---CHECK GENDER
     if (product.gender !== "M" && product.gender !== "F") {
       throw new Error(`gender deve essere 'M' o 'F'`);
     }
 
-    //---CHECK CATEGORY
+    //---CHECK MACRO-iCATEGORY
     if (product.gender === "M") {
       for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
-        if (product.category === constants.genders.uomo.abbigliamento[i].name) {
-          categoryIndex = i;
+        if (
+          product.macroCoategory ===
+          constants.genders.uomo.abbigliamento[i].name
+        ) {
+          macroCategoryIndex = i;
         }
       }
 
-      category = constants.genders.donna.abbigliamento[categoryIndex];
-      if (categoryIndex === null || categoryIndex === undefined) {
+      macroCategory = constants.genders.donna.abbigliamento[macroCategoryIndex];
+      if (macroCategoryIndex === null || macroCategoryIndex === undefined) {
         throw new Error(
           `la category ${
-            product.category
+            product.macroCategory
           } non e' una category accetata, lista di categories accettate: ${constants.genders.uomo.abbigliamento.map(
             (obj) => {
               return obj.name;
@@ -39,17 +42,18 @@ const checkConstants = (obj, is: String) => {
     } else {
       for (let i = 0; i < constants.genders.donna.abbigliamento.length; i++) {
         if (
-          product.category === constants.genders.donna.abbigliamento[i].name
+          product.macroCategory ===
+          constants.genders.donna.abbigliamento[i].name
         ) {
-          categoryIndex = i;
+          macroCategoryIndex = i;
         }
       }
 
-      category = constants.genders.donna.abbigliamento[categoryIndex];
-      if (categoryIndex === null || categoryIndex === undefined) {
+      macroCategory = constants.genders.donna.abbigliamento[macroCategoryIndex];
+      if (macroCategoryIndex === null || macroCategoryIndex === undefined) {
         throw new Error(
           `la category ${
-            product.category
+            product.macroCategory
           } non e' una category accetata, lista di categories accettate: ${constants.genders.donna.abbigliamento.map(
             (obj) => {
               return obj.name;
@@ -78,23 +82,23 @@ const checkConstants = (obj, is: String) => {
 
     //---CHECK SIZES
     const areSizesOk = product.sizes.every((size) =>
-      category.sizes.includes(size)
+      macroCategory.sizes.includes(size)
     );
 
     if (!areSizesOk) {
       throw new Error(
-        `sizes ${product.sizes} non sono accetate per category ${category.name}, taglie accettati per ${category.name}: ${category.sizes}`
+        `sizes ${product.sizes} non sono accetate per category ${macroCategory.name}, taglie accettati per ${macroCategory.name}: ${macroCategory.sizes}`
       );
     }
 
-    //---CHECK TYPE
-    const areTypesOk = product.types.every((type) =>
-      category.types.includes(type)
+    //---CHECK MICRO-CATEGORY
+    const isMicroCategoryOk = macroCategory.types.includes(
+      product.microCategory
     );
 
-    if (!areTypesOk) {
+    if (!isMicroCategoryOk) {
       throw new Error(
-        `types ${product.types} non sono accetate per category ${category.name}, types accetati per ${category.name}: ${category.types}`
+        `micro-category ${product.microCategory} non sono accetate per category ${macroCategory.name}, types accetati per ${macroCategory.name}: ${macroCategory.types}`
       );
     }
   }
