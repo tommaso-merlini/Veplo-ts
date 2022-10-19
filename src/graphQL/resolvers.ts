@@ -21,7 +21,6 @@ const resolvers = {
       return "ciao";
     },
     product: async (_, { id }, { prisma }: Context) => {
-      console.log(id);
       const product = await prisma.product.findFirst({
         where: {
           id,

@@ -15,7 +15,7 @@ const apolloserver = new ApolloServer({
   context: context,
   introspection: process.env.NODE_ENV !== "production",
   validationRules: [depthLimit(3)],
-  formatError: (err) => {
+  formatError: (err: any) => {
     // Don't give the specific errors to the client (in production)
     if (
       err.extensions!.code.startsWith("INTERNAL_SERVER_ERROR") &&
