@@ -1,4 +1,5 @@
 import { ApolloServer } from "apollo-server-express";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import depthLimit from "graphql-depth-limit";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "../src/graphQL/typeDefs";
@@ -14,6 +15,7 @@ const apolloserver = new ApolloServer({
   schema,
   context: context,
   introspection: process.env.NODE_ENV !== "production",
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
   validationRules: [depthLimit(3)],
   formatError: (err: any) => {
     // Don't give the specific errors to the client (in production)

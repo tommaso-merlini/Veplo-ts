@@ -26,8 +26,6 @@ const resolvers = {
           id,
         },
       });
-
-      console.log(product);
       return product;
     },
     products: async (_, { name, coordinates, range }, { prisma }: Context) => {
