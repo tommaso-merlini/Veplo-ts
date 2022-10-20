@@ -98,7 +98,7 @@ const checkConstants = (obj, is: String) => {
 
     if (!isMicroCategoryOk) {
       throw new Error(
-        `micro-category ${product.microCategory} non sono accetate per category ${macroCategory.name}, types accetati per ${macroCategory.name}: ${macroCategory.types}`
+        `micro-category ${product.microCategory} non e' accetata per macro-category ${macroCategory.name}, micro-categories accetate per ${macroCategory.name}: ${macroCategory.types}`
       );
     }
   }
