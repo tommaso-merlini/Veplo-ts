@@ -90,7 +90,6 @@ const resolvers = {
   Mutation: {
     createProduct: async (_, { shopId, options }, { prisma }: Context) => {
       try {
-        //TODO check the integrity of the filter using the constants
         checkConstants(options, "product");
 
         const shop = await prisma.shop.findFirst({
@@ -114,6 +113,32 @@ const resolvers = {
       } catch (e: any) {
         throw new GraphQLError(e.message);
       }
+      return true;
+    },
+    editProduct: async (_, { id, options }, { prisma }: Context) => {
+      const product = await prisma.product.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      //TODO merge product with options (overwrite equal values)
+
+      const editedProduct = Object.assign({}, product, options);
+
+      console.log(editedProduct);
+
+      checkConstants(editedProduct, "product");
+
+      //TODO get the id from the jwt and check if product.shopId = jwt.id
+
+      await prisma.product.update({
+        where: {
+          id,
+        },
+        data: options,
+      });
+
       return true;
     },
   },

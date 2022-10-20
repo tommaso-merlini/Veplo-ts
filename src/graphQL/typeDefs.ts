@@ -70,6 +70,17 @@ const typeDefs = gql`
     description: String
   }
 
+  input EditProductInput {
+    name: String
+    price: Float
+    colors: [String!]
+    sizes: [String!]
+    macroCategory: String
+    microCategory: String
+    gender: String
+    brand: String
+  }
+
   type Query {
     prova: String!
 
@@ -87,6 +98,7 @@ const typeDefs = gql`
 
   type Mutation {
     createProduct(shopId: ID!, options: ProductInput!): Boolean!
+    editProduct(id: ID!, options: EditProductInput!): Boolean!
   }
 `;
 
