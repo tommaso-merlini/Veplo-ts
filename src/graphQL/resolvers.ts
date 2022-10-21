@@ -122,8 +122,7 @@ const resolvers = {
         },
       });
 
-      //TODO merge product with options (overwrite equal values)
-
+      //merging product with options (overwrite equal values)
       const editedProduct = Object.assign({}, product, options);
 
       console.log(editedProduct);
@@ -137,6 +136,24 @@ const resolvers = {
           id,
         },
         data: options,
+      });
+
+      return true;
+    },
+
+    deleteProduct: async (_, { id }, { prisma }: Context) => {
+      // const product = await prisma.product.findFirst({
+      //   where: {
+      //     id,
+      //   },
+      // });
+
+      //TODO get the id from the jwt and check if product.shopId = jwt.id
+
+      await prisma.product.delete({
+        where: {
+          id,
+        },
       });
 
       return true;

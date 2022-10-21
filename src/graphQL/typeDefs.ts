@@ -99,6 +99,7 @@ const typeDefs = gql`
   type Mutation {
     createProduct(shopId: ID!, options: ProductInput!): Boolean!
     editProduct(id: ID!, options: EditProductInput!): Boolean!
+    deleteProduct(id: ID!): Boolean!
   }
 `;
 
