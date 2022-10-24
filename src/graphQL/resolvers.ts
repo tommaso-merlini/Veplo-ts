@@ -1,8 +1,8 @@
 import { Context } from "../../apollo/context";
 import { GraphQLError } from "graphql";
-import { ProvidedRequiredArgumentsOnDirectivesRule } from "graphql/validation/rules/ProvidedRequiredArgumentsRule";
-import { constants } from "../../constants/constants";
 import checkConstants from "../controllers/checkConstants";
+import authenticateToken from "../controllers/authenticateToken";
+import lodash from "lodash";
 
 const fixIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -88,7 +88,11 @@ const resolvers = {
   },
 
   Mutation: {
-    createProduct: async (_, { shopId, options }, { prisma }: Context) => {
+    createProduct: async (
+      _,
+      { shopId, options },
+      { prisma, admin, req }: Context
+    ) => {
       try {
         checkConstants(options, "product");
 
@@ -98,7 +102,11 @@ const resolvers = {
           },
         });
 
-        //TODO get the id from the jwt and check if shopId = jwt.id
+        //token operations
+        const token = await admin
+          .auth()
+          .verifyIdToken(req.headers.authorization);
+        authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
         const newProduct = await prisma.product.create({
           data: {
@@ -108,6 +116,7 @@ const resolvers = {
               coordinates: shop.location.coordinates,
             },
             shopId: shopId,
+            firebaseShopId: shop.firebaseId,
           },
         });
       } catch (e: any) {
@@ -115,21 +124,31 @@ const resolvers = {
       }
       return true;
     },
-    editProduct: async (_, { id, options }, { prisma }: Context) => {
+    editProduct: async (
+      _,
+      { id, options },
+      { prisma, admin, req }: Context
+    ) => {
       const product = await prisma.product.findFirst({
         where: {
           id,
         },
       });
 
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+
       //merging product with options (overwrite equal values)
       const editedProduct = Object.assign({}, product, options);
 
-      console.log(editedProduct);
+      //check if the editedProduct = product
+      if (lodash.isEqual(product, editedProduct)) {
+        throw new Error("you didn't edit any fields");
+      }
 
+      //check the fields with the constants
       checkConstants(editedProduct, "product");
-
-      //TODO get the id from the jwt and check if product.shopId = jwt.id
 
       await prisma.product.update({
         where: {
@@ -141,14 +160,16 @@ const resolvers = {
       return true;
     },
 
-    deleteProduct: async (_, { id }, { prisma }: Context) => {
-      // const product = await prisma.product.findFirst({
-      //   where: {
-      //     id,
-      //   },
-      // });
+    deleteProduct: async (_, { id }, { prisma, admin, req }: Context) => {
+      const product = await prisma.product.findFirst({
+        where: {
+          id,
+        },
+      });
 
-      //TODO get the id from the jwt and check if product.shopId = jwt.id
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
       await prisma.product.delete({
         where: {

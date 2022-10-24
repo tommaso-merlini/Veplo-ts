@@ -19,6 +19,7 @@ const typeDefs = gql`
     location: Location
     shopId: ID!
     description: String
+    firebaseShopId: String
   }
 
   type Schedule {
@@ -49,6 +50,7 @@ const typeDefs = gql`
     street: String
     status: String
     products: [Product!]
+    firebaseId: String
   }
 
   input Filters {

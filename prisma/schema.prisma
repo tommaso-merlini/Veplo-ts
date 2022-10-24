@@ -59,6 +59,7 @@ model Product {
   location          Location
   description       String?
   shopId            String  @db.ObjectId
+  firebaseShopId    String
 }
 
 model Shop {
@@ -68,6 +69,7 @@ model Shop {
   week        Week?
   street      String
   status      String
+  firebaseId  String
 }
 
 //{
