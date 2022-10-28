@@ -179,6 +179,22 @@ const resolvers = {
 
       return true;
     },
+    createShop: async (_, options, { prisma, req, admin }: Context) => {
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      if (!token.isShop) {
+        throw new Error("you are not logged in as a shop");
+      }
+      const newShop = await prisma.shop.create({
+        data: {
+          ...options,
+          firebaseId: token.uid,
+          status: "inactive",
+        },
+      });
+
+      return true;
+    },
   },
 
   Shop: {

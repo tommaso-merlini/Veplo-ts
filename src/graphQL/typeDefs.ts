@@ -72,6 +72,38 @@ const typeDefs = gql`
     description: String
   }
 
+  input ScheduleInput {
+    opening: String!
+    closing: String!
+  }
+
+  input DayInput {
+    name: String!
+    schedule: ScheduleInput!
+  }
+
+  input WeekInput {
+    monday: DayInput!
+    tuesday: DayInput!
+    wednesday: DayInput!
+    thursday: DayInput!
+    friday: DayInput!
+    saturday: DayInput!
+    sunday: DayInput!
+  }
+
+  input ShopInput {
+    name: String!
+    location: LocationInput!
+    week: WeekInput!
+    street: String!
+  }
+
+  input LocationInput {
+    type: String!
+    coordinates: [Float!]!
+  }
+
   input EditProductInput {
     name: String
     price: Float
@@ -99,9 +131,13 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    #product
     createProduct(shopId: ID!, options: ProductInput!): Boolean!
     editProduct(id: ID!, options: EditProductInput!): Boolean!
     deleteProduct(id: ID!): Boolean!
+
+    #shop
+    createShop(options: ShopInput!): Boolean
   }
 `;
 
