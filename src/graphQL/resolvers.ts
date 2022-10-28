@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Context } from "../../apollo/context";
 import { GraphQLError } from "graphql";
 import checkConstants from "../controllers/checkConstants";
