@@ -1,9 +1,27 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  #===========TYPES===============
   type Location {
     type: String!
     coordinates: [Float!]!
+  }
+
+  type Lightshop {
+    city: String!
+    name: String
+  }
+
+  type Opening {
+    days: [Int!]
+    hours: [Float!]
+  }
+
+  type AddressShop {
+    postcode: String
+    city: String
+    street: String
+    location: Location
   }
 
   type Product {
@@ -18,46 +36,54 @@ const typeDefs = gql`
     brand: String
     location: Location
     shopId: ID!
-    description: String
     firebaseShopId: String
-  }
-
-  type Schedule {
-    opening: String!
-    closing: String!
-  }
-
-  type Day {
-    name: String!
-    schedule: Schedule!
-  }
-
-  type Week {
-    monday: Day!
-    tuesday: Day!
-    wednesday: Day!
-    thursday: Day!
-    friday: Day!
-    saturday: Day!
-    sunday: Day!
+    shop: Lightshop
+    photos: [String!]
+    updatedAt: Int
   }
 
   type Shop {
     id: ID
     name: String
-    location: Location
-    week: Week
-    street: String
     status: String
     products: [Product!]
     firebaseId: String
+    address: AddressShop
+    macroCategories: [String!]
+    description: [String!]
+    createdAt: Int
+    gender: [String!]
   }
+
+  #===========INPUTS===============
 
   input Filters {
     colors: [String!]
     sizes: [String!]
     genders: [String!]
     brand: String
+  }
+
+  input LightShop {
+    name: String
+    city: String
+  }
+
+  input LocationInput {
+    type: String!
+    coordinates: [Float!]!
+  }
+
+  input AddressShopInput {
+    postcode: String!
+    city: String!
+    street: String!
+    location: LocationInput!
+  }
+
+  input OpeningInput {
+    days: [Int!]!
+    hours: [Float!]!
   }
 
   input ProductInput {
@@ -69,39 +95,16 @@ const typeDefs = gql`
     microCategory: String!
     gender: String!
     brand: String!
-    description: String
-  }
-
-  input ScheduleInput {
-    opening: String!
-    closing: String!
-  }
-
-  input DayInput {
-    name: String!
-    schedule: ScheduleInput!
-  }
-
-  input WeekInput {
-    monday: DayInput!
-    tuesday: DayInput!
-    wednesday: DayInput!
-    thursday: DayInput!
-    friday: DayInput!
-    saturday: DayInput!
-    sunday: DayInput!
+    photos: [String!]!
   }
 
   input ShopInput {
     name: String!
-    location: LocationInput!
-    week: WeekInput!
-    street: String!
-  }
-
-  input LocationInput {
-    type: String!
-    coordinates: [Float!]!
+    address: AddressShopInput!
+    macroCategories: [String!]!
+    description: String!
+    gender: [String!]!
+    opening: OpeningInput!
   }
 
   input EditProductInput {
@@ -114,6 +117,8 @@ const typeDefs = gql`
     gender: String
     brand: String
   }
+
+  #=============QUERIES=================
 
   type Query {
     prova: String!
@@ -129,6 +134,8 @@ const typeDefs = gql`
 
     shop(id: ID!): Shop
   }
+
+  #===================MUTATIONS===================
 
   type Mutation {
     #product

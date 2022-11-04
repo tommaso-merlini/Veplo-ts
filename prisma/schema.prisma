@@ -46,6 +46,11 @@ type Week {
   sunday      Day
 }
 
+type LightShop {
+  name        String
+  city        String
+}
+
 model Product {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   name              String
@@ -57,19 +62,36 @@ model Product {
   gender            String //EX: ["F", "M"]
   brand             String
   location          Location
-  description       String?
   shopId            String  @db.ObjectId
-  firebaseShopId    String
+  firebaseShopId    String //TODO spostare firebaseShopId in shop.firebaseId
+  shop              LightShop
+  photos            String[]
+  updatedAt        Int //because Date.now() returns a number
+}
+
+type Opening {
+  days        Int[]
+  hours       Float[]
+}
+
+type AddressShop {
+  postcode    String 
+  city        String
+  street      String
+  location    Location
 }
 
 model Shop {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  location    Location
-  week        Week?
-  street      String
-  status      String
-  firebaseId  String
+  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String
+  status                String
+  opening               Opening
+  address               AddressShop
+  macroCategories       String[]
+  description           String
+  createdAt             Int
+  gender                String[]
+  firebaseId            String
 }
 
 //{

@@ -1,10 +1,11 @@
 // @ts-nocheck
 
 import { Context } from "../../apollo/context";
-import { GraphQLError } from "graphql";
+import { GraphQLError, Token } from "graphql";
 import checkConstants from "../controllers/checkConstants";
 import authenticateToken from "../controllers/authenticateToken";
 import lodash from "lodash";
+import { CountryCodeResolver } from "graphql-scalars";
 
 const fixIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -115,10 +116,15 @@ const resolvers = {
             ...options,
             location: {
               type: "Point",
-              coordinates: shop.location.coordinates,
+              coordinates: shop.address.location.coordinates,
             },
             shopId: shopId,
             firebaseShopId: shop.firebaseId,
+            shop: {
+              city: "terni", //TODO get the city field
+              name: shop.name,
+            },
+            updatedAt: Date.now(),
           },
         });
       } catch (e: any) {
@@ -181,17 +187,31 @@ const resolvers = {
 
       return true;
     },
-    createShop: async (_, options, { prisma, req, admin }: Context) => {
+    createShop: async (_, { options }, { prisma, req, admin }: Context) => {
       //token operations
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
       if (!token.isShop) {
         throw new Error("you are not logged in as a shop");
       }
+
+      const alreadyExists = await prisma.shop.findFirst({
+        where: {
+          firebaseId: token.uid,
+        },
+      });
+
+      if (alreadyExists) {
+        throw new Error(`an user with firebaseId ${token.uid} already exists`);
+      }
+
+      checkConstants(options, "shop");
+
       const newShop = await prisma.shop.create({
         data: {
           ...options,
           firebaseId: token.uid,
           status: "inactive",
+          createdAt: Date.now(),
         },
       });
 

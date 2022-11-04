@@ -20,14 +20,13 @@ const checkConstants = (obj, is: String) => {
     if (product.gender === "M") {
       for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
         if (
-          product.macroCoategory ===
-          constants.genders.uomo.abbigliamento[i].name
+          product.macroCategory === constants.genders.uomo.abbigliamento[i].name
         ) {
           macroCategoryIndex = i;
         }
       }
 
-      macroCategory = constants.genders.donna.abbigliamento[macroCategoryIndex];
+      macroCategory = constants.genders.uomo.abbigliamento[macroCategoryIndex];
       if (macroCategoryIndex === null || macroCategoryIndex === undefined) {
         throw new Error(
           `la category ${
@@ -100,6 +99,45 @@ const checkConstants = (obj, is: String) => {
       throw new Error(
         `micro-category ${product.microCategory} non e' accetata per macro-category ${macroCategory.name}, micro-categories accetate per ${macroCategory.name}: ${macroCategory.types}`
       );
+    }
+  } else {
+    const shop = obj;
+    //---CHECK GENDER
+    if (
+      shop.gender[0] !== "M" &&
+      shop.gender[0] !== "F" &&
+      shop.gender[1] !== "M" &&
+      shop.gender[1] !== "F"
+    ) {
+      throw new Error(`gender deve essere 'M' o 'F'`);
+    }
+
+    //---CHECK CATEGORIES
+    if (shop.gender[0] !== "M" || shop.gender[1] !== "M") {
+      //cycles trough the shop macrocategories
+      for (
+        let macroCategoryIndex = 0;
+        macroCategoryIndex < shop.macroCategories.length;
+        macroCategoryIndex++
+      ) {
+        let macroCategory = shop.macroCategories[macroCategoryIndex];
+        let ok = false;
+        for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
+          if (macroCategory === constants.genders.uomo.abbigliamento[i].name) {
+            ok = true;
+          }
+        }
+
+        if (!ok) {
+          throw new Error(
+            `la category ${macroCategory} non e' una category accetata, lista di categories accettate: ${constants.genders.donna.abbigliamento.map(
+              (obj) => {
+                return obj.name;
+              }
+            )}`
+          );
+        }
+      }
     }
   }
 };
