@@ -39,7 +39,7 @@ const typeDefs = gql`
     firebaseShopId: String
     shop: Lightshop
     photos: [String!]
-    updatedAt: Int
+    updatedAt: String
   }
 
   type Shop {
@@ -51,7 +51,7 @@ const typeDefs = gql`
     address: AddressShop
     macroCategories: [String!]
     description: [String!]
-    createdAt: Int
+    createdAt: String
     gender: [String!]
   }
 
