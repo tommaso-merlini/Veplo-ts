@@ -29,13 +29,7 @@ const checkConstants = (obj, is: String) => {
       macroCategory = constants.genders.uomo.abbigliamento[macroCategoryIndex];
       if (macroCategoryIndex === null || macroCategoryIndex === undefined) {
         throw new Error(
-          `la category ${
-            product.macroCategory
-          } non e' una category accetata, lista di categories accettate: ${constants.genders.uomo.abbigliamento.map(
-            (obj) => {
-              return obj.name;
-            }
-          )}`
+          `la category ${product.macroCategory} non e' una category accetata`
         );
       }
     } else {
@@ -51,13 +45,7 @@ const checkConstants = (obj, is: String) => {
       macroCategory = constants.genders.donna.abbigliamento[macroCategoryIndex];
       if (macroCategoryIndex === null || macroCategoryIndex === undefined) {
         throw new Error(
-          `la category ${
-            product.macroCategory
-          } non e' una category accetata, lista di categories accettate: ${constants.genders.donna.abbigliamento.map(
-            (obj) => {
-              return obj.name;
-            }
-          )}`
+          `la category ${product.macroCategory} non e' una category accetata`
         );
       }
     }
@@ -137,11 +125,7 @@ const checkConstants = (obj, is: String) => {
 
           if (!ok) {
             throw new Error(
-              `la category ${macroCategory} non e' una category accetata, lista di categories accettate: ${constants.genders.uomo.abbigliamento.map(
-                (obj) => {
-                  return obj.name;
-                }
-              )}`
+              `la category ${macroCategory} non e' una category accetata`
             );
           }
         }
@@ -170,11 +154,7 @@ const checkConstants = (obj, is: String) => {
 
           if (!ok) {
             throw new Error(
-              `la category ${macroCategory} non e' una category accetata, lista di categories accettate: ${constants.genders.donna.abbigliamento.map(
-                (obj) => {
-                  return obj.name;
-                }
-              )}`
+              `la category ${macroCategory} non e' una category accetata`
             );
           }
         }
