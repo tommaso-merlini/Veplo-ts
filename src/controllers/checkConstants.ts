@@ -112,30 +112,71 @@ const checkConstants = (obj, is: String) => {
       throw new Error(`gender deve essere 'M' o 'F'`);
     }
 
-    //---CHECK CATEGORIES
-    if (shop.gender[0] !== "M" || shop.gender[1] !== "M") {
-      //cycles trough the shop macrocategories
-      for (
-        let macroCategoryIndex = 0;
-        macroCategoryIndex < shop.macroCategories.length;
-        macroCategoryIndex++
-      ) {
-        let macroCategory = shop.macroCategories[macroCategoryIndex];
-        let ok = false;
-        for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
-          if (macroCategory === constants.genders.uomo.abbigliamento[i].name) {
-            ok = true;
+    for (let l = 0; l < shop.gender.length; l++) {
+      if (shop.gender[l] === "M") {
+        //cycles trough the shop macrocategories
+        for (
+          let macroCategoryIndex = 0;
+          macroCategoryIndex < shop.macroCategories.length;
+          macroCategoryIndex++
+        ) {
+          let macroCategory = shop.macroCategories[macroCategoryIndex];
+          let ok = false;
+          for (
+            let i = 0;
+            i < constants.genders.uomo.abbigliamento.length;
+            i++
+          ) {
+            console.log(constants.genders.uomo.abbigliamento[i].name);
+            if (
+              macroCategory === constants.genders.uomo.abbigliamento[i].name
+            ) {
+              ok = true;
+            }
+          }
+
+          if (!ok) {
+            throw new Error(
+              `la category ${macroCategory} non e' una category accetata, lista di categories accettate: ${constants.genders.uomo.abbigliamento.map(
+                (obj) => {
+                  return obj.name;
+                }
+              )}`
+            );
           }
         }
+      }
+      if (shop.gender[l] === "F") {
+        //cycles trough the shop macrocategories
+        for (
+          let macroCategoryIndex = 0;
+          macroCategoryIndex < shop.macroCategories.length;
+          macroCategoryIndex++
+        ) {
+          let macroCategory = shop.macroCategories[macroCategoryIndex];
+          let ok = false;
+          for (
+            let i = 0;
+            i < constants.genders.donna.abbigliamento.length;
+            i++
+          ) {
+            console.log(constants.genders.donna.abbigliamento[i].name);
+            if (
+              macroCategory === constants.genders.donna.abbigliamento[i].name
+            ) {
+              ok = true;
+            }
+          }
 
-        if (!ok) {
-          throw new Error(
-            `la category ${macroCategory} non e' una category accetata, lista di categories accettate: ${constants.genders.donna.abbigliamento.map(
-              (obj) => {
-                return obj.name;
-              }
-            )}`
-          );
+          if (!ok) {
+            throw new Error(
+              `la category ${macroCategory} non e' una category accetata, lista di categories accettate: ${constants.genders.donna.abbigliamento.map(
+                (obj) => {
+                  return obj.name;
+                }
+              )}`
+            );
+          }
         }
       }
     }

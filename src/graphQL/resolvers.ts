@@ -4,7 +4,7 @@ import { Context } from "../../apollo/context";
 import { GraphQLError, Token } from "graphql";
 import checkConstants from "../controllers/checkConstants";
 import authenticateToken from "../controllers/authenticateToken";
-import lodash from "lodash";
+import lodash, { identity } from "lodash";
 import { CountryCodeResolver } from "graphql-scalars";
 
 const fixIdNaming = (products) => {
@@ -105,6 +105,10 @@ const resolvers = {
           },
         });
 
+        if (shop === null || shop === undefined) {
+          throw new Error(`can't find a shop with id ${shopId}`);
+        }
+
         //token operations
         const token = await admin
           .auth()
@@ -124,7 +128,7 @@ const resolvers = {
               city: "terni", //TODO get the city field
               name: shop.name,
             },
-            updatedAt: Date.now(),
+            updatedAt: new Date(),
           },
         });
       } catch (e: any) {
@@ -142,6 +146,10 @@ const resolvers = {
           id,
         },
       });
+
+      if (product === null || product === undefined) {
+        throw new Error(`can't find a product with id ${id}`);
+      }
 
       //token operations
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -162,7 +170,7 @@ const resolvers = {
         where: {
           id,
         },
-        data: options,
+        data: { ...options, updatedAt: new Date() },
       });
 
       return true;
@@ -209,9 +217,9 @@ const resolvers = {
       const newShop = await prisma.shop.create({
         data: {
           ...options,
-          firebaseId: token.uid,
+          firebaseId: "token.uiciaod",
           status: "inactive",
-          createdAt: Date.now(),
+          createdAt: new Date(),
         },
       });
 

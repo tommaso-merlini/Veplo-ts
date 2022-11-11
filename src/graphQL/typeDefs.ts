@@ -53,6 +53,7 @@ const typeDefs = gql`
     description: [String!]
     createdAt: String
     gender: [String!]
+    photos: [String!]
   }
 
   #===========INPUTS===============
@@ -105,6 +106,7 @@ const typeDefs = gql`
     description: String!
     gender: [String!]!
     opening: OpeningInput!
+    photos: [String!]!
   }
 
   input EditProductInput {

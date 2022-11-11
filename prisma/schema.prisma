@@ -66,7 +66,7 @@ model Product {
   firebaseShopId    String //TODO spostare firebaseShopId in shop.firebaseId
   shop              LightShop
   photos            String[]
-  updatedAt         String //because Date.now() returns a number
+  updatedAt         DateTime 
 }
 
 type Opening {
@@ -89,9 +89,10 @@ model Shop {
   address               AddressShop
   macroCategories       String[]
   description           String
-  createdAt             String
+  createdAt             DateTime
   gender                String[]
   firebaseId            String
+  photos                String[]
 }
 
 //{
