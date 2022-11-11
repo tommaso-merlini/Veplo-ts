@@ -1,9 +1,13 @@
+// @ts-nocheck
+
 /***
 size:
     - m, s, l -> 
     - 30-31 (pantaloni) -> bottom
     - 30-50 (scarpe) -> shoes
 ***/
+
+import { brands } from "./brands";
 
 /*SITO: 
   https://www.blitzresults.com/it/abbigliamento-donna/
@@ -240,68 +244,6 @@ const tags = {
   },
 };
 
-const brand = [
-  "Adidas Originals",
-  "Bellybutton",
-  "Bruno Premi",
-  "Calvin Klein",
-  "Chipie",
-  "Clarks",
-  "Converse",
-  "Desigual",
-  "Diesel",
-  "Esprit",
-  "Fornarina",
-  "Franklin & Marshall",
-  "Fratelli Rossetti",
-  "Geox",
-  "G-Star",
-  "Guess",
-  "Hilfiger Denim",
-  "Kickers",
-  "Latitude Femme",
-  "Levi's®",
-  "Liu Jo",
-  "Marc O'Polo",
-  "New Balance",
-  "Nike",
-  "North Sails",
-  "Oilily",
-  "Petit Bateau",
-  "Pretty Ballerinas",
-  "Primigi",
-  "Puma",
-  "Pura Lopez",
-  "Replay",
-  "Skechers",
-  "Studio Pollini",
-  "The North Face",
-  "Timberland",
-  "Tommy Hilfiger",
-  "UGG Australia",
-  "Vagabond",
-  "Vans",
-];
-
-const colors = [
-  "Nero",
-  "Marrone",
-  "Beige",
-  "Grigio",
-  "Bianco",
-  "Blu",
-  "Petrolio",
-  "Azzurro",
-  "Verde",
-  "Oliva",
-  "Giallo",
-  "Arancione",
-  "Rosso",
-  "Rosa",
-  "Lilla",
-  "Oro",
-  "Argento",
-  "multicolore",
-];
+const brand = brands;
 
 const prezzo = "variabile";
