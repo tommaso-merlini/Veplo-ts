@@ -96,45 +96,41 @@ const resolvers = {
       { shopId, options },
       { prisma, admin, req }: Context
     ) => {
-      try {
-        checkConstants(options, "product");
+      checkConstants(options, "product");
 
-        const shop = await prisma.shop.findFirst({
-          where: {
-            id: shopId,
-          },
-        });
+      const shop = await prisma.shop.findFirst({
+        where: {
+          id: shopId,
+        },
+      });
 
-        if (shop === null || shop === undefined) {
-          throw new Error(`can't find a shop with id ${shopId}`);
-        }
-
-        //token operations
-        const token = await admin
-          .auth()
-          .verifyIdToken(req.headers.authorization);
-        authenticateToken(token.uid, shop.firebaseId, token.isShop);
-
-        const newProduct = await prisma.product.create({
-          data: {
-            ...options,
-            location: {
-              type: "Point",
-              coordinates: shop.address.location.coordinates,
-            },
-            shopId: shopId,
-            firebaseShopId: shop.firebaseId,
-            shop: {
-              city: "terni", //TODO get the city field
-              name: shop.name,
-            },
-            updatedAt: new Date(),
-          },
-        });
-      } catch (e: any) {
-        throw new GraphQLError(e.message);
+      if (shop === null || shop === undefined) {
+        throw new Error(`can't find a shop with id ${shopId}`);
       }
-      return true;
+
+      //token operations
+      // const token = await admin
+      //   .auth()
+      //   .verifyIdToken(req.headers.authorization);
+      // authenticateToken(token.uid, shop.firebaseId, token.isShop);
+
+      const newProduct = await prisma.product.create({
+        data: {
+          ...options,
+          location: {
+            type: "Point",
+            coordinates: shop.address.location.coordinates,
+          },
+          shopId: shopId,
+          firebaseShopId: shop.firebaseId,
+          shop: {
+            city: "terni", //TODO get the city field
+            name: shop.name,
+          },
+          updatedAt: new Date(),
+        },
+      });
+      return newProduct.id;
     },
     editProduct: async (
       _,

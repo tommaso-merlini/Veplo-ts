@@ -96,7 +96,7 @@ const typeDefs = gql`
     microCategory: String!
     gender: String!
     brand: String!
-    photos: [String!]!
+    photos: [String!]
   }
 
   input ShopInput {
@@ -141,7 +141,7 @@ const typeDefs = gql`
 
   type Mutation {
     #product
-    createProduct(shopId: ID!, options: ProductInput!): Boolean!
+    createProduct(shopId: ID!, options: ProductInput!): ID!
     editProduct(id: ID!, options: EditProductInput!): Boolean!
     deleteProduct(id: ID!): Boolean!
 
