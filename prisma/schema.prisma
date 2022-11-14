@@ -66,12 +66,13 @@ model Product {
   firebaseShopId    String //TODO spostare firebaseShopId in shop.firebaseId
   shop              LightShop
   photos            String[]
+  createdAt         DateTime
   updatedAt         DateTime 
 }
 
 type Opening {
   days        Int[]
-  hours       Float[]
+  hours       String[]
 }
 
 type AddressShop {
@@ -87,12 +88,12 @@ model Shop {
   status                String
   opening               Opening
   address               AddressShop
-  macroCategories       String[]
-  description           String
+  description           String?
+  piva                  String
+  phone                 String
   createdAt             DateTime
-  gender                String[]
   firebaseId            String
-  photos                String[]
+  photo                 String?
 }
 
 //{

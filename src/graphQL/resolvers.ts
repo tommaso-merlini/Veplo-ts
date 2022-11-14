@@ -109,10 +109,8 @@ const resolvers = {
       }
 
       //token operations
-      // const token = await admin
-      //   .auth()
-      //   .verifyIdToken(req.headers.authorization);
-      // authenticateToken(token.uid, shop.firebaseId, token.isShop);
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
       const newProduct = await prisma.product.create({
         data: {
@@ -127,6 +125,7 @@ const resolvers = {
             city: "terni", //TODO get the city field
             name: shop.name,
           },
+          createdAt: new Date(),
           updatedAt: new Date(),
         },
       });
@@ -213,7 +212,7 @@ const resolvers = {
       const newShop = await prisma.shop.create({
         data: {
           ...options,
-          firebaseId: "token.uiciaod",
+          firebaseId: token.uid,
           status: "inactive",
           createdAt: new Date(),
         },

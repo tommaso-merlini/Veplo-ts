@@ -14,7 +14,7 @@ const typeDefs = gql`
 
   type Opening {
     days: [Int!]
-    hours: [Float!]
+    hours: [String!]
   }
 
   type AddressShop {
@@ -38,7 +38,7 @@ const typeDefs = gql`
     shopId: ID!
     firebaseShopId: String
     shop: Lightshop
-    photos: [String!]
+    photo: String
     updatedAt: String
   }
 
@@ -49,11 +49,13 @@ const typeDefs = gql`
     products: [Product!]
     firebaseId: String
     address: AddressShop
-    macroCategories: [String!]
+    #macroCategories: [String!]
     description: [String!]
     createdAt: String
-    gender: [String!]
+    #gender: [String!]
     photos: [String!]
+    piva: String
+    phone: String
   }
 
   #===========INPUTS===============
@@ -84,7 +86,7 @@ const typeDefs = gql`
 
   input OpeningInput {
     days: [Int!]!
-    hours: [Float!]!
+    hours: [String!]!
   }
 
   input ProductInput {
@@ -102,11 +104,13 @@ const typeDefs = gql`
   input ShopInput {
     name: String!
     address: AddressShopInput!
-    macroCategories: [String!]!
-    description: String!
-    gender: [String!]!
+    #macroCategories: [String!]!
+    description: String
+    #gender: [String!]!
     opening: OpeningInput!
-    photos: [String!]!
+    photo: String
+    piva: String!
+    phone: String!
   }
 
   input EditProductInput {
@@ -118,6 +122,7 @@ const typeDefs = gql`
     microCategory: String
     gender: String
     brand: String
+    photos: [String!]
   }
 
   #=============QUERIES=================
