@@ -94,6 +94,8 @@ model Shop {
   createdAt             DateTime
   firebaseId            String
   photo                 String?
+  macroCategory         String[]
+  genders               String[]
 }
 
 //{

@@ -104,9 +104,7 @@ const typeDefs = gql`
   input ShopInput {
     name: String!
     address: AddressShopInput!
-    #macroCategories: [String!]!
     description: String
-    #gender: [String!]!
     opening: OpeningInput!
     photo: String
     piva: String!
