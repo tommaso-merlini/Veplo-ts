@@ -38,7 +38,7 @@ const typeDefs = gql`
     shopId: ID!
     firebaseShopId: String
     shop: Lightshop
-    photo: String
+    photos: [String!]
     updatedAt: String
   }
 
@@ -53,7 +53,7 @@ const typeDefs = gql`
     description: [String!]
     createdAt: String
     #gender: [String!]
-    photos: [String!]
+    photo: String
     piva: String
     phone: String
   }

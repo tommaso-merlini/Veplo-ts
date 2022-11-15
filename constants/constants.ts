@@ -1,3 +1,5 @@
+import { brands } from "../brands.js";
+
 const woman_clothes_sizes = [
   "xxs (36)",
   "xs (38)",
@@ -31,48 +33,7 @@ const man_bottom_clothes_sizes = [
 ];
 
 export const constants = {
-  brands: [
-    "Adidas Originals",
-    "Bellybutton",
-    "Bruno Premi",
-    "Calvin Klein",
-    "Chipie",
-    "Clarks",
-    "Converse",
-    "Desigual",
-    "Diesel",
-    "Esprit",
-    "Fornarina",
-    "Franklin & Marshall",
-    "Fratelli Rossetti",
-    "Geox",
-    "G-Star",
-    "Guess",
-    "Hilfiger Denim",
-    "Kickers",
-    "Latitude Femme",
-    "Levi's®",
-    "Liu Jo",
-    "Marc O'Polo",
-    "New Balance",
-    "Nike",
-    "North Sails",
-    "Oilily",
-    "Petit Bateau",
-    "Pretty Ballerinas",
-    "Primigi",
-    "Puma",
-    "Pura Lopez",
-    "Replay",
-    "Skechers",
-    "Studio Pollini",
-    "The North Face",
-    "Timberland",
-    "Tommy Hilfiger",
-    "UGG Australia",
-    "Vagabond",
-    "Vans",
-  ],
+  brands: brands,
 
   colors: [
     "Nero",
