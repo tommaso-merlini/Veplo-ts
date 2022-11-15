@@ -122,7 +122,7 @@ const resolvers = {
           shopId: shopId,
           firebaseShopId: shop.firebaseId,
           shop: {
-            city: "terni", //TODO get the city field
+            city: shop.address.city,
             name: shop.name,
           },
           createdAt: new Date(),
@@ -177,6 +177,8 @@ const resolvers = {
           id,
         },
       });
+
+      //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
       //token operations
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
