@@ -112,6 +112,8 @@ const resolvers = {
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
       authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
+      //TODO handling the macroCategories => insert macroCategory into shop
+
       const newProduct = await prisma.product.create({
         data: {
           ...options,
@@ -168,7 +170,7 @@ const resolvers = {
         data: { ...options, updatedAt: new Date() },
       });
 
-      return true;
+      return product.id;
     },
 
     deleteProduct: async (_, { id }, { prisma, admin, req }: Context) => {
@@ -190,7 +192,7 @@ const resolvers = {
         },
       });
 
-      return true;
+      return product.id;
     },
     createShop: async (_, { options }, { prisma, req, admin }: Context) => {
       //token operations
