@@ -6,6 +6,7 @@ import checkConstants from "../controllers/checkConstants";
 import authenticateToken from "../controllers/authenticateToken";
 import lodash, { identity } from "lodash";
 import { CountryCodeResolver } from "graphql-scalars";
+import { prisma } from "@prisma/client";
 
 const fixIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -87,6 +88,18 @@ const resolvers = {
       });
 
       return shop;
+    },
+    capExists: async (_, { cap }, { prisma }: Context) => {
+      const searchedCap = await prisma.cap.findFirst({
+        where: {
+          cap,
+        },
+      });
+      if (searchedCap) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 

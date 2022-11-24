@@ -98,6 +98,13 @@ model Shop {
   genders               String[]
 }
 
+model Cap {
+  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  cap                   String
+  city                  String
+  location              Location
+}
+
 //{
 //  "mappings": {
 //    "dynamic": false,

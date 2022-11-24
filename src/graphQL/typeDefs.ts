@@ -138,6 +138,8 @@ const typeDefs = gql`
     ): [Product!]
 
     shop(id: ID!): Shop
+
+    capExists(cap: String!): Boolean!
   }
 
   #===================MUTATIONS===================
