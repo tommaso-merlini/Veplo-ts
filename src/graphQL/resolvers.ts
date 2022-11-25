@@ -89,6 +89,15 @@ const resolvers = {
 
       return shop;
     },
+    shopByFirebaseId: async (_, { firebaseId }, { prisma }: Context) => {
+      const shop = await prisma.shop.findFirst({
+        where: {
+          firebaseId,
+        },
+      });
+
+      return shop;
+    },
     capExists: async (_, { cap }, { prisma }: Context) => {
       const searchedCap = await prisma.cap.findFirst({
         where: {

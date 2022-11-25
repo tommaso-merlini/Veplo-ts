@@ -138,6 +138,7 @@ const typeDefs = gql`
     ): [Product!]
 
     shop(id: ID!): Shop
+    shopByFirebaseId(firebaseId: String!): Shop
 
     capExists(cap: String!): Boolean!
   }
