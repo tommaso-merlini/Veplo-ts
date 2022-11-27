@@ -78,7 +78,6 @@ const typeDefs = gql`
   }
 
   input AddressShopInput {
-    postcode: String!
     city: String!
     street: String!
     location: LocationInput!
@@ -140,7 +139,7 @@ const typeDefs = gql`
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
 
-    capExists(cap: String!): Boolean!
+
   }
 
   #===================MUTATIONS===================

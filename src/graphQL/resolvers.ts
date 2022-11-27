@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { Context } from "../../apollo/context";
 import { GraphQLError, Token } from "graphql";
 import checkConstants from "../controllers/checkConstants";
@@ -7,6 +5,9 @@ import authenticateToken from "../controllers/authenticateToken";
 import lodash, { identity } from "lodash";
 import { CountryCodeResolver } from "graphql-scalars";
 import { prisma } from "@prisma/client";
+import { reverseGeocoding } from "../controllers/reverseGeocoding";
+import { checkPostCode } from "../controllers/checkPostCode";
+import { createPostCode } from "../controllers/createPostCode";
 
 const fixIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -97,18 +98,6 @@ const resolvers = {
       });
 
       return shop;
-    },
-    capExists: async (_, { cap }, { prisma }: Context) => {
-      const searchedCap = await prisma.cap.findFirst({
-        where: {
-          cap,
-        },
-      });
-      if (searchedCap) {
-        return true;
-      } else {
-        return false;
-      }
     },
   },
 
@@ -217,6 +206,8 @@ const resolvers = {
       return product.id;
     },
     createShop: async (_, { options }, { prisma, req, admin }: Context) => {
+      
+
       //token operations
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
       if (!token.isShop) {
@@ -235,6 +226,14 @@ const resolvers = {
 
       checkConstants(options, "shop");
 
+      const {center, city, postCode}:any = await reverseGeocoding(options.address.location.coordinates[0], options.address.location.coordinates[1]);
+
+      const postCodeExists = await checkPostCode(prisma, postCode);
+      if(!postCodeExists) {
+        createPostCode(prisma, postCode, city, center);
+      }
+
+      options.address.postcode = postCode;
       const newShop = await prisma.shop.create({
         data: {
           ...options,
