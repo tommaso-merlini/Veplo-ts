@@ -207,24 +207,24 @@ const resolvers = {
     },
     createShop: async (_, { options }, { prisma, req, admin }: Context) => {
       //token operations
-      // const token = await admin.auth().verifyIdToken(req.headers.authorization);
-      // if (!token.isShop) {
-      //   throw new Error("you are not logged in as a shop");
-      // }
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      if (!token.isShop) {
+        throw new Error("you are not logged in as a shop");
+      }
 
-      // const alreadyExists = await prisma.shop.findFirst({
-      //   where: {
-      //     firebaseId: token.uid,
-      //   },
-      // });
+      const alreadyExists = await prisma.shop.findFirst({
+        where: {
+          firebaseId: token.uid,
+        },
+      });
 
-      // if (alreadyExists) {
-      //   throw new Error(`an user with firebaseId ${token.uid} already exists`);
-      // }
+      if (alreadyExists) {
+        throw new Error(`an user with firebaseId ${token.uid} already exists`);
+      }
 
       checkConstants(options, "shop");
 
-      const { center, city, postCode }: any = await reverseGeocoding(
+      let { center, city, postCode }: any = await reverseGeocoding(
         options.address.location.coordinates[0],
         options.address.location.coordinates[1]
       );
@@ -238,13 +238,13 @@ const resolvers = {
       const newShop = await prisma.shop.create({
         data: {
           ...options,
-          firebaseId: "token.uid",
+          firebaseId: token.uid,
           status: "inactive",
           createdAt: new Date(),
         },
       });
 
-      return true;
+      return newShop.id;
     },
   },
 

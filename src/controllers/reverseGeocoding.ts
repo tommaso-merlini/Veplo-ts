@@ -1,3 +1,5 @@
+import { GraphQLError } from "graphql";
+
 const request = require("request");
 
 require("dotenv").config();
@@ -9,7 +11,7 @@ export const reverseGeocoding = async (
   const endpoint = "mapbox.place";
   const types = ["postcode"];
   //https://api.mapbox.com/geocoding/v5/mapbox.places/42.56231,12.645763.json?types='postcode'&limit=1&country=IT&language=it&access_token=pk.eyJ1Ijoibmljb2xvbGVnYWN5IiwiYSI6ImNsOWVkaGsxZzFzdjEzd3A4eGlubDdnZ3cifQ.G9KaZlNas4WvUgnZiL-d7w
-  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${latitude},${longitude}.json?limit=1&country=IT&language=it&access_token=${process.env.MAPBOX_URI}`;
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${latitude},${longitude}.json?limit=1&country=it&language=it&access_token=${process.env.MAPBOX_URI}`;
   return new Promise((resolve) => {
     request({ url: url, json: true }, function (error, response) {
       if (error) {

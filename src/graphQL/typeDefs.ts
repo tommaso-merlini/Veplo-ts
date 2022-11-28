@@ -138,8 +138,6 @@ const typeDefs = gql`
 
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
-
-
   }
 
   #===================MUTATIONS===================
@@ -151,7 +149,7 @@ const typeDefs = gql`
     deleteProduct(id: ID!): ID!
 
     #shop
-    createShop(options: ShopInput!): Boolean
+    createShop(options: ShopInput!): ID!
   }
 `;
 
