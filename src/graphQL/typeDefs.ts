@@ -138,6 +138,8 @@ const typeDefs = gql`
 
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
+
+    isShop: Boolean!
   }
 
   #===================MUTATIONS===================
