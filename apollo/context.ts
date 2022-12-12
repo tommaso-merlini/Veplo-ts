@@ -8,6 +8,8 @@ export interface Context {
   req: any;
   resolvers: any;
   admin: typeof admin;
+  db: typeof db;
+  FieldValue: typeof FieldValue;
 }
 
 export const context = async ({ req }) => {

@@ -152,6 +152,7 @@ const typeDefs = gql`
 
     #shop
     createShop(options: ShopInput!): ID!
+    setIsShop(isShop: Boolean!): Boolean!
   }
 `;
 

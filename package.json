@@ -41,7 +41,6 @@
     "graphql-scalars": "^1.19.0",
     "graphql-tools": "^8.3.6",
     "lodash": "^4.17.21",
-    "pm2": "^5.2.2",
     "request": "^2.88.2"
   }
 }
