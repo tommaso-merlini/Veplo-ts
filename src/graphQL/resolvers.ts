@@ -33,32 +33,106 @@ const resolvers = {
       });
       return product;
     },
-    products: async (_, { name, coordinates, range }, { prisma }: Context) => {
+    products: async (
+      _,
+      { name, cap, range, gender, macroCategory },
+      { prisma }: Context
+    ) => {
       try {
+        const searchedCap = await prisma.cap.findFirst({
+          where: {
+            cap,
+          },
+        });
+        if (!searchedCap) {
+          throw new Error(`cap ${cap} does not exists`);
+        }
+        const coordinates = searchedCap.location.coordinates;
+        const latitude = coordinates[0];
+        const longitude = coordinates[1];
+        const checkName = () => {
+          if (name != null) {
+            return {
+              text: {
+                query: name,
+                path: "name",
+                fuzzy: {
+                  maxEdits: 2,
+                  prefixLength: 4,
+                },
+              },
+            };
+          } else {
+            return {
+              exists: {
+                path: "search",
+              },
+            };
+          }
+        };
+        const checkGender = () => {
+          if (gender != null) {
+            return { gender };
+          } else {
+            return {};
+          }
+        };
+        const checkMacroCategory = () => {
+          if (macroCategory != null) {
+            return { macroCategory };
+          } else {
+            return {};
+          }
+        };
         let products: any = await prisma.product.aggregateRaw({
           pipeline: [
+            // {
+            //   $search: {
+            //     index: "search",
+            //     compound: {
+            //       must: [
+            // {
+            //   text: {
+            //     query: name,
+            //      path: "name",
+            //     fuzzy: {
+            //       maxEdits: 2,
+            //       prefixLength: 4,
+            //     },
+            //   },
+            // },
+            //         {
+            //           geoWithin: {
+            //             path: "location",
+            //             circle: {
+            //               center: {
+            //                 type: "Point",
+            //                 coordinates: [latitude, longitude],
+            //               },
+            //               radius: range,
+            //             },
+            //           },
+            //         },
+            //       ],
+            //     },
+            //   },
+            // },
+            // {
+            //   $match: { colors: ["colors Product2"] },
+            // },
             {
               $search: {
                 index: "search",
                 compound: {
-                  must: [
-                    {
-                      text: {
-                        query: name,
-                        path: "name",
-                        fuzzy: {
-                          maxEdits: 2,
-                          prefixLength: 4,
-                        },
-                      },
-                    },
+                  should: [
+                    checkName(),
                     {
                       geoWithin: {
                         path: "location",
                         circle: {
                           center: {
                             type: "Point",
-                            coordinates: [coordinates[0], coordinates[1]],
+                            coordinates: [latitude, longitude],
                           },
                           radius: range,
                         },
@@ -68,9 +142,12 @@ const resolvers = {
                 },
               },
             },
-            // {
-            //   $match: { colors: ["colors Product2"] },
-            // },
+            {
+              $match: checkGender(),
+            },
+            {
+              $match: checkMacroCategory(),
+            },
           ],
         });
         fixIdNaming(products);
