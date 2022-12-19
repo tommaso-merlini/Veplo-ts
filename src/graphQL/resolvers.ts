@@ -78,7 +78,7 @@ const resolvers = {
           }
         };
         const checkMacroCategory = () => {
-          if (macroCategory != null) {
+          if (macroCategory != null && macroCategory != "") {
             return { macroCategory };
           } else {
             return {};
