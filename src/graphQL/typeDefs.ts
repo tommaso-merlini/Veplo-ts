@@ -61,11 +61,11 @@ const typeDefs = gql`
   #===========INPUTS===============
 
   input Filters {
-    #colors: [String!]
-    #sizes: [String!]
-    #brands: [String!]
-    #minPrice: Int
-    #maxPrice: Int
+    colors: [String!]
+    sizes: [String!]
+    brands: [String!]
+    minPrice: Int
+    maxPrice: Int
     name: String
     cap: String
     gender: String

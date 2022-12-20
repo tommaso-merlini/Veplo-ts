@@ -52,6 +52,8 @@ const resolvers = {
         const longitude = coordinates[1];
         const gender = filters.gender;
         const macroCategory = filters.macroCategory;
+        const brands = filters.brands;
+        const sizes = filters.sizes;
         const checkName = () => {
           if (filters.name != null) {
             return {
@@ -79,6 +81,24 @@ const resolvers = {
             return {};
           }
         };
+        const checkBrands = () => {
+          if (filters.brands != null) {
+            return {
+              brand: { $in: brands },
+            };
+          } else {
+            return {};
+          }
+        };
+        const checkSizes = () => {
+          if (filters.sizes != null) {
+            return {
+              sizes: { $in: sizes },
+            };
+          } else {
+            return {};
+          }
+        };
         const checkMacroCategory = () => {
           if (filters.macroCategory != null && filters.macroCategory != "") {
             return { macroCategory };
@@ -86,6 +106,31 @@ const resolvers = {
             return {};
           }
         };
+
+        const checkMaxPrice = () => {
+          if (filters.maxPrice != null) {
+            return { price: { $lte: filters.maxPrice } };
+          } else {
+            return {};
+          }
+        };
+
+        const checkMinPrice = () => {
+          if (filters.minPrice != null) {
+            return { price: { $gte: filters.minPrice } };
+          } else {
+            return {};
+          }
+        };
+
+        const checkColors = () => {
+          if (filters.colors != null) {
+            return { colors: { $in: filters.colors } };
+          } else {
+            return {};
+          }
+        };
+
         let products: any = await prisma.product.aggregateRaw({
           pipeline: [
             // {
@@ -157,12 +202,13 @@ const resolvers = {
             //     },
             //   },
             // },
-            {
-              $match: checkGender(),
-            },
-            {
-              $match: checkMacroCategory(),
-            },
+            { $match: checkGender() },
+            { $match: checkMacroCategory() },
+            { $match: checkBrands() },
+            { $match: checkSizes() },
+            { $match: checkMinPrice() },
+            { $match: checkMaxPrice() },
+            { $match: checkColors() },
             { $limit: limit },
             { $skip: offset },
           ],
