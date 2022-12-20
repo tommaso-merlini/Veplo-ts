@@ -61,12 +61,15 @@ const typeDefs = gql`
   #===========INPUTS===============
 
   input Filters {
-    colors: [String!]
-    sizes: [String!]
-    genders: [String!]
-    brand: String
-    minPrice: Int
-    maxPrice: Int
+    #colors: [String!]
+    #sizes: [String!]
+    #brands: [String!]
+    #minPrice: Int
+    #maxPrice: Int
+    name: String
+    cap: String
+    gender: String
+    macroCategory: String
   }
 
   input LightShop {
@@ -132,11 +135,10 @@ const typeDefs = gql`
     product(id: ID!): Product
 
     products(
-      name: String
-      cap: String
       range: Float!
-      gender: String
-      macroCategory: String
+      limit: Int!
+      offset: Int!
+      filters: Filters
     ): [Product!]
 
     shop(id: ID!): Shop
