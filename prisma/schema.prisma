@@ -137,3 +137,7 @@ model Cap {
 //    }
 //  }
 //}
+
+//{
+//"address.location": "2dsphere"  
+//}

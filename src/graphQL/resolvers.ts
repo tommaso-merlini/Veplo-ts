@@ -199,22 +199,6 @@ const resolvers = {
                 },
               },
             },
-            // {
-            //   $replaceWith: {
-            //     $setField: {
-            //       field: "data.products",
-            //       input: "$$ROOT",
-            //       value: "products",
-            //     },
-            //   },
-            // },
-            // {
-            //   $project: {
-            //     products: {
-            //       $getField: "data.products",
-            //     },
-            //   },
-            // },
             { $match: checkGender() },
             { $match: checkMacroCategory() },
             { $match: checkBrands() },
@@ -224,8 +208,16 @@ const resolvers = {
             { $match: checkColors() },
             { $limit: limit },
             { $skip: offset },
+            // {
+            //   $project: {
+            //     document: ""
+            //     score: { $meta: "searchScore" }
+            //   }
+            // }
           ],
         });
+
+        console.log(products);
         fixProductsIdNaming(products);
 
         return products;
