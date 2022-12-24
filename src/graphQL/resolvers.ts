@@ -169,6 +169,7 @@ const resolvers = {
                 index: "search",
                 compound: {
                   should: [
+                    //!get the best ranked name on the top of the list
                     checkName(),
                     {
                       geoWithin: {
@@ -247,6 +248,57 @@ const resolvers = {
       } else {
         return true;
       }
+    },
+    shops: async (_, { cap }, { prisma }: Context) => {
+      const searchedCap = await prisma.cap.findFirst({
+        where: {
+          cap,
+        },
+      });
+
+      if (!searchedCap) {
+        throw new Error(`${cap} non registrato`);
+      }
+
+      const coordinates = searchedCap.location.coordinates;
+
+      const shops = await prisma.shop.aggregateRaw({
+        pipeline: [
+          {
+            $search: {
+              index: "search",
+              compound: {
+                must: [
+                  // {
+                  //   text: {
+                  //     query: filters.name,
+                  //     path: "name",
+                  //     fuzzy: {
+                  //       maxEdits: 2,
+                  //       prefixLength: 4,
+                  //     },
+                  //   },
+                  // },
+                  {
+                    geoWithin: {
+                      path: "location",
+                      circle: {
+                        center: {
+                          type: "Point",
+                          coordinates: [latitude, longitude],
+                        },
+                        radius: range,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      });
+
+      return shops;
     },
   },
 

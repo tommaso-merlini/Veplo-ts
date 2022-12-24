@@ -67,7 +67,7 @@ const typeDefs = gql`
     minPrice: Int
     maxPrice: Int
     name: String
-    cap: String
+    cap: String!
     gender: String
     macroCategory: String
   }
@@ -132,8 +132,8 @@ const typeDefs = gql`
   type Query {
     prova: String!
 
+    #product
     product(id: ID!): Product
-
     products(
       range: Float!
       limit: Int!
@@ -141,10 +141,11 @@ const typeDefs = gql`
       filters: Filters
     ): [Product!]
 
+    #shop
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
-
     isShop: Boolean!
+    shops(cap: String!): Shop!
   }
 
   #===================MUTATIONS===================
