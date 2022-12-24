@@ -145,7 +145,7 @@ const typeDefs = gql`
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
     isShop: Boolean!
-    shops(cap: String!): Shop!
+    shops(cap: String!, range: Int!, limit: Int!, offset: Int!): [Shop!]!
   }
 
   #===================MUTATIONS===================

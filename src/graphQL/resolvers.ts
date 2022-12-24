@@ -9,7 +9,7 @@ import { reverseGeocoding } from "../controllers/reverseGeocoding";
 import { checkPostCode } from "../controllers/checkPostCode";
 import { createPostCode } from "../controllers/createPostCode";
 
-const fixIdNaming = (products) => {
+const fixProductsIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
     //change _id to id
     products[i].id = products[i]["_id"]["$oid"];
@@ -17,6 +17,18 @@ const fixIdNaming = (products) => {
 
     //delete the $oid object
     products[i].shopId = products[i].shopId.$oid;
+  }
+};
+
+const fixShopsIdNaming = (shops) => {
+  for (let i = 0; i < shops.length; i++) {
+    //change _id to id
+    shops[i].id = shops[i]["_id"]["$oid"];
+
+    shops[i].id = shops[i]._id.$oid;
+
+    //delete the $oid object
+    delete shops[i]._id;
   }
 };
 
@@ -214,7 +226,7 @@ const resolvers = {
             { $skip: offset },
           ],
         });
-        fixIdNaming(products);
+        fixProductsIdNaming(products);
 
         return products;
       } catch (e: any) {
@@ -249,7 +261,7 @@ const resolvers = {
         return true;
       }
     },
-    shops: async (_, { cap }, { prisma }: Context) => {
+    shops: async (_, { cap, range, limit, offset }, { prisma }: Context) => {
       const searchedCap = await prisma.cap.findFirst({
         where: {
           cap,
@@ -266,26 +278,16 @@ const resolvers = {
         pipeline: [
           {
             $search: {
-              index: "search",
+              index: "closeShops",
               compound: {
                 must: [
-                  // {
-                  //   text: {
-                  //     query: filters.name,
-                  //     path: "name",
-                  //     fuzzy: {
-                  //       maxEdits: 2,
-                  //       prefixLength: 4,
-                  //     },
-                  //   },
-                  // },
                   {
                     geoWithin: {
-                      path: "location",
+                      path: "address.location",
                       circle: {
                         center: {
                           type: "Point",
-                          coordinates: [latitude, longitude],
+                          coordinates 
                         },
                         radius: range,
                       },
@@ -295,8 +297,12 @@ const resolvers = {
               },
             },
           },
+          { $limit: limit },
+          { $skip: offset },
         ],
       });
+
+      fixShopsIdNaming(shops);
 
       return shops;
     },
