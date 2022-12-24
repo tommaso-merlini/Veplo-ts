@@ -302,8 +302,6 @@ const resolvers = {
         ]
       })
 
-      console.log(shops)
-
       fixShopsIdNaming(shops);
 
       return shops;
