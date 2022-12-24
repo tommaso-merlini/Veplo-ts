@@ -105,6 +105,7 @@ model Cap {
   location              Location
 }
 
+//PRODUCT SEARCH INDEX
 //{
 //  "mappings": {
 //    "dynamic": false,
@@ -119,3 +120,20 @@ model Cap {
 //     }
 //   }
 // }
+
+//SHOP SEARCH INDEX
+//{
+//  "mappings": {
+//    "dynamic": false,
+//    "fields": {
+//      "address": {
+//        "fields": {
+//          "location": {
+//            "type": "geo"
+//          }
+//        },
+//       "type": "document"
+//      }
+//    }
+//  }
+//}

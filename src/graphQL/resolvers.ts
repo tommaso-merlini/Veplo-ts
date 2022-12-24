@@ -274,33 +274,35 @@ const resolvers = {
 
       const coordinates = searchedCap.location.coordinates;
 
+      // const shops = await prisma.shop.findRaw({
+      //   options: {
+      //     address: {
+      //       location: {
+      //        $near: {
+      //           $geometry: { type: "Point",  coordinates: coordinates },
+      //           $maxDistance: range
+      //         }
+      //       }
+      //     }
+      //   }
+      // });
+
       const shops = await prisma.shop.aggregateRaw({
         pipeline: [
           {
-            $search: {
-              index: "closeShops",
-              compound: {
-                must: [
-                  {
-                    geoWithin: {
-                      path: "address.location",
-                      circle: {
-                        center: {
-                          type: "Point",
-                          coordinates 
-                        },
-                        radius: range,
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-          },
-          { $limit: limit },
-          { $skip: offset },
-        ],
-      });
+            $geoNear: {
+               near: { type: "Point", coordinates: coordinates },
+               spherical: true,
+               maxDistance: range,
+               distanceField: "distance"
+            }
+         },
+         {$limit: limit},
+         {$skip: offset}
+        ]
+      })
+
+      console.log(shops)
 
       fixShopsIdNaming(shops);
 
