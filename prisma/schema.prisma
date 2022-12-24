@@ -6,17 +6,9 @@ generator client {
   binaryTargets = ["native", "linux-musl"]
 }
 
-let database_url;
-
-if(env("NODE_ENV") === "production") {
-  databse_url = env("PROD_DATABSE_URL")
-} else {
-  database_url = env("DEV_DATABSE_URL")
-}
-
 datasource db {
   provider = "mongodb"
-  url      = databse_url
+  url      = ""
 }
 
 
