@@ -13,6 +13,7 @@ const schema = makeExecutableSchema({
 
 const apolloserver = new ApolloServer({
   schema,
+  cache: "bounded",
   context: context,
   introspection: process.env.NODE_ENV !== "production",
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
