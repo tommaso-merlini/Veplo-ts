@@ -1,42 +1,15 @@
 import { Context } from "../../apollo/context";
-import { GraphQLError, Token } from "graphql";
+import { GraphQLError } from "graphql";
 import checkConstants from "../controllers/checkConstants";
 import authenticateToken from "../controllers/authenticateToken";
-import lodash, { identity } from "lodash";
-import { CountryCodeResolver } from "graphql-scalars";
-import { prisma } from "@prisma/client";
 import { reverseGeocoding } from "../controllers/reverseGeocoding";
 import { checkPostCode } from "../controllers/checkPostCode";
 import { createPostCode } from "../controllers/createPostCode";
-import { DateResolver } from "graphql-scalars";
 import Product from "../schemas/Product.model";
 import Cap from "../schemas/Cap.model";
 import getRequestedFields from "../controllers/getRequestedFields";
 import Shop from "../schemas/Shop.model";
 import getDiffs from "../controllers/getDiffs";
-
-const fixProductsIdNaming = (products) => {
-  for (let i = 0; i < products.length; i++) {
-    //change _id to id
-    products[i].id = products[i]["_id"]["$oid"];
-    delete products[i]._id;
-
-    //delete the $oid object
-    products[i].shopId = products[i].shopId.$oid;
-  }
-};
-
-const fixShopsIdNaming = (shops) => {
-  for (let i = 0; i < shops.length; i++) {
-    //change _id to id
-    shops[i].id = shops[i]["_id"]["$oid"];
-
-    shops[i].id = shops[i]._id.$oid;
-
-    //delete the $oid object
-    delete shops[i]._id;
-  }
-};
 
 const resolvers = {
   Query: {
