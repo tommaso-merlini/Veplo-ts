@@ -8,6 +8,7 @@ import { prisma } from "@prisma/client";
 import { reverseGeocoding } from "../controllers/reverseGeocoding";
 import { checkPostCode } from "../controllers/checkPostCode";
 import { createPostCode } from "../controllers/createPostCode";
+import { DateResolver } from "graphql-scalars";
 
 const fixProductsIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -72,6 +73,8 @@ const resolvers = {
               text: {
                 query: filters.name,
                 path: "name",
+                //TODO decomment when implementing the score
+                //score: { boost: { value: 1 } },
                 fuzzy: {
                   maxEdits: 2,
                   prefixLength: 4,
@@ -145,37 +148,6 @@ const resolvers = {
 
         let products: any = await prisma.product.aggregateRaw({
           pipeline: [
-            // {
-            //   $search: {
-            //     index: "search",
-            //     compound: {
-            //       must: [
-            //         // {
-            //         //   text: {
-            //         //     query: filters.name,
-            //         //     path: "name",
-            //         //     fuzzy: {
-            //         //       maxEdits: 2,
-            //         //       prefixLength: 4,
-            //         //     },
-            //         //   },
-            //         // },
-            //         {
-            //           geoWithin: {
-            //             path: "location",
-            //             circle: {
-            //               center: {
-            //                 type: "Point",
-            //                 coordinates: [latitude, longitude],
-            //               },
-            //               radius: range,
-            //             },
-            //           },
-            //         },
-            //       ],
-            //     },
-            //   },
-            // },
             {
               $search: {
                 index: "search",
@@ -199,6 +171,16 @@ const resolvers = {
                 },
               },
             },
+            //! NOT WORKING
+            // {
+            //   $match: {
+            //     updatedAt: {
+            //       $lte: new Date().toLocaleDateString(),
+            //     },
+            //     score: { boost: { value: 1 } },
+            //   },
+            // },
+
             { $match: checkGender() },
             { $match: checkMacroCategory() },
             { $match: checkBrands() },
@@ -206,18 +188,30 @@ const resolvers = {
             { $match: checkMinPrice() },
             { $match: checkMaxPrice() },
             { $match: checkColors() },
+
             { $limit: limit },
             { $skip: offset },
+            { $sort: { updatedAt: -1 } },
+
+            //     //TODO decomment when creating the score system
             // {
             //   $project: {
-            //     document: ""
-            //     score: { $meta: "searchScore" }
-            //   }
-            // }
+            //     score: { $meta: "searchScore" },
+            //     name: 1,
+            //   },
+            // },
           ],
         });
 
-        console.log(products);
+        // console.log("=====================================");
+        // console.log(products);
+        // console.log("=====================================");
+        for (let i = 0; i < products.length; i++) {
+          //change _id to id
+          products[i].updatedAt = products[i].updatedAt.$date;
+          products[i].createdAt = products[i].createdAt.$date;
+        }
+
         fixProductsIdNaming(products);
 
         return products;
@@ -283,16 +277,16 @@ const resolvers = {
         pipeline: [
           {
             $geoNear: {
-               near: { type: "Point", coordinates: coordinates },
-               spherical: true,
-               maxDistance: range,
-               distanceField: "distance"
-            }
-         },
-         {$limit: limit},
-         {$skip: offset}
-        ]
-      })
+              near: { type: "Point", coordinates: coordinates },
+              spherical: true,
+              maxDistance: range,
+              distanceField: "distance",
+            },
+          },
+          { $limit: limit },
+          { $skip: offset },
+        ],
+      });
 
       fixShopsIdNaming(shops);
 
@@ -471,6 +465,7 @@ const resolvers = {
       return products;
     },
   },
+  ISODate: DateResolver,
 };
 
 export default resolvers;
