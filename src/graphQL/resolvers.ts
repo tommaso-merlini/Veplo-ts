@@ -9,6 +9,10 @@ import { reverseGeocoding } from "../controllers/reverseGeocoding";
 import { checkPostCode } from "../controllers/checkPostCode";
 import { createPostCode } from "../controllers/createPostCode";
 import { DateResolver } from "graphql-scalars";
+import Product from "../schemas/Product.model";
+import Cap from "../schemas/Cap.model";
+import getRequestedFields from "../controllers/getRequestedFields";
+import Shop from "../schemas/Shop.model";
 
 const fixProductsIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -38,260 +42,241 @@ const resolvers = {
     prova: () => {
       return "ciao";
     },
-    // product: async (_, { id }, { prisma }: Context) => {
-    //   const product = await prisma.product.findFirst({
-    //     where: {
-    //       id,
-    //     },
-    //   });
-    //   return product;
-    // },
-    // products: async (
-    //   _,
-    //   { range, limit, offset, filters },
-    //   { prisma }: Context
-    // ) => {
-    //   try {
-    //     const searchedCap = await prisma.cap.findFirst({
-    //       where: {
-    //         cap: filters.cap,
-    //       },
-    //     });
-    //     if (!searchedCap) {
-    //       throw new Error(`cap ${filters.cap} does not exists`);
-    //     }
-    //     const coordinates = searchedCap.location.coordinates;
-    //     const latitude = coordinates[0];
-    //     const longitude = coordinates[1];
-    //     const gender = filters.gender;
-    //     const macroCategory = filters.macroCategory;
-    //     const brands = filters.brands;
-    //     const sizes = filters.sizes;
-    //     const checkName = () => {
-    //       if (filters.name != null) {
-    //         return {
-    //           text: {
-    //             query: filters.name,
-    //             path: "name",
-    //             //TODO decomment when implementing the score
-    //             //score: { boost: { value: 1 } },
-    //             fuzzy: {
-    //               maxEdits: 2,
-    //               prefixLength: 4,
-    //             },
-    //           },
-    //         };
-    //       } else {
-    //         return {
-    //           exists: {
-    //             path: "search",
-    //           },
-    //         };
-    //       }
-    //     };
-    //     const checkGender = () => {
-    //       if (filters.gender != null) {
-    //         return { gender };
-    //       } else {
-    //         return {};
-    //       }
-    //     };
-    //     const checkBrands = () => {
-    //       if (filters.brands != null) {
-    //         return {
-    //           brand: { $in: brands },
-    //         };
-    //       } else {
-    //         return {};
-    //       }
-    //     };
-    //     const checkSizes = () => {
-    //       if (filters.sizes != null) {
-    //         return {
-    //           sizes: { $in: sizes },
-    //         };
-    //       } else {
-    //         return {};
-    //       }
-    //     };
-    //     const checkMacroCategory = () => {
-    //       if (filters.macroCategory != null && filters.macroCategory != "") {
-    //         return { macroCategory };
-    //       } else {
-    //         return {};
-    //       }
-    //     };
+    product: async (_, { id }) => {
+      const product = await Product.findById(id);
+      return product;
+    },
+    products: async (_, { range, limit, offset, filters }, __, info) => {
+      try {
+        const searchedCap = await Cap.findOne({
+          cap: filters.cap,
+        });
 
-    //     const checkMaxPrice = () => {
-    //       if (filters.maxPrice != null) {
-    //         return { price: { $lte: filters.maxPrice } };
-    //       } else {
-    //         return {};
-    //       }
-    //     };
+        if (!searchedCap) {
+          throw new Error(`cap ${filters.cap} does not exists`);
+        }
 
-    //     const checkMinPrice = () => {
-    //       if (filters.minPrice != null) {
-    //         return { price: { $gte: filters.minPrice } };
-    //       } else {
-    //         return {};
-    //       }
-    //     };
+        const coordinates = searchedCap.location.coordinates;
+        const latitude = coordinates[0];
+        const longitude = coordinates[1];
+        const gender = filters.gender;
+        const macroCategory = filters.macroCategory;
+        const brands = filters.brands;
+        const sizes = filters.sizes;
+        const checkName = () => {
+          if (filters.name != null) {
+            return {
+              text: {
+                query: filters.name,
+                path: "name",
+                //TODO decomment when implementing the score
+                //score: { boost: { value: 1 } },
+                fuzzy: {
+                  maxEdits: 2,
+                  prefixLength: 4,
+                },
+              },
+            };
+          } else {
+            return {
+              exists: {
+                path: "search",
+              },
+            };
+          }
+        };
+        const checkGender = () => {
+          if (filters.gender != null) {
+            return { gender };
+          } else {
+            return {};
+          }
+        };
+        const checkBrands = () => {
+          if (filters.brands != null) {
+            return {
+              brand: { $in: brands },
+            };
+          } else {
+            return {};
+          }
+        };
+        const checkSizes = () => {
+          if (filters.sizes != null) {
+            return {
+              sizes: { $in: sizes },
+            };
+          } else {
+            return {};
+          }
+        };
+        const checkMacroCategory = () => {
+          if (filters.macroCategory != null && filters.macroCategory != "") {
+            return { macroCategory };
+          } else {
+            return {};
+          }
+        };
 
-    //     const checkColors = () => {
-    //       if (filters.colors != null) {
-    //         return { colors: { $in: filters.colors } };
-    //       } else {
-    //         return {};
-    //       }
-    //     };
+        const checkMaxPrice = () => {
+          if (filters.maxPrice != null) {
+            return { price: { $lte: filters.maxPrice } };
+          } else {
+            return {};
+          }
+        };
 
-    //     let products: any = await prisma.product.aggregateRaw({
-    //       pipeline: [
-    //         {
-    //           $search: {
-    //             index: "search",
-    //             compound: {
-    //               should: [
-    //                 //!get the best ranked name on the top of the list
-    //                 checkName(),
-    //                 {
-    //                   geoWithin: {
-    //                     path: "location",
-    //                     circle: {
-    //                       center: {
-    //                         type: "Point",
-    //                         coordinates: [latitude, longitude],
-    //                       },
-    //                       radius: range,
-    //                     },
-    //                   },
-    //                 },
-    //               ],
-    //             },
-    //           },
-    //         },
-    //         //! NOT WORKING
-    //         // {
-    //         //   $match: {
-    //         //     updatedAt: {
-    //         //       $lte: new Date().toLocaleDateString(),
-    //         //     },
-    //         //     score: { boost: { value: 1 } },
-    //         //   },
-    //         // },
+        const checkMinPrice = () => {
+          if (filters.minPrice != null) {
+            return { price: { $gte: filters.minPrice } };
+          } else {
+            return {};
+          }
+        };
 
-    //         { $match: checkGender() },
-    //         { $match: checkMacroCategory() },
-    //         { $match: checkBrands() },
-    //         { $match: checkSizes() },
-    //         { $match: checkMinPrice() },
-    //         { $match: checkMaxPrice() },
-    //         { $match: checkColors() },
+        const checkColors = () => {
+          if (filters.colors != null) {
+            return { colors: { $in: filters.colors } };
+          } else {
+            return {};
+          }
+        };
 
-    //         { $limit: limit },
-    //         { $skip: offset },
-    //         { $sort: { updatedAt: -1 } },
+        let products: any = await Product.aggregate([
+          {
+            $search: {
+              index: "ProductSearchIndex",
+              compound: {
+                should: [
+                  //!get the best ranked name on the top of the list
+                  checkName(),
+                  {
+                    geoWithin: {
+                      path: "location",
+                      circle: {
+                        center: {
+                          type: "Point",
+                          coordinates: [latitude, longitude],
+                        },
+                        radius: range,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          //! NOT WORKING
+          // {
+          //   $match: {
+          //     updatedAt: {
+          //       $lte: new Date().toDateString(),
+          //     },
+          //     score: { boost: { value: 1 } },
+          //   },
+          // },
 
-    //         //     //TODO decomment when creating the score system
-    //         // {
-    //         //   $project: {
-    //         //     score: { $meta: "searchScore" },
-    //         //     name: 1,
-    //         //   },
-    //         // },
-    //       ],
-    //     });
+          { $match: checkGender() },
+          { $match: checkMacroCategory() },
+          { $match: checkBrands() },
+          { $match: checkSizes() },
+          { $match: checkMinPrice() },
+          { $match: checkMaxPrice() },
+          { $match: checkColors() },
 
-    //     // console.log("=====================================");
-    //     // console.log(products);
-    //     // console.log("=====================================");
-    //     for (let i = 0; i < products.length; i++) {
-    //       //change _id to id
-    //       products[i].updatedAt = products[i].updatedAt.$date;
-    //       products[i].createdAt = products[i].createdAt.$date;
-    //     }
+          // { $limit: limit },
+          // { $skip: offset },
+          { $sort: { updatedAt: -1 } },
 
-    //     fixProductsIdNaming(products);
+          //     //TODO decomment when creating the score system
+          {
+            $project: {
+              score: { $meta: "searchScore" },
+              // name: 1,
+              ...getRequestedFields(info),
+              _id: 0,
+              id: "$_id",
+            },
+          },
+        ])
+          .skip(offset)
+          .limit(limit);
 
-    //     return products;
-    //   } catch (e: any) {
-    //     console.log(e.message);
-    //     throw new GraphQLError(e.message);
-    //   }
-    // },
-    // shop: async (_, { id }, { prisma }: Context) => {
-    //   const shop = await prisma.shop.findFirst({
-    //     where: {
-    //       id,
-    //     },
-    //   });
+        // console.log("=====================================");
+        // console.log(products);
+        // console.log("=====================================");
 
-    //   return shop;
-    // },
-    // shopByFirebaseId: async (_, { firebaseId }, { prisma }: Context) => {
-    //   const shop = await prisma.shop.findFirst({
-    //     where: {
-    //       firebaseId,
-    //     },
-    //   });
+        return products;
+      } catch (e: any) {
+        console.log(e.message);
+        throw new GraphQLError(e.message);
+      }
+    },
+    shop: async (_, { id }) => {
+      const shop = await Shop.findById(id);
 
-    //   return shop;
-    // },
-    // isShop: async (_, __, { req, admin }: Context) => {
-    //   //token operations
-    //   const token = await admin.auth().verifyIdToken(req.headers.authorization);
-    //   if (!token.isShop) {
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    // },
-    // shops: async (_, { cap, range, limit, offset }, { prisma }: Context) => {
-    //   const searchedCap = await prisma.cap.findFirst({
-    //     where: {
-    //       cap,
-    //     },
-    //   });
+      return shop;
+    },
+    shopByFirebaseId: async (_, { firebaseId }) => {
+      const shop = await Shop.findOne({ firebaseId });
 
-    //   if (!searchedCap) {
-    //     throw new Error(`${cap} non registrato`);
-    //   }
+      return shop;
+    },
+    isShop: async (_, __, { req, admin }: Context) => {
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      if (!token.isShop) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    shops: async (_, { cap, range, limit, offset }, __, info) => {
+      const searchedCap = await Cap.findOne({ cap });
 
-    //   const coordinates = searchedCap.location.coordinates;
+      if (!searchedCap) {
+        throw new Error(`${cap} non registrato`);
+      }
 
-    //   // const shops = await prisma.shop.findRaw({
-    //   //   options: {
-    //   //     address: {
-    //   //       location: {
-    //   //        $near: {
-    //   //           $geometry: { type: "Point",  coordinates: coordinates },
-    //   //           $maxDistance: range
-    //   //         }
-    //   //       }
-    //   //     }
-    //   //   }
-    //   // });
+      const coordinates = searchedCap.location.coordinates;
 
-    //   const shops = await prisma.shop.aggregateRaw({
-    //     pipeline: [
-    //       {
-    //         $geoNear: {
-    //           near: { type: "Point", coordinates: coordinates },
-    //           spherical: true,
-    //           maxDistance: range,
-    //           distanceField: "distance",
-    //         },
-    //       },
-    //       { $limit: limit },
-    //       { $skip: offset },
-    //     ],
-    //   });
+      // const shops = await prisma.shop.findRaw({
+      //   options: {
+      //     address: {
+      //       location: {
+      //        $near: {
+      //           $geometry: { type: "Point",  coordinates: coordinates },
+      //           $maxDistance: range
+      //         }
+      //       }
+      //     }
+      //   }
+      // });
 
-    //   fixShopsIdNaming(shops);
+      const shops = await Shop.aggregate([
+        {
+          $geoNear: {
+            near: { type: "Point", coordinates: coordinates },
+            spherical: true,
+            maxDistance: range,
+            distanceField: "distance",
+          },
+        },
+        {
+          $project: {
+            score: { $meta: "searchScore" },
+            // name: 1,
+            ...getRequestedFields(info),
+            _id: 0,
+            id: "$_id",
+          },
+        },
+      ])
+        .skip(offset)
+        .limit(limit);
 
-    //   return shops;
-    // },
+      return shops;
+    },
   },
 
   // Mutation: {
@@ -454,17 +439,15 @@ const resolvers = {
   //   },
   // },
 
-  // Shop: {
-  //   products: async (shop, _, { prisma }: Context) => {
-  //     const products = await prisma.product.findMany({
-  //       where: {
-  //         shopId: shop.id,
-  //       },
-  //     });
+  Shop: {
+    products: async (shop) => {
+      const products = await Product.find({
+        shopId: shop.id,
+      });
 
-  //     return products;
-  //   },
-  // },
+      return products;
+    },
+  },
   // ISODate: DateResolver,
 };
 

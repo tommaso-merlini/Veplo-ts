@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-mongoose.set("useCreateIndex", true);
+// mongoose.set("useCreateIndex", true);
 
 const ProductSchema = new mongoose.Schema({
   name: {
@@ -45,18 +45,17 @@ const ProductSchema = new mongoose.Schema({
       required: true,
     },
   },
+  photos: [{ type: String, required: true }],
+  createdAt: {
+    type: Date,
+    required: true,
+  },
+  updatedAt: {
+    type: Date,
+    required: true,
+  },
 
   //   status: { type: String, required: true },
-});
-
-// Duplicate the ID field.
-ProductSchema.virtual("id").get(function () {
-  return this._id.toHexString();
-});
-
-// Ensure virtual fields are serialised.
-ProductSchema.set("toJSON", {
-  virtuals: true,
 });
 
 ProductSchema.index({
