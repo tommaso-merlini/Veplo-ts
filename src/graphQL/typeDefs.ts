@@ -60,6 +60,7 @@ const typeDefs = gql`
     photo: String
     piva: String
     phone: String
+    opening: Opening
   }
 
   #===========INPUTS===============
