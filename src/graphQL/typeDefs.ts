@@ -1,6 +1,9 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  #===========SCALARS===============
+  scalar ISODate
+
   #===========TYPES===============
   type Location {
     type: String!
@@ -40,6 +43,7 @@ const typeDefs = gql`
     shop: Lightshop
     photos: [String!]
     updatedAt: String
+    createdAt: String
   }
 
   type Shop {
