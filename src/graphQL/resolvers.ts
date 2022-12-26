@@ -313,7 +313,7 @@ const resolvers = {
       return product.id;
     },
 
-    deleteProduct: async (_, { id }, { prisma, admin, req }: Context) => {
+    deleteProduct: async (_, { id }, { admin, req }: Context) => {
       const product = await Product.findById(id);
 
       //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
