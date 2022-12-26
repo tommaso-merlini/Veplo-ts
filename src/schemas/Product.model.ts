@@ -35,7 +35,7 @@ const ProductSchema = new mongoose.Schema({
   brand: { type: String, required: false },
   shopId: { type: mongoose.Types.ObjectId, required: true },
   firebaseShopId: { type: String, required: true },
-  shop: {
+  shopOptions: {
     name: {
       type: String,
       required: true,

@@ -277,7 +277,7 @@ const resolvers = {
         },
         shopId: shopId,
         firebaseShopId: shop.firebaseId,
-        shop: {
+        shopOptions: {
           city: shop.address.city,
           name: shop.name,
         },

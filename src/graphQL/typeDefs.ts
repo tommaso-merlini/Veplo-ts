@@ -40,7 +40,7 @@ const typeDefs = gql`
     location: Location
     shopId: ID
     firebaseShopId: String
-    shop: Lightshop
+    shopOptions: Lightshop
     photos: [String!]
     updatedAt: String
     createdAt: String
