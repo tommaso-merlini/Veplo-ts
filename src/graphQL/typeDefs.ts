@@ -54,7 +54,7 @@ const typeDefs = gql`
     firebaseId: String
     address: AddressShop
     #macroCategories: [String!]
-    description: [String!]
+    description: String
     createdAt: String
     #gender: [String!]
     photo: String
