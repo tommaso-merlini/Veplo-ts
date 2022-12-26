@@ -214,19 +214,6 @@ const resolvers = {
 
       const coordinates = searchedCap.location.coordinates;
 
-      // const shops = await prisma.shop.findRaw({
-      //   options: {
-      //     address: {
-      //       location: {
-      //        $near: {
-      //           $geometry: { type: "Point",  coordinates: coordinates },
-      //           $maxDistance: range
-      //         }
-      //       }
-      //     }
-      //   }
-      // });
-
       const shops = await Shop.aggregate([
         {
           $geoNear: {

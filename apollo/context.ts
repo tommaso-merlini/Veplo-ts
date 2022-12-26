@@ -1,5 +1,4 @@
 import resolvers from "../src/graphQL/resolvers";
-import { Prisma } from "../prisma/prisma";
 import { admin, db, FieldValue } from "../firebase/firebase";
 
 export interface Context {
