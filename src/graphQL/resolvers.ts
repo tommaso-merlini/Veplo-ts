@@ -9,6 +9,11 @@ import { reverseGeocoding } from "../controllers/reverseGeocoding";
 import { checkPostCode } from "../controllers/checkPostCode";
 import { createPostCode } from "../controllers/createPostCode";
 import { DateResolver } from "graphql-scalars";
+import Product from "../schemas/Product.model";
+import Cap from "../schemas/Cap.model";
+import getRequestedFields from "../controllers/getRequestedFields";
+import Shop from "../schemas/Shop.model";
+import getDiffs from "../controllers/getDiffs";
 
 const fixProductsIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -38,28 +43,20 @@ const resolvers = {
     prova: () => {
       return "ciao";
     },
-    product: async (_, { id }, { prisma }: Context) => {
-      const product = await prisma.product.findFirst({
-        where: {
-          id,
-        },
-      });
+    product: async (_, { id }) => {
+      const product = await Product.findById(id);
       return product;
     },
-    products: async (
-      _,
-      { range, limit, offset, filters },
-      { prisma }: Context
-    ) => {
+    products: async (_, { range, limit, offset, filters }, __, info) => {
       try {
-        const searchedCap = await prisma.cap.findFirst({
-          where: {
-            cap: filters.cap,
-          },
+        const searchedCap = await Cap.findOne({
+          cap: filters.cap,
         });
+
         if (!searchedCap) {
           throw new Error(`cap ${filters.cap} does not exists`);
         }
+
         const coordinates = searchedCap.location.coordinates;
         const latitude = coordinates[0];
         const longitude = coordinates[1];
@@ -146,73 +143,69 @@ const resolvers = {
           }
         };
 
-        let products: any = await prisma.product.aggregateRaw({
-          pipeline: [
-            {
-              $search: {
-                index: "search",
-                compound: {
-                  should: [
-                    //!get the best ranked name on the top of the list
-                    checkName(),
-                    {
-                      geoWithin: {
-                        path: "location",
-                        circle: {
-                          center: {
-                            type: "Point",
-                            coordinates: [latitude, longitude],
-                          },
-                          radius: range,
+        let products: any = await Product.aggregate([
+          {
+            $search: {
+              index: "ProductSearchIndex",
+              compound: {
+                should: [
+                  //!get the best ranked name on the top of the list
+                  checkName(),
+                  {
+                    geoWithin: {
+                      path: "location",
+                      circle: {
+                        center: {
+                          type: "Point",
+                          coordinates: [latitude, longitude],
                         },
+                        radius: range,
                       },
                     },
-                  ],
-                },
+                  },
+                ],
               },
             },
-            //! NOT WORKING
-            // {
-            //   $match: {
-            //     updatedAt: {
-            //       $lte: new Date().toLocaleDateString(),
-            //     },
-            //     score: { boost: { value: 1 } },
-            //   },
-            // },
+          },
+          //! NOT WORKING
+          // {
+          //   $match: {
+          //     updatedAt: {
+          //       $lte: new Date().toDateString(),
+          //     },
+          //     score: { boost: { value: 1 } },
+          //   },
+          // },
 
-            { $match: checkGender() },
-            { $match: checkMacroCategory() },
-            { $match: checkBrands() },
-            { $match: checkSizes() },
-            { $match: checkMinPrice() },
-            { $match: checkMaxPrice() },
-            { $match: checkColors() },
+          { $match: checkGender() },
+          { $match: checkMacroCategory() },
+          { $match: checkBrands() },
+          { $match: checkSizes() },
+          { $match: checkMinPrice() },
+          { $match: checkMaxPrice() },
+          { $match: checkColors() },
 
-            { $limit: limit },
-            { $skip: offset },
-            { $sort: { updatedAt: -1 } },
+          // { $limit: limit },
+          // { $skip: offset },
+          { $sort: { updatedAt: -1 } },
 
-            //     //TODO decomment when creating the score system
-            // {
-            //   $project: {
-            //     score: { $meta: "searchScore" },
-            //     name: 1,
-            //   },
-            // },
-          ],
-        });
+          //     //TODO decomment when creating the score system
+          {
+            $project: {
+              score: { $meta: "searchScore" },
+              // name: 1,
+              ...getRequestedFields(info),
+              _id: 0,
+              id: "$_id",
+            },
+          },
+        ])
+          .skip(offset)
+          .limit(limit);
 
         // console.log("=====================================");
         // console.log(products);
         // console.log("=====================================");
-        for (let i = 0; i < products.length; i++) {
-          //change _id to id
-          products[i].updatedAt = products[i].updatedAt.$date;
-          products[i].createdAt = products[i].createdAt.$date;
-        }
-
-        fixProductsIdNaming(products);
 
         return products;
       } catch (e: any) {
@@ -220,21 +213,13 @@ const resolvers = {
         throw new GraphQLError(e.message);
       }
     },
-    shop: async (_, { id }, { prisma }: Context) => {
-      const shop = await prisma.shop.findFirst({
-        where: {
-          id,
-        },
-      });
+    shop: async (_, { id }) => {
+      const shop = await Shop.findById(id);
 
       return shop;
     },
-    shopByFirebaseId: async (_, { firebaseId }, { prisma }: Context) => {
-      const shop = await prisma.shop.findFirst({
-        where: {
-          firebaseId,
-        },
-      });
+    shopByFirebaseId: async (_, { firebaseId }) => {
+      const shop = await Shop.findOne({ firebaseId });
 
       return shop;
     },
@@ -247,12 +232,8 @@ const resolvers = {
         return true;
       }
     },
-    shops: async (_, { cap, range, limit, offset }, { prisma }: Context) => {
-      const searchedCap = await prisma.cap.findFirst({
-        where: {
-          cap,
-        },
-      });
+    shops: async (_, { cap, range, limit, offset }, __, info) => {
+      const searchedCap = await Cap.findOne({ cap });
 
       if (!searchedCap) {
         throw new Error(`${cap} non registrato`);
@@ -273,40 +254,37 @@ const resolvers = {
       //   }
       // });
 
-      const shops = await prisma.shop.aggregateRaw({
-        pipeline: [
-          {
-            $geoNear: {
-              near: { type: "Point", coordinates: coordinates },
-              spherical: true,
-              maxDistance: range,
-              distanceField: "distance",
-            },
+      const shops = await Shop.aggregate([
+        {
+          $geoNear: {
+            near: { type: "Point", coordinates: coordinates },
+            spherical: true,
+            maxDistance: range,
+            distanceField: "distance",
           },
-          { $limit: limit },
-          { $skip: offset },
-        ],
-      });
-
-      fixShopsIdNaming(shops);
+        },
+        {
+          $project: {
+            score: { $meta: "searchScore" },
+            // name: 1,
+            ...getRequestedFields(info),
+            _id: 0,
+            id: "$_id",
+          },
+        },
+      ])
+        .skip(offset)
+        .limit(limit);
 
       return shops;
     },
   },
 
   Mutation: {
-    createProduct: async (
-      _,
-      { shopId, options },
-      { prisma, admin, req }: Context
-    ) => {
+    createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
       checkConstants(options, "product");
 
-      const shop = await prisma.shop.findFirst({
-        where: {
-          id: shopId,
-        },
-      });
+      const shop = await Shop.findById(shopId);
 
       if (shop === null || shop === undefined) {
         throw new Error(`can't find a shop with id ${shopId}`);
@@ -318,35 +296,25 @@ const resolvers = {
 
       //TODO handling the macroCategories => insert macroCategory into shop
 
-      const newProduct = await prisma.product.create({
-        data: {
-          ...options,
-          location: {
-            type: "Point",
-            coordinates: shop.address.location.coordinates,
-          },
-          shopId: shopId,
-          firebaseShopId: shop.firebaseId,
-          shop: {
-            city: shop.address.city,
-            name: shop.name,
-          },
-          createdAt: new Date(),
-          updatedAt: new Date(),
+      const newProduct = await Product.create({
+        ...options,
+        location: {
+          type: "Point",
+          coordinates: shop.address.location.coordinates,
         },
+        shopId: shopId,
+        firebaseShopId: shop.firebaseId,
+        shop: {
+          city: shop.address.city,
+          name: shop.name,
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
       return newProduct.id;
     },
-    editProduct: async (
-      _,
-      { id, options },
-      { prisma, admin, req }: Context
-    ) => {
-      const product = await prisma.product.findFirst({
-        where: {
-          id,
-        },
-      });
+    editProduct: async (_, { id, options }, { admin, req }: Context) => {
+      const product = await Product.findById(id);
 
       if (product === null || product === undefined) {
         throw new Error(`can't find a product with id ${id}`);
@@ -357,32 +325,23 @@ const resolvers = {
       authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
       //merging product with options (overwrite equal values)
-      const editedProduct = Object.assign({}, product, options);
+      const { merge, diffs, isDifferent } = getDiffs(product, options);
 
       //check if the editedProduct = product
-      if (lodash.isEqual(product, editedProduct)) {
+      if (!isDifferent) {
         throw new Error("you didn't edit any fields");
       }
 
       //check the fields with the constants
-      checkConstants(editedProduct, "product");
+      checkConstants(merge, "product");
 
-      await prisma.product.update({
-        where: {
-          id,
-        },
-        data: { ...options, updatedAt: new Date() },
-      });
+      await Product.updateOne({ _id: id }, diffs);
 
       return product.id;
     },
 
     deleteProduct: async (_, { id }, { prisma, admin, req }: Context) => {
-      const product = await prisma.product.findFirst({
-        where: {
-          id,
-        },
-      });
+      const product = await Product.findById(id);
 
       //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
@@ -390,25 +349,19 @@ const resolvers = {
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
       authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
-      await prisma.product.delete({
-        where: {
-          id,
-        },
-      });
+      await Product.findByIdAndRemove(id);
 
       return product.id;
     },
-    createShop: async (_, { options }, { prisma, req, admin }: Context) => {
+    createShop: async (_, { options }, { req, admin }: Context) => {
       //token operations
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
       if (!token.isShop) {
         throw new Error("you are not logged in as a shop");
       }
 
-      const alreadyExists = await prisma.shop.findFirst({
-        where: {
-          firebaseId: token.uid,
-        },
+      const alreadyExists = await Shop.findOne({
+        firebaseId: token.uid,
       });
 
       if (alreadyExists) {
@@ -422,19 +375,17 @@ const resolvers = {
         options.address.location.coordinates[1]
       );
 
-      const postCodeExists = await checkPostCode(prisma, postCode);
+      const postCodeExists = await checkPostCode(Cap, postCode);
       if (!postCodeExists) {
-        createPostCode(prisma, postCode, city, center);
+        createPostCode(Cap, postCode, city, center);
       }
 
       options.address.postcode = postCode;
-      const newShop = await prisma.shop.create({
-        data: {
-          ...options,
-          firebaseId: token.uid,
-          status: "inactive",
-          createdAt: new Date(),
-        },
+      const newShop = await Shop.create({
+        ...options,
+        firebaseId: "token.uid",
+        status: "inactive",
+        createdAt: new Date(),
       });
 
       return newShop.id;
@@ -455,17 +406,15 @@ const resolvers = {
   },
 
   Shop: {
-    products: async (shop, _, { prisma }: Context) => {
-      const products = await prisma.product.findMany({
-        where: {
-          shopId: shop.id,
-        },
+    products: async (shop) => {
+      const products = await Product.find({
+        shopId: shop.id,
       });
 
       return products;
     },
   },
-  ISODate: DateResolver,
+  // ISODate: DateResolver,
 };
 
 export default resolvers;

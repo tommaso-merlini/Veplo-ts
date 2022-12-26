@@ -38,7 +38,7 @@ const typeDefs = gql`
     gender: String
     brand: String
     location: Location
-    shopId: ID!
+    shopId: ID
     firebaseShopId: String
     shop: Lightshop
     photos: [String!]
