@@ -6,6 +6,7 @@ import apolloserver from "../apollo/apolloserver";
 import chalk from "chalk";
 import rateLimit from "express-rate-limit";
 import { GraphQLError } from "graphql";
+import initMongoose from "../mongoose/initMongoose";
 require("dotenv").config();
 
 process.on("uncaughtException", function (err) {
@@ -26,6 +27,7 @@ const port = process.env.PORT || 3000;
 async function startServer() {
   await apolloserver.start();
   await apolloserver.applyMiddleware({ app });
+  initMongoose();
 
   app.use(limiter);
 
