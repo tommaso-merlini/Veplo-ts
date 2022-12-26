@@ -13,6 +13,7 @@ import Product from "../schemas/Product.model";
 import Cap from "../schemas/Cap.model";
 import getRequestedFields from "../controllers/getRequestedFields";
 import Shop from "../schemas/Shop.model";
+import getDiffs from "../controllers/getDiffs";
 
 const fixProductsIdNaming = (products) => {
   for (let i = 0; i < products.length; i++) {
@@ -279,165 +280,130 @@ const resolvers = {
     },
   },
 
-  // Mutation: {
-  //   createProduct: async (
-  //     _,
-  //     { shopId, options },
-  //     { prisma, admin, req }: Context
-  //   ) => {
-  //     checkConstants(options, "product");
+  Mutation: {
+    createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
+      checkConstants(options, "product");
 
-  //     const shop = await prisma.shop.findFirst({
-  //       where: {
-  //         id: shopId,
-  //       },
-  //     });
+      const shop = await Shop.findById(shopId);
 
-  //     if (shop === null || shop === undefined) {
-  //       throw new Error(`can't find a shop with id ${shopId}`);
-  //     }
+      if (shop === null || shop === undefined) {
+        throw new Error(`can't find a shop with id ${shopId}`);
+      }
 
-  //     //token operations
-  //     const token = await admin.auth().verifyIdToken(req.headers.authorization);
-  //     authenticateToken(token.uid, shop.firebaseId, token.isShop);
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
-  //     //TODO handling the macroCategories => insert macroCategory into shop
+      //TODO handling the macroCategories => insert macroCategory into shop
 
-  //     const newProduct = await prisma.product.create({
-  //       data: {
-  //         ...options,
-  //         location: {
-  //           type: "Point",
-  //           coordinates: shop.address.location.coordinates,
-  //         },
-  //         shopId: shopId,
-  //         firebaseShopId: shop.firebaseId,
-  //         shop: {
-  //           city: shop.address.city,
-  //           name: shop.name,
-  //         },
-  //         createdAt: new Date(),
-  //         updatedAt: new Date(),
-  //       },
-  //     });
-  //     return newProduct.id;
-  //   },
-  //   editProduct: async (
-  //     _,
-  //     { id, options },
-  //     { prisma, admin, req }: Context
-  //   ) => {
-  //     const product = await prisma.product.findFirst({
-  //       where: {
-  //         id,
-  //       },
-  //     });
+      const newProduct = await Product.create({
+        ...options,
+        location: {
+          type: "Point",
+          coordinates: shop.address.location.coordinates,
+        },
+        shopId: shopId,
+        firebaseShopId: shop.firebaseId,
+        shop: {
+          city: shop.address.city,
+          name: shop.name,
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      return newProduct.id;
+    },
+    editProduct: async (_, { id, options }, { admin, req }: Context) => {
+      const product = await Product.findById(id);
 
-  //     if (product === null || product === undefined) {
-  //       throw new Error(`can't find a product with id ${id}`);
-  //     }
+      if (product === null || product === undefined) {
+        throw new Error(`can't find a product with id ${id}`);
+      }
 
-  //     //token operations
-  //     const token = await admin.auth().verifyIdToken(req.headers.authorization);
-  //     authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
-  //     //merging product with options (overwrite equal values)
-  //     const editedProduct = Object.assign({}, product, options);
+      //merging product with options (overwrite equal values)
+      const { merge, diffs, isDifferent } = getDiffs(product, options);
 
-  //     //check if the editedProduct = product
-  //     if (lodash.isEqual(product, editedProduct)) {
-  //       throw new Error("you didn't edit any fields");
-  //     }
+      //check if the editedProduct = product
+      if (!isDifferent) {
+        throw new Error("you didn't edit any fields");
+      }
 
-  //     //check the fields with the constants
-  //     checkConstants(editedProduct, "product");
+      //check the fields with the constants
+      checkConstants(merge, "product");
 
-  //     await prisma.product.update({
-  //       where: {
-  //         id,
-  //       },
-  //       data: { ...options, updatedAt: new Date() },
-  //     });
+      await Product.updateOne({ _id: id }, diffs);
 
-  //     return product.id;
-  //   },
+      return product.id;
+    },
 
-  //   deleteProduct: async (_, { id }, { prisma, admin, req }: Context) => {
-  //     const product = await prisma.product.findFirst({
-  //       where: {
-  //         id,
-  //       },
-  //     });
+    deleteProduct: async (_, { id }, { prisma, admin, req }: Context) => {
+      const product = await Product.findById(id);
 
-  //     //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
+      //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
-  //     //token operations
-  //     const token = await admin.auth().verifyIdToken(req.headers.authorization);
-  //     authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
-  //     await prisma.product.delete({
-  //       where: {
-  //         id,
-  //       },
-  //     });
+      await Product.findByIdAndRemove(id);
 
-  //     return product.id;
-  //   },
-  //   createShop: async (_, { options }, { prisma, req, admin }: Context) => {
-  //     //token operations
-  //     const token = await admin.auth().verifyIdToken(req.headers.authorization);
-  //     if (!token.isShop) {
-  //       throw new Error("you are not logged in as a shop");
-  //     }
+      return product.id;
+    },
+    createShop: async (_, { options }, { req, admin }: Context) => {
+      //token operations
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      if (!token.isShop) {
+        throw new Error("you are not logged in as a shop");
+      }
 
-  //     const alreadyExists = await prisma.shop.findFirst({
-  //       where: {
-  //         firebaseId: token.uid,
-  //       },
-  //     });
+      const alreadyExists = await Shop.findOne({
+        firebaseId: token.uid,
+      });
 
-  //     if (alreadyExists) {
-  //       throw new Error(`an user with firebaseId ${token.uid} already exists`);
-  //     }
+      if (alreadyExists) {
+        throw new Error(`an user with firebaseId ${token.uid} already exists`);
+      }
 
-  //     checkConstants(options, "shop");
+      checkConstants(options, "shop");
 
-  //     let { center, city, postCode }: any = await reverseGeocoding(
-  //       options.address.location.coordinates[0],
-  //       options.address.location.coordinates[1]
-  //     );
+      let { center, city, postCode }: any = await reverseGeocoding(
+        options.address.location.coordinates[0],
+        options.address.location.coordinates[1]
+      );
 
-  //     const postCodeExists = await checkPostCode(prisma, postCode);
-  //     if (!postCodeExists) {
-  //       createPostCode(prisma, postCode, city, center);
-  //     }
+      const postCodeExists = await checkPostCode(Cap, postCode);
+      if (!postCodeExists) {
+        createPostCode(Cap, postCode, city, center);
+      }
 
-  //     options.address.postcode = postCode;
-  //     const newShop = await prisma.shop.create({
-  //       data: {
-  //         ...options,
-  //         firebaseId: token.uid,
-  //         status: "inactive",
-  //         createdAt: new Date(),
-  //       },
-  //     });
+      options.address.postcode = postCode;
+      const newShop = await Shop.create({
+        ...options,
+        firebaseId: "token.uid",
+        status: "inactive",
+        createdAt: new Date(),
+      });
 
-  //     return newShop.id;
-  //   },
-  //   setIsShop: async (_, { isShop }, { req, admin }: Context) => {
-  //     const token = await admin.auth().verifyIdToken(req.headers.authorization);
-  //     if (isShop === token.isShop) {
-  //       if (isShop === false) {
-  //         console.log("l'utente gia' non e' uno shop");
-  //       } else {
-  //         console.log("l'utente gia' e' uno shop");
-  //       }
-  //     }
-  //     await admin.auth().setCustomUserClaims(token.uid, { isShop });
+      return newShop.id;
+    },
+    setIsShop: async (_, { isShop }, { req, admin }: Context) => {
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      if (isShop === token.isShop) {
+        if (isShop === false) {
+          console.log("l'utente gia' non e' uno shop");
+        } else {
+          console.log("l'utente gia' e' uno shop");
+        }
+      }
+      await admin.auth().setCustomUserClaims(token.uid, { isShop });
 
-  //     return true;
-  //   },
-  // },
+      return true;
+    },
+  },
 
   Shop: {
     products: async (shop) => {
