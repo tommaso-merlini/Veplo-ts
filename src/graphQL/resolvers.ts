@@ -343,7 +343,7 @@ const resolvers = {
       options.address.postcode = postCode;
       const newShop = await Shop.create({
         ...options,
-        firebaseId: "token.uid",
+        firebaseId: token.uid,
         status: "inactive",
         createdAt: new Date(),
       });
