@@ -44,7 +44,7 @@ const resolvers = {
                 query: filters.name,
                 path: "name",
                 //TODO decomment when implementing the score
-                //score: { boost: { value: 1 } },
+                score: { boost: { value: 1 } },
                 fuzzy: {
                   maxEdits: 2,
                   prefixLength: 4,
@@ -121,9 +121,7 @@ const resolvers = {
             $search: {
               index: "ProductSearchIndex",
               compound: {
-                should: [
-                  //!get the best ranked name on the top of the list
-                  checkName(),
+                must: [
                   {
                     geoWithin: {
                       path: "location",
@@ -137,18 +135,26 @@ const resolvers = {
                     },
                   },
                 ],
+                should: [
+                  //!get the best ranked name on the top of the list
+                  checkName(),
+                  {
+                    near: {
+                      path: "updatedAt",
+                      origin: new Date(),
+                      pivot: 7776000000,
+                      score: {
+                        boost: {
+                          value: 1,
+                        },
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
-          //! NOT WORKING
-          // {
-          //   $match: {
-          //     updatedAt: {
-          //       $lte: new Date().toDateString(),
-          //     },
-          //     score: { boost: { value: 1 } },
-          //   },
-          // },
+          //TODO check mongodb $filters(aggregation) for better filters
 
           { $match: checkGender() },
           { $match: checkMacroCategory() },
@@ -158,11 +164,7 @@ const resolvers = {
           { $match: checkMaxPrice() },
           { $match: checkColors() },
 
-          // { $limit: limit },
-          // { $skip: offset },
-          { $sort: { updatedAt: -1 } },
-
-          //     //TODO decomment when creating the score system
+          //TODO decomment when creating the score system
           {
             $project: {
               score: { $meta: "searchScore" },
