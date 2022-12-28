@@ -71,6 +71,9 @@ ProductSchema.index({
         type: "string",
         analyzer: "lucene.italian",
       },
+      updatedAt: {
+        type: "date",
+      },
     },
   },
 });
