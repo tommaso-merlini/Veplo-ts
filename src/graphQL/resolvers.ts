@@ -207,24 +207,83 @@ const resolvers = {
         return true;
       }
     },
-    shops: async (_, { cap, range, limit, offset }, __, info) => {
-      const searchedCap = await Cap.findOne({ cap });
+    shops: async (_, { range, limit, offset, filters }, __, info) => {
+      const searchedCap = await Cap.findOne({ cap: filters.cap });
 
       if (!searchedCap) {
-        throw new Error(`${cap} non registrato`);
+        throw new Error(`${filters.cap} non registrato`);
       }
 
       const coordinates = searchedCap.location.coordinates;
 
+      const checkName = () => {
+        if (filters.name != null) {
+          return {
+            text: {
+              query: filters.name,
+              path: "name",
+              //TODO decomment when implementing the score
+              score: { boost: { value: 1 } },
+              fuzzy: {
+                maxEdits: 2,
+                prefixLength: 4,
+              },
+            },
+          };
+        } else {
+          return {
+            exists: {
+              path: "search",
+            },
+          };
+        }
+      };
+
       const shops = await Shop.aggregate([
         {
-          $geoNear: {
-            near: { type: "Point", coordinates: coordinates },
-            spherical: true,
-            maxDistance: range,
-            distanceField: "distance",
+          $search: {
+            index: "ShopSearchIndex",
+            compound: {
+              must: [
+                {
+                  geoWithin: {
+                    path: "address.location",
+                    score: {
+                      boost: {
+                        value: 3,
+                      },
+                    },
+                    circle: {
+                      center: {
+                        type: "Point",
+                        coordinates: [coordinates[0], coordinates[1]],
+                      },
+                      radius: range,
+                    },
+                  },
+                },
+              ],
+              should: [
+                //!get the best ranked name on the top of the list
+                checkName(),
+                {
+                  near: {
+                    path: "createdAt",
+                    origin: new Date(),
+                    pivot: 7776000000,
+                    score: {
+                      boost: {
+                        value: 1,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
           },
         },
+
+        //TODO decomment when creating the score system
         {
           $project: {
             score: { $meta: "searchScore" },
@@ -237,6 +296,10 @@ const resolvers = {
       ])
         .skip(offset)
         .limit(limit);
+
+      console.log("=====================================");
+      console.log(shops);
+      console.log("=====================================");
 
       return shops;
     },

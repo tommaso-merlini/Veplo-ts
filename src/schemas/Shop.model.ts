@@ -68,9 +68,57 @@ const ShopSchema = new mongoose.Schema({
   ],
 });
 
+// ShopSchema.index({
+//   "address.location": "2dsphere",
+// });
+
 ShopSchema.index({
-  "address.location": "2dsphere",
+  name: "ShopSearchIndex",
+
+  mappings: {
+    dynamic: false,
+    fields: {
+      address: {
+        fields: {
+          location: {
+            type: "geo",
+          },
+        },
+        type: "document",
+      },
+      name: {
+        type: "string",
+        analyzer: "lucene.italian",
+      },
+      createdAt: {
+        type: "date",
+      },
+    },
+  },
 });
+
+// {
+//   "mappings": {
+//     "dynamic": false,
+//     "fields": {
+//       "address": {
+//         "fields": {
+//           "location": {
+//             "type": "geo"
+//           }
+//         },
+//         "type": "document"
+//       },
+//       "name": {
+//         "analyzer": "lucene.italian",
+//         "type": "string"
+//       },
+//       "createdAt": {
+//         "type": "date"
+//       }
+//     }
+//   }
+// }
 
 const Shop = mongoose.model("shop", ShopSchema);
 export default Shop;

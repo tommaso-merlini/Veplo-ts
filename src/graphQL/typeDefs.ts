@@ -65,7 +65,7 @@ const typeDefs = gql`
 
   #===========INPUTS===============
 
-  input Filters {
+  input ProductFilters {
     colors: [String!]
     sizes: [String!]
     brands: [String!]
@@ -75,6 +75,11 @@ const typeDefs = gql`
     cap: String!
     gender: String
     macroCategory: String
+  }
+
+  input ShopFilters {
+    cap: String!
+    name: String
   }
 
   input LightShop {
@@ -143,14 +148,19 @@ const typeDefs = gql`
       range: Float!
       limit: Int!
       offset: Int!
-      filters: Filters
+      filters: ProductFilters!
     ): [Product!]
 
     #shop
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
     isShop: Boolean!
-    shops(cap: String!, range: Int!, limit: Int!, offset: Int!): [Shop!]!
+    shops(
+      range: Int!
+      limit: Int!
+      offset: Int!
+      filters: ShopFilters!
+    ): [Shop!]!
   }
 
   #===================MUTATIONS===================
