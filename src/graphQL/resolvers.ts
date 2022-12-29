@@ -14,6 +14,7 @@ import getDiffs from "../controllers/getDiffs";
 const resolvers = {
   Query: {
     prova: () => {
+      throw new Error("prova");
       return "ciao";
     },
     product: async (_, { id }) => {
