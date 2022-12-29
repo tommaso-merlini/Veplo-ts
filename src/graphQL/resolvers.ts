@@ -184,7 +184,6 @@ const resolvers = {
 
         return products;
       } catch (e: any) {
-        console.log(e.message);
         throw new GraphQLError(e.message);
       }
     },
@@ -296,10 +295,6 @@ const resolvers = {
       ])
         .skip(offset)
         .limit(limit);
-
-      console.log("=====================================");
-      console.log(shops);
-      console.log("=====================================");
 
       return shops;
     },
@@ -423,9 +418,9 @@ const resolvers = {
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
       if (isShop === token.isShop) {
         if (isShop === false) {
-          console.log("l'utente gia' non e' uno shop");
+          throw new Error("l'utente gia' non e' uno shop");
         } else {
-          console.log("l'utente gia' e' uno shop");
+          throw new Error("l'utente gia' e' uno shop");
         }
       }
       await admin.auth().setCustomUserClaims(token.uid, { isShop });
