@@ -1,10 +1,14 @@
 import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import {
+  ApolloError,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} from "apollo-server-core";
 import depthLimit from "graphql-depth-limit";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "../src/graphQL/typeDefs";
 import resolvers from "../src/graphQL/resolvers";
 import { context } from "./context";
+import { v4 as uuidv4 } from "uuid";
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -24,14 +28,20 @@ const apolloserver = new ApolloServer({
       err.extensions!.code.startsWith("INTERNAL_SERVER_ERROR") &&
       process.env.NODE_ENV === "production"
     ) {
-      return new Error(`internal server error`);
-    }
+      if (err.originalError instanceof ApolloError) {
+        const errorId = uuidv4();
+        console.log("============================");
 
-    if (
-      err.extensions!.code.startsWith("INTERNAL_SERVER_ERROR") &&
-      process.env.NODE_ENV === "testing"
-    ) {
-      return new Error(`internal server error -> ${err.message}`);
+        console.log(`errorId: ${errorId}`);
+        console.log(`path: ${err.path}`);
+        console.log(`date: ${new Date()}`);
+        console.log("============================");
+        return new Error(
+          `internal server error -> error id: ${errorId} | save the error id and contact ${process.env.CONTACT_EMAIL} for more informations`
+        );
+      } else {
+        return new Error(`internal server error`);
+      }
     }
 
     if (
@@ -39,13 +49,6 @@ const apolloserver = new ApolloServer({
       process.env.NODE_ENV === "production"
     ) {
       return new Error("bad graphql fields");
-    }
-
-    if (
-      err.extensions!.code.startsWith("GRAPHQL_VALIDATION_FAILED") &&
-      process.env.NODE_ENV === "production"
-    ) {
-      return new Error("graphql validation failed");
     }
 
     return err;
