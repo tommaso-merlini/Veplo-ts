@@ -54,7 +54,7 @@ const resolvers = {
           } else {
             return {
               exists: {
-                path: "search",
+                path: "name",
               },
             };
           }
@@ -233,7 +233,7 @@ const resolvers = {
         } else {
           return {
             exists: {
-              path: "search",
+              path: "name",
             },
           };
         }
@@ -245,6 +245,7 @@ const resolvers = {
             index: "ShopSearchIndex",
             compound: {
               must: [
+                checkName(),
                 {
                   geoWithin: {
                     path: "address.location",
@@ -265,7 +266,6 @@ const resolvers = {
               ],
               should: [
                 //!get the best ranked name on the top of the list
-                checkName(),
                 {
                   near: {
                     path: "createdAt",
