@@ -41,6 +41,7 @@ function startServer() {
       console.log(
         chalk.bgGreen.black(`Express is listening at http://localhost:${port}`)
       );
+      console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
     });
   });
 
