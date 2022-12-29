@@ -431,10 +431,12 @@ const resolvers = {
   },
 
   Shop: {
-    products: async (shop) => {
+    products: async (shop, { limit, offset }) => {
       const products = await Product.find({
         shopId: shop.id,
-      });
+      })
+        .skip(offset)
+        .limit(limit);
 
       return products;
     },
