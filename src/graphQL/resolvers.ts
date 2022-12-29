@@ -315,9 +315,13 @@ const resolvers = {
         throw new Error(`can't find a shop with id ${shopId}`);
       }
 
-      //token operations
-      const token = await admin.auth().verifyIdToken(req.headers.authorization);
-      authenticateToken(token.uid, shop.firebaseId, token.isShop);
+      if (process.env.NODE_ENV === "production") {
+        //token operations
+        const token = await admin
+          .auth()
+          .verifyIdToken(req.headers.authorization);
+        authenticateToken(token.uid, shop.firebaseId, token.isShop);
+      }
 
       //TODO handling the macroCategories => insert macroCategory into shop
 
