@@ -10,6 +10,8 @@ import Cap from "../schemas/Cap.model";
 import getRequestedFields from "../controllers/getRequestedFields";
 import Shop from "../schemas/Shop.model";
 import getDiffs from "../controllers/getDiffs";
+import checkFirebaseErrors from "../controllers/checkFirebaseErrors";
+import checkObjectID from "../controllers/checkObjectID";
 
 const resolvers = {
   Query: {
@@ -25,16 +27,7 @@ const resolvers = {
       return "ciao";
     },
     product: async (_, { id }) => {
-      if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      } else {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "422",
-            customPath: "id",
-            customMessage: "the id provided is not a valid ObjectID",
-          },
-        });
-      }
+      checkObjectID(id);
 
       const product = await Product.findById(id);
 
@@ -223,16 +216,7 @@ const resolvers = {
       }
     },
     shop: async (_, { id }) => {
-      if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      } else {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "422",
-            customPath: "id",
-            customMessage: "the id provided is not a valid ObjectID",
-          },
-        });
-      }
+      checkObjectID(id);
       const shop = await Shop.findById(id);
 
       if (!shop) {
@@ -240,7 +224,7 @@ const resolvers = {
           extensions: {
             customCode: "404",
             customPath: "id",
-            customMessage: "not found",
+            customMessage: "shop not found",
           },
         });
       }
@@ -255,7 +239,7 @@ const resolvers = {
           extensions: {
             customCode: "404",
             customPath: "id",
-            customMessage: "not found",
+            customMessage: "shop not found",
           },
         });
       }
@@ -377,14 +361,7 @@ const resolvers = {
       try {
         token = await admin.auth().verifyIdToken(req.headers.authorization);
       } catch (e) {
-        console.log(e);
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "401",
-            customPath: "token",
-            customMessage: "unathorized",
-          },
-        });
+        checkFirebaseErrors(e);
       }
       checkConstants(options, "product");
 
@@ -428,13 +405,7 @@ const resolvers = {
       try {
         token = await admin.auth().verifyIdToken(req.headers.authorization);
       } catch (e) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "401",
-            customPath: "token",
-            customMessage: "unathorized",
-          },
-        });
+        checkFirebaseErrors(e);
       }
       const product = await Product.findById(id);
 
@@ -443,7 +414,7 @@ const resolvers = {
           extensions: {
             customCode: "404",
             customPath: "id",
-            customMessage: "not found",
+            customMessage: "product not found",
           },
         });
       }
@@ -478,13 +449,7 @@ const resolvers = {
       try {
         token = await admin.auth().verifyIdToken(req.headers.authorization);
       } catch (e) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "401",
-            customPath: "token",
-            customMessage: "unathorized",
-          },
-        });
+        checkFirebaseErrors(e);
       }
       const product = await Product.findById(id);
 
@@ -492,8 +457,8 @@ const resolvers = {
         throw Object.assign(new Error("Error"), {
           extensions: {
             customCode: "404",
-            customPath: "product",
-            customMessage: "not found",
+            customPath: "id",
+            customMessage: "product not found",
           },
         });
       }
@@ -513,20 +478,15 @@ const resolvers = {
       try {
         token = await admin.auth().verifyIdToken(req.headers.authorization);
       } catch (e) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "401",
-            customPath: "token",
-            customMessage: "unathorized",
-          },
-        });
+        checkFirebaseErrors(e);
       }
+
       if (!token.isShop) {
         throw Object.assign(new Error("Error"), {
           extensions: {
-            customCode: "401",
+            customCode: "403",
             customPath: "token",
-            customMessage: "unauthorized ",
+            customMessage: "token's owner is not a shop",
           },
         });
       }

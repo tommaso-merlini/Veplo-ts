@@ -4,17 +4,24 @@ const authenticateToken = (tokenId: string, id: string, isShop: Boolean) => {
 
   //check if it is a shop
   if (!isShop) {
-    throw new Error("this user is not a shop");
-  }
-
-  //if the userTokenId or userId is not provided throw an error
-  if (!tokenId || !id) {
-    throw new Error("unauthorized");
+    throw Object.assign(new Error("Error"), {
+      extensions: {
+        customCode: "403",
+        customPath: "token",
+        customMessage: "token's owner is not a shop",
+      },
+    });
   }
 
   //if the userIds from the jwt and the input don't match throw an error
   if (tokenId != id) {
-    throw new Error("incorrect authorization");
+    throw Object.assign(new Error("Error"), {
+      extensions: {
+        customCode: "403",
+        customPath: "token",
+        customMessage: "token belongs to another shop",
+      },
+    });
   }
 
   return true;

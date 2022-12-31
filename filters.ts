@@ -172,8 +172,6 @@ const tags = {
     abbigliamento: [
       "Tutto l'abbigliamento",
       //"Completi",
-      "Pantaloni",
-      "Bermuda",
       {
         name: "T-shirt & Polo",
         url: "t-shirt-e-polo",

@@ -23,29 +23,39 @@ const apolloserver = new ApolloServer({
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
   validationRules: [depthLimit(3)],
   formatError: (err: any) => {
+    let path = err.path;
+    if(err.path === undefined) {
+      path = "graphql fields"
+    }
+
+    const errorId = uuidv4();
+    console.log("================================================");
+    console.log(`errorId: ${errorId}`);
+    console.log(`path: ${path}`);
+    console.log(`message: ${err.extensions.customMessage}`);
+    console.log(`date: ${new Date()}`);
+    console.log("===============================================");
+
     // Don't give the specific errors to the client (in production)
     if (err.extensions!.code.startsWith("INTERNAL_SERVER_ERROR")) {
-      if (err.originalError instanceof ApolloError) {
         if (process.env.NODE_ENV === "production") {
-          const errorId = uuidv4();
-          console.log("============================");
-
-          console.log(`errorId: ${errorId}`);
-          console.log(`path: ${err.path}`);
-          console.log(`date: ${new Date()}`);
-          console.log("============================");
-          return new Error(
-            `internal server error -> error id: ${errorId} | save the error id and contact ${process.env.CONTACT_EMAIL} for more informations`
-          );
-        } else {
           return new Error("Internal server error");
+        } else {
+        if(!err.extensions.customCode) {
+          err.extensions.customCode = "500";
         }
-      } else {
+        if(!err.extensions.customPath) {
+          err.extensions.customPath = err.path[0];
+        }
+        if(!err.extensions.customMessage) {
+          err.extensions.customMessage = err.message;
+        }
         const error = Object.assign(new Error("Internal server error"), {
           extensions: {
             code: err.extensions.customCode,
             path: err.extensions.customPath,
             message: err.extensions.customMessage,
+            id: errorId
           },
         });
         return error;
@@ -53,10 +63,22 @@ const apolloserver = new ApolloServer({
     }
 
     if (
-      err.extensions!.code.startsWith("GRAPHQL_VALIDATION_FAILED") &&
-      process.env.NODE_ENV === "production"
+      err.extensions!.code.startsWith("GRAPHQL_VALIDATION_FAILED")
     ) {
+      if(process.env.NODE_ENV === "production") {
+
       return new Error("bad graphql fields");
+      } else {
+        const error = Object.assign(new Error("Graphql validation failed"), {
+          extensions: {
+            code: "400",
+            path: "fields",
+            message: err.message,
+            id: errorId
+          },
+        });
+        return error;
+      }
     }
 
     return err;
