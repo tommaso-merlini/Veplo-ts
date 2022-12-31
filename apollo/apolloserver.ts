@@ -24,23 +24,31 @@ const apolloserver = new ApolloServer({
   validationRules: [depthLimit(3)],
   formatError: (err: any) => {
     // Don't give the specific errors to the client (in production)
-    if (
-      err.extensions!.code.startsWith("INTERNAL_SERVER_ERROR") &&
-      process.env.NODE_ENV === "production"
-    ) {
+    if (err.extensions!.code.startsWith("INTERNAL_SERVER_ERROR")) {
       if (err.originalError instanceof ApolloError) {
-        const errorId = uuidv4();
-        console.log("============================");
+        if (process.env.NODE_ENV === "production") {
+          const errorId = uuidv4();
+          console.log("============================");
 
-        console.log(`errorId: ${errorId}`);
-        console.log(`path: ${err.path}`);
-        console.log(`date: ${new Date()}`);
-        console.log("============================");
-        return new Error(
-          `internal server error -> error id: ${errorId} | save the error id and contact ${process.env.CONTACT_EMAIL} for more informations`
-        );
+          console.log(`errorId: ${errorId}`);
+          console.log(`path: ${err.path}`);
+          console.log(`date: ${new Date()}`);
+          console.log("============================");
+          return new Error(
+            `internal server error -> error id: ${errorId} | save the error id and contact ${process.env.CONTACT_EMAIL} for more informations`
+          );
+        } else {
+          return new Error("Internal server error");
+        }
       } else {
-        return new Error(`internal server error`);
+        const error = Object.assign(new Error("Internal server error"), {
+          extensions: {
+            code: err.extensions.customCode,
+            path: err.extensions.customPath,
+            message: err.extensions.customMessage,
+          },
+        });
+        return error;
       }
     }
 

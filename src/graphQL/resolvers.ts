@@ -14,10 +14,39 @@ import getDiffs from "../controllers/getDiffs";
 const resolvers = {
   Query: {
     prova: () => {
+      // throw Object.assign(new Error("Error"), {
+      //   extensions: {
+      //     customCode: "code",
+      //     customPath: "path",
+      //     customMessage: "message",
+      //   },
+      // });
+
       return "ciao";
     },
     product: async (_, { id }) => {
+      if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      } else {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "422",
+            customPath: "id",
+            customMessage: "the id provided is not a valid ObjectID",
+          },
+        });
+      }
+
       const product = await Product.findById(id);
+
+      if (!product) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "id",
+            customMessage: "not found",
+          },
+        });
+      }
       return product;
     },
     products: async (_, { range, limit, offset, filters }, __, info) => {
@@ -27,7 +56,13 @@ const resolvers = {
         });
 
         if (!searchedCap) {
-          throw new Error(`cap ${filters.cap} does not exists`);
+          throw Object.assign(new Error("Error"), {
+            extensions: {
+              customCode: "404",
+              customPath: "cap",
+              customMessage: "not found",
+            },
+          });
         }
 
         const coordinates = searchedCap.location.coordinates;
@@ -188,12 +223,42 @@ const resolvers = {
       }
     },
     shop: async (_, { id }) => {
+      if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      } else {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "422",
+            customPath: "id",
+            customMessage: "the id provided is not a valid ObjectID",
+          },
+        });
+      }
       const shop = await Shop.findById(id);
+
+      if (!shop) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "id",
+            customMessage: "not found",
+          },
+        });
+      }
 
       return shop;
     },
     shopByFirebaseId: async (_, { firebaseId }) => {
       const shop = await Shop.findOne({ firebaseId });
+
+      if (!shop) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "id",
+            customMessage: "not found",
+          },
+        });
+      }
 
       return shop;
     },
@@ -210,7 +275,13 @@ const resolvers = {
       const searchedCap = await Cap.findOne({ cap: filters.cap });
 
       if (!searchedCap) {
-        throw new Error(`${filters.cap} non registrato`);
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "cap",
+            customMessage: "not found",
+          },
+        });
       }
 
       const coordinates = searchedCap.location.coordinates;
@@ -302,21 +373,35 @@ const resolvers = {
 
   Mutation: {
     createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
+      let token;
+      try {
+        token = await admin.auth().verifyIdToken(req.headers.authorization);
+      } catch (e) {
+        console.log(e);
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "401",
+            customPath: "token",
+            customMessage: "unathorized",
+          },
+        });
+      }
       checkConstants(options, "product");
 
       const shop = await Shop.findById(shopId);
 
-      if (shop === null || shop === undefined) {
-        throw new Error(`can't find a shop with id ${shopId}`);
+      if (!shop) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "shop",
+            customMessage: "not found",
+          },
+        });
       }
 
-      if (process.env.NODE_ENV === "production") {
-        //token operations
-        const token = await admin
-          .auth()
-          .verifyIdToken(req.headers.authorization);
-        authenticateToken(token.uid, shop.firebaseId, token.isShop);
-      }
+      //token operations
+      authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
       //TODO handling the macroCategories => insert macroCategory into shop
 
@@ -335,17 +420,35 @@ const resolvers = {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+
       return newProduct.id;
     },
     editProduct: async (_, { id, options }, { admin, req }: Context) => {
+      let token;
+      try {
+        token = await admin.auth().verifyIdToken(req.headers.authorization);
+      } catch (e) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "401",
+            customPath: "token",
+            customMessage: "unathorized",
+          },
+        });
+      }
       const product = await Product.findById(id);
 
-      if (product === null || product === undefined) {
-        throw new Error(`can't find a product with id ${id}`);
+      if (!product) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "id",
+            customMessage: "not found",
+          },
+        });
       }
 
       //token operations
-      const token = await admin.auth().verifyIdToken(req.headers.authorization);
       authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
       //merging product with options (overwrite equal values)
@@ -353,7 +456,13 @@ const resolvers = {
 
       //check if the editedProduct = product
       if (!isDifferent) {
-        throw new Error("you didn't edit any fields");
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "304",
+            customPath: "product",
+            customMessage: "not modified",
+          },
+        });
       }
 
       //check the fields with the constants
@@ -365,12 +474,33 @@ const resolvers = {
     },
 
     deleteProduct: async (_, { id }, { admin, req }: Context) => {
+      let token;
+      try {
+        token = await admin.auth().verifyIdToken(req.headers.authorization);
+      } catch (e) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "401",
+            customPath: "token",
+            customMessage: "unathorized",
+          },
+        });
+      }
       const product = await Product.findById(id);
+
+      if (!product) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "product",
+            customMessage: "not found",
+          },
+        });
+      }
 
       //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
       //token operations
-      const token = await admin.auth().verifyIdToken(req.headers.authorization);
       authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
       await Product.findByIdAndRemove(id);
@@ -379,9 +509,26 @@ const resolvers = {
     },
     createShop: async (_, { options }, { req, admin }: Context) => {
       //token operations
-      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+      let token;
+      try {
+        token = await admin.auth().verifyIdToken(req.headers.authorization);
+      } catch (e) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "401",
+            customPath: "token",
+            customMessage: "unathorized",
+          },
+        });
+      }
       if (!token.isShop) {
-        throw new Error("you are not logged in as a shop");
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "401",
+            customPath: "token",
+            customMessage: "unauthorized ",
+          },
+        });
       }
 
       const alreadyExists = await Shop.findOne({
@@ -389,7 +536,13 @@ const resolvers = {
       });
 
       if (alreadyExists) {
-        throw new Error(`an user with firebaseId ${token.uid} already exists`);
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "409",
+            customPath: "shop",
+            customMessage: "already exists",
+          },
+        });
       }
 
       checkConstants(options, "shop");
@@ -417,11 +570,13 @@ const resolvers = {
     setIsShop: async (_, { isShop }, { req, admin }: Context) => {
       const token = await admin.auth().verifyIdToken(req.headers.authorization);
       if (isShop === token.isShop) {
-        if (isShop === false) {
-          throw new Error("l'utente gia' non e' uno shop");
-        } else {
-          throw new Error("l'utente gia' e' uno shop");
-        }
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "304 ",
+            customPath: "shop",
+            customMessage: "not modified",
+          },
+        });
       }
       await admin.auth().setCustomUserClaims(token.uid, { isShop });
 
