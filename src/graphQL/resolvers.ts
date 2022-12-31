@@ -36,7 +36,7 @@ const resolvers = {
           extensions: {
             customCode: "404",
             customPath: "id",
-            customMessage: "not found",
+            customMessage: "product not found",
           },
         });
       }
