@@ -53,7 +53,7 @@ const resolvers = {
             extensions: {
               customCode: "404",
               customPath: "cap",
-              customMessage: "not found",
+              customMessage: "cap not found",
             },
           });
         }
@@ -263,7 +263,7 @@ const resolvers = {
           extensions: {
             customCode: "404",
             customPath: "cap",
-            customMessage: "not found",
+            customMessage: "cap not found",
           },
         });
       }
@@ -372,7 +372,7 @@ const resolvers = {
           extensions: {
             customCode: "404",
             customPath: "shop",
-            customMessage: "not found",
+            customMessage: "shop not found",
           },
         });
       }
