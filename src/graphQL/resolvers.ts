@@ -12,6 +12,7 @@ import Shop from "../schemas/Shop.model";
 import getDiffs from "../controllers/getDiffs";
 import checkFirebaseErrors from "../controllers/checkFirebaseErrors";
 import checkObjectID from "../controllers/checkObjectID";
+import checkDiscount from "../controllers/checkDiscount";
 
 const resolvers = {
   Query: {
@@ -358,11 +359,14 @@ const resolvers = {
   Mutation: {
     createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
       let token;
-      try {
-        token = await admin.auth().verifyIdToken(req.headers.authorization);
-      } catch (e) {
-        checkFirebaseErrors(e);
+      if (process.env.NODE_ENV === "production") {
+        try {
+          token = await admin.auth().verifyIdToken(req.headers.authorization);
+        } catch (e) {
+          checkFirebaseErrors(e);
+        }
       }
+
       checkConstants(options, "product");
 
       const shop = await Shop.findById(shopId);
@@ -378,9 +382,19 @@ const resolvers = {
       }
 
       //token operations
-      authenticateToken(token.uid, shop.firebaseId, token.isShop);
+      if (process.env.NODE_ENV === "production")
+        authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
       //TODO handling the macroCategories => insert macroCategory into shop
+
+      let discountedPrice: null | number;
+
+      if (options.discount) {
+        checkDiscount(options.discount);
+        discountedPrice =
+          options.price - (options.price * options.discount) / 100;
+        discountedPrice = +discountedPrice.toFixed(2);
+      }
 
       const newProduct = await Product.create({
         ...options,
@@ -394,6 +408,7 @@ const resolvers = {
           city: shop.address.city,
           name: shop.name,
         },
+        discountedPrice,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -402,11 +417,14 @@ const resolvers = {
     },
     editProduct: async (_, { id, options }, { admin, req }: Context) => {
       let token;
-      try {
-        token = await admin.auth().verifyIdToken(req.headers.authorization);
-      } catch (e) {
-        checkFirebaseErrors(e);
+      if (process.env.NODE_ENV === "production") {
+        try {
+          token = await admin.auth().verifyIdToken(req.headers.authorization);
+        } catch (e) {
+          checkFirebaseErrors(e);
+        }
       }
+
       const product = await Product.findById(id);
 
       if (!product) {
@@ -420,7 +438,8 @@ const resolvers = {
       }
 
       //token operations
-      authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+      if (process.env.NODE_ENV === "production")
+        authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
       //merging product with options (overwrite equal values)
       const { merge, diffs, isDifferent } = getDiffs(product, options);
@@ -431,7 +450,7 @@ const resolvers = {
           extensions: {
             customCode: "304",
             customPath: "product",
-            customMessage: "not modified",
+            customMessage: "product not modified",
           },
         });
       }
@@ -439,7 +458,16 @@ const resolvers = {
       //check the fields with the constants
       checkConstants(merge, "product");
 
-      await Product.updateOne({ _id: id }, diffs);
+      let discountedPrice: null | number;
+
+      if (options.discount) {
+        checkDiscount(options.discount);
+        discountedPrice =
+          product.price - (product.price * options.discount) / 100;
+        discountedPrice = +discountedPrice.toFixed(2);
+      }
+
+      await Product.updateOne({ _id: id }, { ...diffs, discountedPrice });
 
       return product.id;
     },
@@ -474,11 +502,13 @@ const resolvers = {
     },
     createShop: async (_, { options }, { req, admin }: Context) => {
       //token operations
-      let token;
-      try {
-        token = await admin.auth().verifyIdToken(req.headers.authorization);
-      } catch (e) {
-        checkFirebaseErrors(e);
+      let token: any = "token di prova";
+      if (process.env.NODE_ENV === "production") {
+        try {
+          token = await admin.auth().verifyIdToken(req.headers.authorization);
+        } catch (e) {
+          checkFirebaseErrors(e);
+        }
       }
 
       if (!token.isShop) {

@@ -10,7 +10,7 @@ const typeDefs = gql`
     coordinates: [Float!]!
   }
 
-  type Lightshop {
+  type ShopOptions {
     city: String!
     name: String
   }
@@ -40,10 +40,12 @@ const typeDefs = gql`
     location: Location
     shopId: ID
     firebaseShopId: String
-    shopOptions: Lightshop
+    shopOptions: ShopOptions
     photos: [String!]
     updatedAt: String
     createdAt: String
+    discount: Int
+    discountedPrice: Int
   }
 
   type Shop {
@@ -82,11 +84,6 @@ const typeDefs = gql`
     name: String
   }
 
-  input LightShop {
-    name: String
-    city: String
-  }
-
   input LocationInput {
     type: String!
     coordinates: [Float!]!
@@ -113,6 +110,7 @@ const typeDefs = gql`
     gender: String!
     brand: String!
     photos: [String!]
+    discount: Int
   }
 
   input ShopInput {
@@ -135,6 +133,7 @@ const typeDefs = gql`
     gender: String
     brand: String
     photos: [String!]
+    discount: Int
   }
 
   #=============QUERIES=================
