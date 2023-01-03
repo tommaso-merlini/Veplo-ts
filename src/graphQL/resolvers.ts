@@ -572,6 +572,10 @@ const resolvers = {
 
       return true;
     },
+    createImage: async (_, { file }) => {
+      console.log(file);
+      return true;
+    },
   },
 
   Shop: {
@@ -585,7 +589,6 @@ const resolvers = {
       return products;
     },
   },
-  // ISODate: DateResolver,
 };
 
 export default resolvers;

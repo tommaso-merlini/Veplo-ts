@@ -43,8 +43,6 @@ function startServer() {
 
     s3Client;
 
-    console.log(__dirname);
-
     const blob = fs.readFileSync(__dirname + "/photos/wp6743882.jpeg");
     // Step 3: Define the parameters for the object you want to upload.
     const params = {
@@ -72,7 +70,7 @@ function startServer() {
     };
 
     // Step 5: Call the uploadObject function.
-    uploadObject();
+    //uploadObject();
 
     app.listen(port, () => {
       console.log(

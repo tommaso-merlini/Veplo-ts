@@ -2,7 +2,7 @@ const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
   #===========SCALARS===============
-  scalar ISODate
+  scalar Upload
 
   #===========TYPES===============
   type Location {
@@ -173,6 +173,9 @@ const typeDefs = gql`
     #shop
     createShop(options: ShopInput!): ID!
     setIsShop(isShop: Boolean!): Boolean!
+
+    #image
+    createImage(file: Upload!): Boolean!
   }
 `;
 
