@@ -16,7 +16,7 @@ import checkDiscount from "../controllers/checkDiscount";
 import { GraphQLUpload } from "graphql-upload";
 import { finished } from "stream/promises";
 import streamToBlob from "../controllers/streamToBlob";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import sharp from "sharp";
 import fs from "fs";
@@ -488,13 +488,16 @@ const resolvers = {
       return product.id;
     },
 
-    deleteProduct: async (_, { id }, { admin, req }: Context) => {
+    deleteProduct: async (_, { id }, { admin, req, s3Client }: Context) => {
       let token;
-      try {
-        token = await admin.auth().verifyIdToken(req.headers.authorization);
-      } catch (e) {
-        checkFirebaseErrors(e);
+      if (process.env.NODE_ENV === "production") {
+        try {
+          token = await admin.auth().verifyIdToken(req.headers.authorization);
+        } catch (e) {
+          checkFirebaseErrors(e);
+        }
       }
+
       const product = await Product.findById(id);
 
       if (!product) {
@@ -509,8 +512,24 @@ const resolvers = {
 
       //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
-      //token operations
-      authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+      if (process.env.NODE_ENV === "production")
+        //token operations
+        authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+
+      const objects = [];
+
+      product.photos.map((photo) => {
+        objects.push({ Key: photo });
+      });
+
+      const params = {
+        Bucket: "spaceprova1",
+        Delete: {
+          Objects: objects,
+        },
+      };
+
+      s3Client.send(new DeleteObjectsCommand(params));
 
       await Product.findByIdAndRemove(id);
 

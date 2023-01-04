@@ -11,6 +11,8 @@ const uploadToSpaces = async (photos, metadata) => {
     const stream = await createReadStream();
     let blob: any = await streamToBlob(stream);
 
+    //TODO resize based on type (shop or product)
+    //TODO this resize is too much heavy
     blob = sharp(blob).resize(1801, 2600);
 
     const newBlob = await streamToBlob(blob);
