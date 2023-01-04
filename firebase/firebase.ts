@@ -13,12 +13,10 @@ import "@firebase/messaging";
 import { getAuth, UserRecord } from "firebase-admin/auth";
 require("dotenv").config();
 
-
 import admin from "firebase-admin";
 const Timestamp = admin.firestore.Timestamp;
 const FieldValue = admin.firestore.FieldValue;
 
-// TODO: Replace the following with your app's Firebase project configuration
 // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
 const dev_firebaseConfig = {
   apiKey: "AIzaSyDs607C9zpuZjhM9H9lA48QRkFX4nZwi9o",
@@ -36,8 +34,8 @@ const prod_firebaseconfig = {
   storageBucket: "dintorni-prod.appspot.com",
   messagingSenderId: "890670080840",
   appId: "1:890670080840:web:1c04dd1f4e6a29d4c5497d",
-  measurementId: "G-EETDDVBRRY"
-}
+  measurementId: "G-EETDDVBRRY",
+};
 
 let serviceAccount;
 
@@ -45,8 +43,7 @@ let serviceAccount;
 // console.log(JSON.parse(JSON.stringify(process.env.PROD_FIREBASE_SERVICE_ACCOUNT)));
 // console.log("===============================");
 
-
-if(process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   serviceAccount = {
     type: process.env.PROD_TYPE,
     project_id: process.env.PROD_PROJECT_ID,
@@ -57,8 +54,8 @@ if(process.env.NODE_ENV === "production") {
     auth_uri: process.env.PROD_AUTH_URI,
     token_uri: process.env.PROD_TOKEN_URI,
     auth_provider_x509_cert_url: process.env.PROD_AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.PROD_CLIENT_X509_CERT_URL
-  }
+    client_x509_cert_url: process.env.PROD_CLIENT_X509_CERT_URL,
+  };
 } else {
   serviceAccount = {
     type: process.env.DEV_TYPE,
@@ -70,8 +67,8 @@ if(process.env.NODE_ENV === "production") {
     auth_uri: process.env.DEV_AUTH_URI,
     token_uri: process.env.DEV_TOKEN_URI,
     auth_provider_x509_cert_url: process.env.DEV_AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.DEV_CLIENT_X509_CERT_URL
-  }
+    client_x509_cert_url: process.env.DEV_CLIENT_X509_CERT_URL,
+  };
 }
 
 admin.initializeApp({
@@ -82,7 +79,7 @@ const db = admin.firestore();
 
 let firebaseConfig;
 
-if(process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   firebaseConfig = prod_firebaseconfig;
 } else {
   firebaseConfig = dev_firebaseConfig;

@@ -109,7 +109,7 @@ const typeDefs = gql`
     microCategory: String!
     gender: String!
     brand: String!
-    photos: [String!]
+    photos: [Upload!]!
     discount: Int
   }
 
@@ -132,7 +132,6 @@ const typeDefs = gql`
     microCategory: String
     gender: String
     brand: String
-    photos: [String!]
     discount: Int
   }
 
@@ -173,9 +172,10 @@ const typeDefs = gql`
     #shop
     createShop(options: ShopInput!): ID!
     setIsShop(isShop: Boolean!): Boolean!
+    #TODO editShop
 
     #image
-    createImage(file: Upload!): Boolean!
+    createImage(files: [Upload!]!): Boolean!
   }
 `;
 

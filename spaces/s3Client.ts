@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 
 // Step 2: The s3Client function validates your request and directs it to your Space's specified endpoint using the AWS SDK.
 const s3Client = new S3Client({

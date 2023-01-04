@@ -13,8 +13,18 @@ import getDiffs from "../controllers/getDiffs";
 import checkFirebaseErrors from "../controllers/checkFirebaseErrors";
 import checkObjectID from "../controllers/checkObjectID";
 import checkDiscount from "../controllers/checkDiscount";
+import { GraphQLUpload } from "graphql-upload";
+import { finished } from "stream/promises";
+import streamToBlob from "../controllers/streamToBlob";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid";
+import sharp from "sharp";
+import fs from "fs";
+import uploadToSpaces from "../controllers/uploadToSpaces";
+import { isGcsTfliteModelOptions } from "firebase-admin/lib/machine-learning/machine-learning-api-client";
 
 const resolvers = {
+  Upload: GraphQLUpload,
   Query: {
     prova: () => {
       // throw Object.assign(new Error("Error"), {
@@ -72,7 +82,6 @@ const resolvers = {
               text: {
                 query: filters.name,
                 path: "name",
-                //TODO decomment when implementing the score
                 score: { boost: { value: 1 } },
                 fuzzy: {
                   maxEdits: 2,
@@ -193,7 +202,6 @@ const resolvers = {
           { $match: checkMaxPrice() },
           { $match: checkColors() },
 
-          //TODO decomment when creating the score system
           {
             $project: {
               score: { $meta: "searchScore" },
@@ -277,7 +285,6 @@ const resolvers = {
             text: {
               query: filters.name,
               path: "name",
-              //TODO decomment when implementing the score
               score: { boost: { value: 1 } },
               fuzzy: {
                 maxEdits: 2,
@@ -338,7 +345,6 @@ const resolvers = {
           },
         },
 
-        //TODO decomment when creating the score system
         {
           $project: {
             score: { $meta: "searchScore" },
@@ -357,8 +363,13 @@ const resolvers = {
   },
 
   Mutation: {
-    createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
+    createProduct: async (
+      _,
+      { shopId, options },
+      { admin, req, s3Client }: Context
+    ) => {
       let token;
+      let photosId = [];
       if (process.env.NODE_ENV === "production") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -396,6 +407,10 @@ const resolvers = {
         discountedPrice = +discountedPrice.toFixed(2);
       }
 
+      photosId = await uploadToSpaces(options.photos, {
+        firebaseShopId: shop.firebaseShopId,
+      });
+
       const newProduct = await Product.create({
         ...options,
         location: {
@@ -411,6 +426,7 @@ const resolvers = {
         discountedPrice,
         createdAt: new Date(),
         updatedAt: new Date(),
+        photos: photosId,
       });
 
       return newProduct.id;
@@ -503,6 +519,7 @@ const resolvers = {
     createShop: async (_, { options }, { req, admin }: Context) => {
       //token operations
       let token: any = "token di prova";
+      let photosId = [];
       if (process.env.NODE_ENV === "production") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -536,7 +553,6 @@ const resolvers = {
       }
 
       checkConstants(options, "shop");
-
       let { center, city, postCode }: any = await reverseGeocoding(
         options.address.location.coordinates[0],
         options.address.location.coordinates[1]
@@ -547,12 +563,19 @@ const resolvers = {
         createPostCode(Cap, postCode, city, center);
       }
 
+      if (options.photo) {
+        photosId = await uploadToSpaces([options.photo], {
+          firebaseShopId: token.uid,
+        });
+      }
+
       options.address.postcode = postCode;
       const newShop = await Shop.create({
         ...options,
         firebaseId: token.uid,
         status: "inactive",
         createdAt: new Date(),
+        photo: photosId,
       });
 
       return newShop.id;
@@ -564,7 +587,7 @@ const resolvers = {
           extensions: {
             customCode: "304 ",
             customPath: "shop",
-            customMessage: "not modified",
+            customMessage: "shop not modified",
           },
         });
       }
@@ -572,8 +595,33 @@ const resolvers = {
 
       return true;
     },
-    createImage: async (_, { file }) => {
-      console.log(file);
+    createImage: async (_, { files }, { s3Client }) => {
+      for (let i = 0; i < files.length; i++) {
+        const { createReadStream, filename, mimetype, encoding } = await files[
+          i
+        ];
+        const stream = await createReadStream();
+        let blob: any = await streamToBlob(stream);
+
+        blob = sharp(blob).resize(1801, 2600);
+
+        const newBlob = await streamToBlob(blob);
+
+        const params: any = {
+          Bucket: "spaceprova1", // The path to the directory you want to upload the object to, starting with your Space name.
+          Key: uuidv4(), // Object key, referenced whenever you want to access this file later.
+          Body: newBlob, // The object's contents. This variable is an object, not a string.
+          ACL: "public-read", // Defines ACL permissions, such as private or public.
+          Metadata: {
+            // Defines metadata tags.
+            "x-amz-meta-my-key": "your-value",
+          },
+          ContentType: "image/webp",
+        };
+
+        await s3Client.send(new PutObjectCommand(params));
+      }
+
       return true;
     },
   },

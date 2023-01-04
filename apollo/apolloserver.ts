@@ -32,7 +32,7 @@ const apolloserver = new ApolloServer({
     console.log("================================================");
     console.log(`errorId: ${errorId}`);
     console.log(`path: ${path}`);
-    console.log(`message: ${err.extensions.customMessage}`);
+    console.log(`message: ${err.extensions.customMessage || err.message}`);
     console.log(`date: ${new Date()}`);
     console.log("===============================================");
 
