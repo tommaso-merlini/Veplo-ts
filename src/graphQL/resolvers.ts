@@ -19,9 +19,9 @@ import streamToBlob from "../controllers/streamToBlob";
 import { DeleteObjectsCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import sharp from "sharp";
-import fs from "fs";
 import uploadToSpaces from "../controllers/uploadToSpaces";
-import { isGcsTfliteModelOptions } from "firebase-admin/lib/machine-learning/machine-learning-api-client";
+import deleteFromSpaces from "../controllers/deleteFromSpaces";
+import getUpdatedPhotosId from "../controllers/getUpdatedPhotosId";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -407,9 +407,7 @@ const resolvers = {
         discountedPrice = +discountedPrice.toFixed(2);
       }
 
-      photosId = await uploadToSpaces(options.photos, {
-        firebaseShopId: shop.firebaseShopId,
-      });
+      photosId = await uploadToSpaces(options.photos);
 
       const newProduct = await Product.create({
         ...options,
@@ -433,6 +431,8 @@ const resolvers = {
     },
     editProduct: async (_, { id, options }, { admin, req }: Context) => {
       let token;
+      let updatedPhotosId = [];
+      let newPhotosId = [];
       if (process.env.NODE_ENV === "production") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -461,7 +461,7 @@ const resolvers = {
       const { merge, diffs, isDifferent } = getDiffs(product, options);
 
       //check if the editedProduct = product
-      if (!isDifferent) {
+      if (!isDifferent && !options.newPhotos && !options.deletedPhotos) {
         throw Object.assign(new Error("Error"), {
           extensions: {
             customCode: "304",
@@ -483,7 +483,29 @@ const resolvers = {
         discountedPrice = +discountedPrice.toFixed(2);
       }
 
-      await Product.updateOne({ _id: id }, { ...diffs, discountedPrice });
+      if (options.newPhotos) {
+        newPhotosId = await uploadToSpaces(options.newPhotos);
+      }
+
+      if (options.deletedPhotos) await deleteFromSpaces(options.deletedPhotos);
+
+      updatedPhotosId = getUpdatedPhotosId(
+        product.photos,
+        options.deletedPhotos,
+        newPhotosId
+      );
+
+      const arePhotosDifferent =
+        JSON.stringify(product.photos) != JSON.stringify(updatedPhotosId);
+
+      if (arePhotosDifferent) {
+        await Product.updateOne(
+          { _id: id },
+          { ...diffs, discountedPrice, photos: updatedPhotosId }
+        );
+      } else {
+        await Product.updateOne({ _id: id }, { ...diffs, discountedPrice });
+      }
 
       return product.id;
     },
@@ -516,20 +538,7 @@ const resolvers = {
         //token operations
         authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
-      const objects = [];
-
-      product.photos.map((photo) => {
-        objects.push({ Key: photo });
-      });
-
-      const params = {
-        Bucket: "spaceprova1",
-        Delete: {
-          Objects: objects,
-        },
-      };
-
-      s3Client.send(new DeleteObjectsCommand(params));
+      deleteFromSpaces(product.photos);
 
       await Product.findByIdAndRemove(id);
 
@@ -583,9 +592,7 @@ const resolvers = {
       }
 
       if (options.photo) {
-        photosId = await uploadToSpaces([options.photo], {
-          firebaseShopId: token.uid,
-        });
+        photosId = await uploadToSpaces([options.photo]);
       }
 
       options.address.postcode = postCode;

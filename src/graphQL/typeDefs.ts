@@ -133,6 +133,8 @@ const typeDefs = gql`
     gender: String
     brand: String
     discount: Int
+    newPhotos: [Upload!]
+    deletedPhotos: [String!]
   }
 
   #=============QUERIES=================

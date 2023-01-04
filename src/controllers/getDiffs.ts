@@ -2,10 +2,6 @@
  * Recursively merge properties of two objects
  */
 function getDiffs(obj1, obj2) {
-  console.log(obj1);
-
-  console.log(obj2);
-
   let diffs = {};
   let merge = obj1;
   let isDifferent = false;
@@ -15,12 +11,12 @@ function getDiffs(obj1, obj2) {
         //if the name of the values are equal
         if (obj2[p] !== obj1[k]) {
           //but the actual values are different
-          if (typeof obj2[p] === "object" && typeof obj1[k] === "object") {
-            //if the values are arrays
-            if (JSON.stringify(obj2[p]) == JSON.stringify(obj1[k])) {
-              break;
-            }
-          }
+          // if (typeof obj2[p] === "object" && typeof obj1[k] === "object") {
+          //   //if the values are arrays
+          //   if (JSON.stringify(obj2[p]) == JSON.stringify(obj1[k])) {
+          //     break;
+          //   }
+          // }
           diffs[p] = obj2[p];
           merge[p] = obj2[p];
           isDifferent = true;

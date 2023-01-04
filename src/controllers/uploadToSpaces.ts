@@ -4,7 +4,7 @@ import { uuidv4 } from "@firebase/util";
 import s3Client from "../../spaces/s3Client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-const uploadToSpaces = async (photos, metadata) => {
+const uploadToSpaces = async (photos) => {
   let imageIds = [];
   for (let i = 0; i < photos.length; i++) {
     const { createReadStream, filename, mimetype, encoding } = await photos[i];
@@ -13,7 +13,7 @@ const uploadToSpaces = async (photos, metadata) => {
 
     //TODO resize based on type (shop or product)
     //TODO this resize is too much heavy
-    blob = sharp(blob).resize(1801, 2600);
+    blob = sharp(blob).resize(762, 1100);
 
     const newBlob = await streamToBlob(blob);
 
@@ -26,7 +26,6 @@ const uploadToSpaces = async (photos, metadata) => {
       Key: id, // Object key, referenced whenever you want to access this file later.
       Body: newBlob, // The object's contents. This variable is an object, not a string.
       ACL: "public-read", // Defines ACL permissions, such as private or public.
-      Metadata: metadata,
       ContentType: "image/webp",
     };
 
