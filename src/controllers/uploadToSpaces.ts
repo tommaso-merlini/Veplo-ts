@@ -4,8 +4,14 @@ import { uuidv4 } from "@firebase/util";
 import s3Client from "../../spaces/s3Client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-const uploadToSpaces = async (photos) => {
+const uploadToSpaces = async (photos, shop?) => {
   let imageIds = [];
+  let resolutionWidth = 762;
+  let resolutionHeight = 1100;
+  if (shop !== undefined || shop !== null) {
+    resolutionWidth = 720;
+    resolutionHeight = 450;
+  }
   for (let i = 0; i < photos.length; i++) {
     const { createReadStream, filename, mimetype, encoding } = await photos[i];
     const stream = await createReadStream();
@@ -13,7 +19,7 @@ const uploadToSpaces = async (photos) => {
 
     //TODO resize based on type (shop or product)
     //TODO this resize is too much heavy
-    blob = sharp(blob).resize(762, 1100);
+    blob = sharp(blob).resize(resolutionWidth, resolutionHeight);
 
     const newBlob = await streamToBlob(blob);
 

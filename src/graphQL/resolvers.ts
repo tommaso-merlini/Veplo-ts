@@ -592,7 +592,7 @@ const resolvers = {
       }
 
       if (options.photo) {
-        photosId = await uploadToSpaces([options.photo]);
+        photosId = await uploadToSpaces([options.photo], "shop");
       }
 
       options.address.postcode = postCode;
