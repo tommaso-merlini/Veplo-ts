@@ -427,7 +427,7 @@ const resolvers = {
         photos: photosId,
       });
 
-      return newProduct.id;
+      return { id: newProduct.id, photos: photosId };
     },
     editProduct: async (_, { id, options }, { admin, req }: Context) => {
       let token;

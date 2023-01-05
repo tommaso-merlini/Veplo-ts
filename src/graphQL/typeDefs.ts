@@ -65,6 +65,11 @@ const typeDefs = gql`
     opening: Opening
   }
 
+  type CreateProductResponse {
+    id: ID!
+    photos: [String!]!
+  }
+
   #===========INPUTS===============
 
   input ProductFilters {
@@ -167,7 +172,7 @@ const typeDefs = gql`
 
   type Mutation {
     #product
-    createProduct(shopId: ID!, options: ProductInput!): ID!
+    createProduct(shopId: ID!, options: ProductInput!): CreateProductResponse
     editProduct(id: ID!, options: EditProductInput!): ID!
     deleteProduct(id: ID!): ID!
 
