@@ -123,7 +123,7 @@ const typeDefs = gql`
     address: AddressShopInput!
     description: String
     opening: OpeningInput!
-    photo: String
+    photo: Upload
     piva: String!
     phone: String!
   }
