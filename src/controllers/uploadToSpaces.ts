@@ -8,10 +8,12 @@ const uploadToSpaces = async (photos, shop?) => {
   let imageIds = [];
   let resolutionWidth = 762;
   let resolutionHeight = 1100;
-  if (shop !== undefined || shop !== null) {
+  if (shop !== undefined && shop !== null) {
     resolutionWidth = 720;
     resolutionHeight = 450;
   }
+
+  throw new Error("prova");
   for (let i = 0; i < photos.length; i++) {
     const { createReadStream, filename, mimetype, encoding } = await photos[i];
     const stream = await createReadStream();
