@@ -542,7 +542,7 @@ const resolvers = {
     },
     createShop: async (_, { options }, { req, admin }: Context) => {
       //token operations
-      let token = {
+      let token: any = {
         uid: "prova",
         isShop: true,
       };
