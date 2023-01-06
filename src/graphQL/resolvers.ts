@@ -544,6 +544,7 @@ const resolvers = {
       //token operations
       let token = {
         uid: "prova",
+        isShop: true,
       };
       let photosId = [];
       if (process.env.NODE_ENV !== "development") {
