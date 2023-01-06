@@ -363,14 +363,10 @@ const resolvers = {
   },
 
   Mutation: {
-    createProduct: async (
-      _,
-      { shopId, options },
-      { admin, req, s3Client }: Context
-    ) => {
+    createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
       let token;
       let photosId = [];
-      if (process.env.NODE_ENV === "production") {
+      if (process.env.NODE_ENV !== "development") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
         } catch (e) {
@@ -393,7 +389,7 @@ const resolvers = {
       }
 
       //token operations
-      if (process.env.NODE_ENV === "production")
+      if (process.env.NODE_ENV !== "development")
         authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
       //TODO handling the macroCategories => insert macroCategory into shop
@@ -433,7 +429,7 @@ const resolvers = {
       let token;
       let updatedPhotosId = [];
       let newPhotosId = [];
-      if (process.env.NODE_ENV === "production") {
+      if (process.env.NODE_ENV !== "development") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
         } catch (e) {
@@ -454,7 +450,7 @@ const resolvers = {
       }
 
       //token operations
-      if (process.env.NODE_ENV === "production")
+      if (process.env.NODE_ENV !== "development")
         authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
       //merging product with options (overwrite equal values)
@@ -512,7 +508,7 @@ const resolvers = {
 
     deleteProduct: async (_, { id }, { admin, req, s3Client }: Context) => {
       let token;
-      if (process.env.NODE_ENV === "production") {
+      if (process.env.NODE_ENV !== "development") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
         } catch (e) {
@@ -534,7 +530,7 @@ const resolvers = {
 
       //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
-      if (process.env.NODE_ENV === "production")
+      if (process.env.NODE_ENV !== "development")
         //token operations
         authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
@@ -548,7 +544,7 @@ const resolvers = {
       //token operations
       let token: any = "token di prova";
       let photosId = [];
-      if (process.env.NODE_ENV === "production") {
+      if (process.env.NODE_ENV !== "development") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
         } catch (e) {
