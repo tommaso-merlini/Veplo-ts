@@ -542,7 +542,9 @@ const resolvers = {
     },
     createShop: async (_, { options }, { req, admin }: Context) => {
       //token operations
-      let token: any = "token di prova";
+      let token = {
+        uid: "prova",
+      };
       let photosId = [];
       if (process.env.NODE_ENV !== "development") {
         try {
@@ -552,7 +554,7 @@ const resolvers = {
         }
       }
 
-      if (!token.isShop) {
+      if (!token.isShop && process.env.NODE_ENV !== "development") {
         throw Object.assign(new Error("Error"), {
           extensions: {
             customCode: "403",
@@ -588,7 +590,7 @@ const resolvers = {
       }
 
       if (options.photo) {
-        photosId = await uploadToSpaces([options.photo], "shop");
+        photosId = await uploadToSpaces(options.photo, "shop");
       }
 
       options.address.postcode = postCode;
@@ -597,7 +599,7 @@ const resolvers = {
         firebaseId: token.uid,
         status: "inactive",
         createdAt: new Date(),
-        photo: photosId,
+        photo: photosId[0],
       });
 
       return newShop.id;

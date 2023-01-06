@@ -13,6 +13,7 @@ const uploadToSpaces = async (photos, shop?) => {
     resolutionHeight = 450;
   }
   for (let i = 0; i < photos.length; i++) {
+    console.log(photos);
     const { createReadStream, filename, mimetype, encoding } = await photos[i];
     const stream = await createReadStream();
     let blob: any = await streamToBlob(stream);
