@@ -3,6 +3,7 @@ import streamToBlob from "./streamToBlob";
 import { uuidv4 } from "@firebase/util";
 import s3Client from "../../spaces/s3Client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { finished } from "stream/promises";
 
 const uploadToSpaces = async (photos, shop?) => {
   let imageIds = [];
@@ -13,10 +14,11 @@ const uploadToSpaces = async (photos, shop?) => {
     resolutionHeight = 450;
   }
 
-  throw new Error("prova");
   for (let i = 0; i < photos.length; i++) {
     const { createReadStream, filename, mimetype, encoding } = await photos[i];
     const stream = await createReadStream();
+    // stream.pipe(stream);
+    // await finished(stream);
     let blob: any = await streamToBlob(stream);
 
     //TODO resize based on type (shop or product)
