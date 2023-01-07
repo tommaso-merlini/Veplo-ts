@@ -366,6 +366,7 @@ const resolvers = {
     createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
       let token;
       let photosId = [];
+      console.log("foto arrivate");
       if (process.env.NODE_ENV !== "development") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);

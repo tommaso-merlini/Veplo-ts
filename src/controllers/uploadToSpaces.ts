@@ -20,6 +20,7 @@ const uploadToSpaces = async (photos, shop?) => {
     // stream.pipe(stream);
     // await finished(stream);
     let blob: any = await streamToBlob(stream);
+    console.log(`foto numero ${i} convertita`);
     blob = sharp(blob).resize(resolutionWidth, resolutionHeight);
 
     const newBlob = await streamToBlob(blob);
@@ -37,6 +38,7 @@ const uploadToSpaces = async (photos, shop?) => {
     };
 
     await s3Client.send(new PutObjectCommand(params));
+    console.log(`foto numero ${i} uploadata`);
   }
   return imageIds;
 };
