@@ -10,7 +10,7 @@ var mongoose = require("mongoose");
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 require("dotenv").config();
-require("events").EventEmitter.prototype._maxListeners = 100;
+require("events").EventEmitter.defaultMaxListeners = 100;
 import { graphqlUploadExpress } from "graphql-upload";
 
 process.on("uncaughtException", function (err) {
