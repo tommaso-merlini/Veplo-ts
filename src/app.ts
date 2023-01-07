@@ -11,7 +11,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 require("dotenv").config();
 import { graphqlUploadExpress } from "graphql-upload";
-const compression = require("compression");
+import compression from "compression";
 
 process.on("uncaughtException", function (err) {
   console.error(err);
