@@ -12,6 +12,8 @@ import fs from "fs";
 require("dotenv").config();
 require("events").EventEmitter.defaultMaxListeners = 100;
 import { graphqlUploadExpress } from "graphql-upload";
+import cluster from "cluster";
+import os from "os";
 
 process.on("uncaughtException", function (err) {
   console.error(err);
@@ -27,66 +29,72 @@ process.on("uncaughtException", function (err) {
 
 const app = express();
 const port = process.env.PORT || 3000;
+const numCpus = os.cpus().length;
 
-function startServer() {
-  initMongoose();
-  mongoose.connection.on("connected", async function (ref) {
-    console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
-    app.use(graphqlUploadExpress());
+async function startServer() {
+  if (cluster.isPrimary) {
+    for (let i = 0; i < numCpus; i++) {
+      cluster.fork();
+    }
+  } else {
+    await initMongoose();
+    mongoose.connection.on("connected", async function (ref) {
+      console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
+      app.use(graphqlUploadExpress());
 
-    await apolloserver.start();
-    await apolloserver.applyMiddleware({ app });
+      await apolloserver.start();
+      await apolloserver.applyMiddleware({ app });
 
-    // app.use(limiter);
+      // app.use(limiter);
 
-    app.get("/", (req, res) => {
-      res.send("Hello World");
+      app.get("/", (req, res) => {
+        res.send("Hello World");
+      });
+
+      app.listen(port, () => {
+        console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
+        console.log(
+          chalk.bgGreen.black(
+            `Express is listening at http://localhost:${port}`
+          )
+        );
+        console.log(
+          chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`)
+        );
+      });
     });
 
-    const blob = fs.readFileSync(__dirname + "/photos/wp6743882.jpeg");
-    // Step 3: Define the parameters for the object you want to upload.
-
-    // Step 5: Call the uploadObject function.
-    //uploadObject();
-
-    app.listen(port, () => {
-      console.log(
-        chalk.bgGreen.black(`Express is listening at http://localhost:${port}`)
+    // If the connection throws an error
+    mongoose.connection.on("error", function (err) {
+      console.error(
+        chalk.bgRed.black("Failed to connect to MongoDB on startup "),
+        err
       );
-      console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
     });
-  });
 
-  // If the connection throws an error
-  mongoose.connection.on("error", function (err) {
-    console.error(
-      chalk.bgRed.black("Failed to connect to MongoDB on startup "),
-      err
-    );
-  });
-
-  // When the connection is disconnected
-  mongoose.connection.on("disconnected", function () {
-    console.log(
-      chalk.bgYellow.black(
-        "Mongoose default connection to MongoDB is disconnected"
-      )
-    );
-  });
-
-  var gracefulExit = function () {
-    mongoose.connection.close(function () {
+    // When the connection is disconnected
+    mongoose.connection.on("disconnected", function () {
       console.log(
         chalk.bgYellow.black(
-          "Mongoose default connection to MongoDB is disconnected through app termination"
+          "Mongoose default connection to MongoDB is disconnected"
         )
       );
-      process.exit(0);
     });
-  };
 
-  // If the Node process ends, close the Mongoose connection
-  process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
+    var gracefulExit = function () {
+      mongoose.connection.close(function () {
+        console.log(
+          chalk.bgYellow.black(
+            "Mongoose default connection to MongoDB is disconnected through app termination"
+          )
+        );
+        process.exit(0);
+      });
+    };
+
+    // If the Node process ends, close the Mongoose connection
+    process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
+  }
 }
 
 startServer();
