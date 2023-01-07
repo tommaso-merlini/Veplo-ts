@@ -26,7 +26,11 @@ const limiter = rateLimit({
 });
 
 const app = express();
-app.use(compression());
+app.use(
+  compression({
+    options: ["zlib"],
+  })
+);
 const port = process.env.PORT || 3000;
 
 function startServer() {
