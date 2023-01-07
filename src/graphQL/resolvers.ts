@@ -369,7 +369,6 @@ const resolvers = {
       { admin, req, s3Client }: Context
     ) => {
       let token;
-      let photosId = [];
       const promises = [];
       console.log("foto arrivate");
       if (process.env.NODE_ENV !== "development") {
@@ -440,9 +439,7 @@ const resolvers = {
         );
       }
 
-      Promise.all(promises).then((values) => {
-        photosId = values;
-      });
+      const photosId = await Promise.all(promises);
 
       const newProduct = await Product.create({
         ...options,
