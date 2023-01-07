@@ -32,69 +32,65 @@ const port = process.env.PORT || 3000;
 const numCpus = os.cpus().length;
 
 async function startServer() {
-  if (cluster.isPrimary) {
-    for (let i = 0; i < numCpus; i++) {
-      cluster.fork();
-    }
-  } else {
-    await initMongoose();
-    mongoose.connection.on("connected", async function (ref) {
-      console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
-      app.use(graphqlUploadExpress());
+  // if (cluster.isPrimary) {
+  //   for (let i = 0; i < numCpus; i++) {
+  //     cluster.fork();
+  //   }
+  // } else {
+  await initMongoose();
+  mongoose.connection.on("connected", async function (ref) {
+    console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
+    app.use(graphqlUploadExpress());
 
-      await apolloserver.start();
-      await apolloserver.applyMiddleware({ app });
+    await apolloserver.start();
+    await apolloserver.applyMiddleware({ app });
 
-      // app.use(limiter);
+    // app.use(limiter);
 
-      app.get("/", (req, res) => {
-        res.send("Hello World");
-      });
-
-      app.listen(port, () => {
-        console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
-        console.log(
-          chalk.bgGreen.black(
-            `Express is listening at http://localhost:${port}`
-          )
-        );
-        console.log(
-          chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`)
-        );
-      });
+    app.get("/", (req, res) => {
+      res.send("Hello World");
     });
 
-    // If the connection throws an error
-    mongoose.connection.on("error", function (err) {
-      console.error(
-        chalk.bgRed.black("Failed to connect to MongoDB on startup "),
-        err
+    app.listen(port, () => {
+      console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
+      console.log(
+        chalk.bgGreen.black(`Express is listening at http://localhost:${port}`)
       );
+      console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
     });
+  });
 
-    // When the connection is disconnected
-    mongoose.connection.on("disconnected", function () {
+  // If the connection throws an error
+  mongoose.connection.on("error", function (err) {
+    console.error(
+      chalk.bgRed.black("Failed to connect to MongoDB on startup "),
+      err
+    );
+  });
+
+  // When the connection is disconnected
+  mongoose.connection.on("disconnected", function () {
+    console.log(
+      chalk.bgYellow.black(
+        "Mongoose default connection to MongoDB is disconnected"
+      )
+    );
+  });
+
+  var gracefulExit = function () {
+    mongoose.connection.close(function () {
       console.log(
         chalk.bgYellow.black(
-          "Mongoose default connection to MongoDB is disconnected"
+          "Mongoose default connection to MongoDB is disconnected through app termination"
         )
       );
+      process.exit(0);
     });
+  };
 
-    var gracefulExit = function () {
-      mongoose.connection.close(function () {
-        console.log(
-          chalk.bgYellow.black(
-            "Mongoose default connection to MongoDB is disconnected through app termination"
-          )
-        );
-        process.exit(0);
-      });
-    };
-
-    // If the Node process ends, close the Mongoose connection
-    process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
-  }
+  // If the Node process ends, close the Mongoose connection
+  process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
+  // }
 }
 
 startServer();

@@ -363,9 +363,14 @@ const resolvers = {
   },
 
   Mutation: {
-    createProduct: async (_, { shopId, options }, { admin, req }: Context) => {
+    createProduct: async (
+      _,
+      { shopId, options },
+      { admin, req, s3Client }: Context
+    ) => {
       let token;
       let photosId = [];
+      const promises = [];
       console.log("foto arrivate");
       if (process.env.NODE_ENV !== "development") {
         try {
@@ -404,7 +409,40 @@ const resolvers = {
         discountedPrice = +discountedPrice.toFixed(2);
       }
 
-      photosId = await uploadToSpaces(options.photos);
+      //photosId = await uploadToSpaces(options.photos);
+
+      for (let i = 0; i < options.photos.length; i++) {
+        promises.push(
+          new Promise(async (resolve, reject) => {
+            const { createReadStream } = await options.photos[i];
+            const stream = await createReadStream();
+            // stream.pipe(stream);
+            // await finished(stream);
+            let blob: any = await streamToBlob(stream);
+            console.log(`foto numero ${i} convertita`);
+            blob = sharp(blob).resize(762, 1100);
+
+            const newBlob = await streamToBlob(blob);
+
+            const id = uuidv4();
+
+            const params: any = {
+              Bucket: "spaceprova1", // The path to the directory you want to upload the object to, starting with your Space name.
+              Key: id, // Object key, referenced whenever you want to access this file later.
+              Body: newBlob, // The object's contents. This variable is an object, not a string.
+              ACL: "public-read", // Defines ACL permissions, such as private or public.
+              ContentType: "image/webp",
+            };
+
+            await s3Client.send(new PutObjectCommand(params));
+            resolve(id);
+          })
+        );
+      }
+
+      Promise.all(promises).then((values) => {
+        photosId = values;
+      });
 
       const newProduct = await Product.create({
         ...options,
