@@ -11,6 +11,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 require("dotenv").config();
 import { graphqlUploadExpress } from "graphql-upload";
+const compression = require("compression");
 
 process.on("uncaughtException", function (err) {
   console.error(err);
@@ -25,6 +26,7 @@ const limiter = rateLimit({
 });
 
 const app = express();
+app.use(compression());
 const port = process.env.PORT || 3000;
 
 function startServer() {
