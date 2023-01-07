@@ -433,7 +433,7 @@ const resolvers = {
               ContentType: "image/webp",
             };
 
-            await s3Client.send(new PutObjectCommand(params));
+            s3Client.send(new PutObjectCommand(params));
             resolve(id);
           })
         );
