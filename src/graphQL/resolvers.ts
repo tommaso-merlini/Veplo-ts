@@ -419,7 +419,7 @@ const resolvers = {
             // await finished(stream);
             let blob: any = await streamToBlob(stream);
             console.log(`foto numero ${i} convertita`);
-            blob = sharp(blob).resize(1143, 1650);
+            blob = sharp(blob).resize(1528, 2200);
 
             const newBlob = await streamToBlob(blob);
 
