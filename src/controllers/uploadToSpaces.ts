@@ -7,8 +7,8 @@ import { finished } from "stream/promises";
 
 const uploadToSpaces = async (photos, shop?) => {
   let imageIds = [];
-  let resolutionWidth = 762;
-  let resolutionHeight = 1100;
+  let resolutionWidth = 1143;
+  let resolutionHeight = 1650;
   if (shop !== undefined && shop !== null) {
     resolutionWidth = 720;
     resolutionHeight = 450;
