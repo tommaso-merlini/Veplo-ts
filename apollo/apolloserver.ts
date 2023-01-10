@@ -39,7 +39,7 @@ const apolloserver = new ApolloServer({
 
     // Don't give the specific errors to the client (in production)
     if (err.extensions!.code.startsWith("INTERNAL_SERVER_ERROR")) {
-      if (process.env.NODE_ENV !== "production") {
+      if (process.env.NODE_ENV === "development") {
         return err;
       } else {
         if (!err.extensions.customCode) {
