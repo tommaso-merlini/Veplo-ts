@@ -2,6 +2,7 @@ import { ApolloServer } from "apollo-server-express";
 import {
   ApolloError,
   ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageDisabled,
 } from "apollo-server-core";
 import depthLimit from "graphql-depth-limit";
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -21,7 +22,12 @@ const apolloserver = new ApolloServer({
   context: context,
   csrfPrevention: process.env.NODE_ENV !== "development",
   introspection: process.env.NODE_ENV !== "production",
-  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
+  // plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
+  plugins: [
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageDisabled()
+      : ApolloServerPluginLandingPageGraphQLPlayground(),
+  ],
   validationRules: [depthLimit(3)],
   formatError: (err: any) => {
     let path = err.path;
