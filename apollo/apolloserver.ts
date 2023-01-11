@@ -60,10 +60,10 @@ const apolloserver = new ApolloServer({
         //   },
         // });
         return {
-          name: "Internal Server Error",
+          name: err.extensions.customMessage,
           code: err.extensions.customCode,
           path: err.extensions.customPath,
-          message: err.extensions.customMessage,
+          message: "Internal Server Error",
           id: errorId,
         };
       }
@@ -74,10 +74,10 @@ const apolloserver = new ApolloServer({
         return err;
       } else {
         return {
-          name: "Graphql Validation Failed",
+          name: err.message,
           code: "400",
           path: "fields",
-          message: err.message,
+          message: "Graphql Validation Failed",
           id: errorId,
         };
       }
