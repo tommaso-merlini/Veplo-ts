@@ -51,35 +51,45 @@ const apolloserver = new ApolloServer({
         if (!err.extensions.customMessage) {
           err.extensions.customMessage = err.message;
         }
-        const error = Object.assign(new Error("Internal server error"), {
-          extensions: {
-            code: err.extensions.customCode,
-            path: err.extensions.customPath,
-            message: err.extensions.customMessage,
-            id: errorId,
-          },
-        });
-        return error;
+        // const error = Object.assign(new Error("Internal server error"), {
+        //   extensions: {
+        //     code: err.extensions.customCode,
+        //     path: err.extensions.customPath,
+        //     message: err.extensions.customMessage,
+        //     id: errorId,
+        //   },
+        // });
+        return {
+          name: "Internal Server Error",
+          code: err.extensions.customCode,
+          path: err.extensions.customPath,
+          message: err.extensions.customMessage,
+          id: errorId,
+        };
       }
     }
 
     if (err.extensions!.code.startsWith("GRAPHQL_VALIDATION_FAILED")) {
-      if (process.env.NODE_ENV === "production") {
-        return new Error("bad graphql fields");
+      if (process.env.NODE_ENV === "development") {
+        return err;
       } else {
-        const error = Object.assign(new Error("Graphql validation failed"), {
-          extensions: {
-            code: "400",
-            path: "fields",
-            message: err.message,
-            id: errorId,
-          },
-        });
-        return error;
+        return {
+          name: "Graphql Validation Failed",
+          code: "400",
+          path: "fields",
+          message: err.message,
+          id: errorId,
+        };
       }
     }
 
-    return err;
+    return {
+      name: err.extensions.code || "Unknow Error",
+      code: "500",
+      path: err.path[0] || "unknown",
+      message: err.message || "unknown",
+      id: errorId,
+    };
   },
 });
 
