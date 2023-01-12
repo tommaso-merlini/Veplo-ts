@@ -48,7 +48,7 @@ async function startServer() {
     // app.use(limiter);
 
     app.get("/", (req, res) => {
-      res.send("Hello World");
+      res.send({ status: "ok" });
     });
 
     app.listen(port, () => {
