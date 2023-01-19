@@ -22,6 +22,7 @@ import sharp from "sharp";
 import uploadToSpaces from "../controllers/uploadToSpaces";
 import deleteFromSpaces from "../controllers/deleteFromSpaces";
 import getUpdatedPhotosId from "../controllers/getUpdatedPhotosId";
+import graphqlFields from "graphql-fields";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -37,10 +38,12 @@ const resolvers = {
 
       return "ciao";
     },
-    product: async (_, { id }) => {
+    product: async (_, { id }, __, info) => {
       checkObjectID(id);
 
-      const product = await Product.findById(id);
+      const requestedFields = getRequestedFields(info);
+
+      const product = await Product.findById(id, requestedFields);
 
       if (!product) {
         throw Object.assign(new Error("Error"), {
@@ -51,6 +54,7 @@ const resolvers = {
           },
         });
       }
+
       return product;
     },
     products: async (_, { range, limit, offset, filters }, __, info) => {
@@ -220,9 +224,12 @@ const resolvers = {
 
       return products;
     },
-    shop: async (_, { id }) => {
+    shop: async (_, { id }, __, info) => {
       checkObjectID(id);
-      const shop = await Shop.findById(id);
+
+      const requestedFields = getRequestedFields(info);
+
+      const shop = await Shop.findById(id, requestedFields);
 
       if (!shop) {
         throw Object.assign(new Error("Error"), {
@@ -233,6 +240,8 @@ const resolvers = {
           },
         });
       }
+
+      console.log(shop);
 
       return shop;
     },
