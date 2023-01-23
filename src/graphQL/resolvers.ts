@@ -1,5 +1,5 @@
 import { Context } from "../../apollo/context";
-import { GraphQLError } from "graphql";
+import { GraphQLError, printSourceLocation } from "graphql";
 import checkConstants from "../controllers/checkConstants";
 import authenticateToken from "../controllers/authenticateToken";
 import { reverseGeocoding } from "../controllers/reverseGeocoding";
@@ -384,6 +384,26 @@ const resolvers = {
 
       checkConstants(options, "product");
 
+      if (options.price.v2 != null && options.price.v2 > options.price.v1) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "400",
+            customPath: "price",
+            customMessage: "pricev2 cannot be greater than pricev1",
+          },
+        });
+      }
+
+      if (options.price.v2 === options.price.v1) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "400",
+            customPath: "price",
+            customMessage: "pricev2 cannot be the same of pricev1",
+          },
+        });
+      }
+
       const shop = await Shop.findById(shopId);
 
       if (!shop) {
@@ -402,16 +422,14 @@ const resolvers = {
 
       //TODO handling the macroCategories => insert macroCategory into shop
 
-      let discountedPrice: null | number;
+      const discountPercentage = (
+        100 -
+        (100 * options.price.v2) / options.price.v1
+      ).toFixed(2);
 
-      if (options.discount) {
-        checkDiscount(options.discount);
-        discountedPrice =
-          options.price - (options.price * options.discount) / 100;
-        discountedPrice = +discountedPrice.toFixed(2);
-      }
+      console.log(discountPercentage);
 
-      //photosId = await uploadToSpaces(options.photos);
+      options.price.discountPercentage = discountPercentage;
 
       for (let i = 0; i < options.photos.length; i++) {
         promises.push(
@@ -457,7 +475,6 @@ const resolvers = {
           name: shop.name,
           status: shop.status,
         },
-        discountedPrice,
         createdAt: new Date(),
         updatedAt: new Date(),
         photos: photosId,
@@ -470,6 +487,8 @@ const resolvers = {
       let token;
       let updatedPhotosId = [];
       let newPhotosId = [];
+      let discountPercentage: null | number;
+
       if (process.env.NODE_ENV !== "development") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -494,6 +513,72 @@ const resolvers = {
       if (process.env.NODE_ENV !== "development")
         authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
+      if (
+        options.price.v1 === options.price.v2 ||
+        product.price.v1 === product.price.v2 ||
+        product.price.v1 === options.price.v2
+        // options.price.v1 === product.price.v2
+      ) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "400",
+            customPath: "product",
+            customMessage: "price v2 cannot be the same of price v1",
+          },
+        });
+      }
+
+      if (
+        options.price.v2 > product.price.v1 ||
+        product.price.v2 > options.price.v1 ||
+        options.price.v2 > options.price.v1
+      ) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "400",
+            customPath: "price",
+            customMessage: "pricev2 cannot be greater than pricev1",
+          },
+        });
+      }
+
+      //price and discount operations
+      if (
+        options.price.v1 != product.price.v1 ||
+        options.price.v2 != product.price.v2
+      ) {
+        if (!options.price.v1) {
+          options.price.v1 = product.price.v1;
+          discountPercentage = +(
+            100 -
+            (100 * options.price.v2) / options.price.v1
+          ).toFixed(2);
+        } else {
+          console.log("ok");
+          discountPercentage = +(
+            100 -
+            (100 * options.price.v2) / options.price.v1
+          ).toFixed(2);
+
+          console.log(discountPercentage);
+        }
+        if (Number.isNaN(discountPercentage)) {
+          discountPercentage = null;
+        }
+        options.price.discountPercentage = discountPercentage;
+      } else {
+        discountPercentage = product.price.discountPercentage;
+      }
+
+      console.log("=====================================");
+
+      console.log(options.price.v1, product.price.v1);
+      console.log(options.price.v2, product.price.v2);
+
+      console.log(discountPercentage);
+
+      console.log("=====================================");
+
       //merging product with options (overwrite equal values)
       const { merge, diffs, isDifferent } = getDiffs(product, options);
 
@@ -510,15 +595,6 @@ const resolvers = {
 
       //check the fields with the constants
       checkConstants(merge, "product");
-
-      let discountedPrice: null | number;
-
-      if (options.discount) {
-        checkDiscount(options.discount);
-        discountedPrice =
-          product.price - (product.price * options.discount) / 100;
-        discountedPrice = +discountedPrice.toFixed(2);
-      }
 
       if (options.newPhotos) {
         newPhotosId = await uploadToSpaces(options.newPhotos);
@@ -538,10 +614,10 @@ const resolvers = {
       if (arePhotosDifferent) {
         await Product.updateOne(
           { _id: id },
-          { ...diffs, discountedPrice, photos: updatedPhotosId }
+          { ...diffs, photos: updatedPhotosId }
         );
       } else {
-        await Product.updateOne({ _id: id }, { ...diffs, discountedPrice });
+        await Product.updateOne({ _id: id }, { ...diffs });
       }
 
       return product.id;

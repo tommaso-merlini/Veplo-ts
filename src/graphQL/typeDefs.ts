@@ -28,10 +28,16 @@ const typeDefs = gql`
     location: Location
   }
 
+  type Price {
+    v1: Float
+    v2: Float
+    discountPercentage: Float
+  }
+
   type Product {
     id: ID
     name: String
-    price: Float
+    price: Price
     colors: [String!]
     sizes: [String!]
     macroCategory: String
@@ -107,9 +113,19 @@ const typeDefs = gql`
     hours: [String!]!
   }
 
+  input PriceInput {
+    v1: Float!
+    v2: Float
+  }
+
+  input EditPriceInput {
+    v1: Float
+    v2: Float
+  }
+
   input ProductInput {
     name: String!
-    price: Float!
+    price: PriceInput!
     colors: [String!]!
     sizes: [String!]!
     macroCategory: String!
@@ -132,7 +148,7 @@ const typeDefs = gql`
 
   input EditProductInput {
     name: String
-    price: Float
+    price: EditPriceInput
     colors: [String!]
     sizes: [String!]
     macroCategory: String

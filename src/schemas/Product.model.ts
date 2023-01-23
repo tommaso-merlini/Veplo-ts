@@ -8,8 +8,15 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: Number,
-    required: true,
+    v1: {
+      type: Number,
+      required: true,
+    },
+    v2: {
+      type: Number,
+      required: false,
+    },
+    discountPercentage: { type: Number, required: false },
   },
   colors: [{ type: String, required: true }],
   sizes: [{ type: String, required: true }],
