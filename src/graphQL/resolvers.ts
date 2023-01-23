@@ -422,12 +422,14 @@ const resolvers = {
 
       //TODO handling the macroCategories => insert macroCategory into shop
 
-      const discountPercentage = (
+      let discountPercentage = +(
         100 -
         (100 * options.price.v2) / options.price.v1
       ).toFixed(2);
 
-      console.log(discountPercentage);
+      if (Number.isNaN(discountPercentage)) {
+        discountPercentage = null;
+      }
 
       options.price.discountPercentage = discountPercentage;
 

@@ -51,7 +51,6 @@ const typeDefs = gql`
     photos: [String!]
     updatedAt: String
     createdAt: String
-    discount: Int
     discountedPrice: Int
     status: String
   }
@@ -133,7 +132,6 @@ const typeDefs = gql`
     gender: String!
     brand: String!
     photos: [Upload!]!
-    discount: Int
   }
 
   input ShopInput {
@@ -155,7 +153,6 @@ const typeDefs = gql`
     microCategory: String
     gender: String
     brand: String
-    discount: Int
     newPhotos: [Upload!]
     deletedPhotos: [String!]
   }

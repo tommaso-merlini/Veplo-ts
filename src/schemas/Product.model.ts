@@ -62,14 +62,6 @@ const ProductSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  discount: {
-    type: Number,
-    required: false,
-  },
-  discountedPrice: {
-    type: Number,
-    required: false,
-  },
 
   status: { type: String, required: true },
 });
