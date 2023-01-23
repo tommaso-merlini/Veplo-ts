@@ -241,8 +241,6 @@ const resolvers = {
         });
       }
 
-      console.log(shop);
-
       return shop;
     },
     shopByFirebaseId: async (_, { firebaseId }) => {
@@ -457,11 +455,13 @@ const resolvers = {
         shopOptions: {
           city: shop.address.city,
           name: shop.name,
+          status: shop.status,
         },
         discountedPrice,
         createdAt: new Date(),
         updatedAt: new Date(),
         photos: photosId,
+        status: "active",
       });
 
       return { id: newProduct.id, photos: photosId };
@@ -581,6 +581,36 @@ const resolvers = {
 
       return product.id;
     },
+    changeProductStatus: async (_, { id, status }, { admin, req }: Context) => {
+      let token;
+      if (process.env.NODE_ENV !== "development") {
+        try {
+          token = await admin.auth().verifyIdToken(req.headers.authorization);
+        } catch (e) {
+          checkFirebaseErrors(e);
+        }
+      }
+
+      const product = await Product.findById(id);
+
+      if (!product) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "id",
+            customMessage: "product not found",
+          },
+        });
+      }
+
+      //token operations
+      if (process.env.NODE_ENV !== "development")
+        authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+
+      await Product.updateOne({ _id: id }, { status: status });
+
+      return true;
+    },
     createShop: async (_, { options }, { req, admin }: Context) => {
       //token operations
       let token: any = {
@@ -639,7 +669,7 @@ const resolvers = {
       const newShop = await Shop.create({
         ...options,
         firebaseId: token.uid,
-        status: "inactive",
+        status: "active",
         createdAt: new Date(),
         photo: photosId[0],
       });
@@ -658,6 +688,45 @@ const resolvers = {
         });
       }
       await admin.auth().setCustomUserClaims(token.uid, { isShop });
+
+      return true;
+    },
+    changeShopStatus: async (_, { id, status }, { admin, req }: Context) => {
+      let token;
+      if (process.env.NODE_ENV !== "development") {
+        try {
+          token = await admin.auth().verifyIdToken(req.headers.authorization);
+        } catch (e) {
+          checkFirebaseErrors(e);
+        }
+      }
+
+      const shop = await Shop.findById(id);
+
+      if (!shop) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "404",
+            customPath: "id",
+            customMessage: "shop not found",
+          },
+        });
+      }
+
+      //token operations
+      if (process.env.NODE_ENV !== "development")
+        authenticateToken(token.uid, shop.firebaseId, token.isShop);
+
+      await Shop.updateOne({ _id: id }, { status: status });
+
+      await Product.updateMany(
+        { firebaseShopId: shop.firebaseId },
+        {
+          $set: {
+            "shopOptions.status": status,
+          },
+        }
+      );
 
       return true;
     },

@@ -44,6 +44,7 @@ const ProductSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    status: { type: String, required: true },
   },
   photos: [{ type: String, required: true }],
   createdAt: {
@@ -56,14 +57,14 @@ const ProductSchema = new mongoose.Schema({
   },
   discount: {
     type: Number,
-    required: false
+    required: false,
   },
   discountedPrice: {
     type: Number,
-    required: false
-  }
+    required: false,
+  },
 
-  //   status: { type: String, required: true },
+  status: { type: String, required: true },
 });
 
 ProductSchema.index({

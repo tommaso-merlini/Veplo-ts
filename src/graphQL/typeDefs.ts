@@ -13,6 +13,7 @@ const typeDefs = gql`
   type ShopOptions {
     city: String!
     name: String
+    status: String!
   }
 
   type Opening {
@@ -46,6 +47,7 @@ const typeDefs = gql`
     createdAt: String
     discount: Int
     discountedPrice: Int
+    status: String
   }
 
   type Shop {
@@ -174,11 +176,13 @@ const typeDefs = gql`
     #product
     createProduct(shopId: ID!, options: ProductInput!): CreateProductResponse
     editProduct(id: ID!, options: EditProductInput!): ID!
+    changeProductStatus(id: ID!, status: String!): Boolean
     deleteProduct(id: ID!): ID!
 
     #shop
     createShop(options: ShopInput!): ID!
     setIsShop(isShop: Boolean!): Boolean!
+    changeShopStatus(id: ID!, status: String!): Boolean
     #TODO editShop
 
     #image
