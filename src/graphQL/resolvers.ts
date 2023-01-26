@@ -24,6 +24,10 @@ import deleteFromSpaces from "../controllers/deleteFromSpaces";
 import getUpdatedPhotosId from "../controllers/getUpdatedPhotosId";
 import graphqlFields from "graphql-fields";
 import handlePriceEdit from "../controllers/handlePriceEdit";
+import productById from "../controllers/queries/productById";
+import capByCap from "../controllers/queries/capByCap";
+import shopById from "../controllers/queries/shopById";
+import shopByFirebaseId from "../controllers/queries/shopByFirebaseId";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -40,38 +44,12 @@ const resolvers = {
       return "ciao";
     },
     product: async (_, { id }, __, info) => {
-      checkObjectID(id);
-
-      const requestedFields = getRequestedFields(info);
-
-      const product = await Product.findById(id, requestedFields);
-
-      if (!product) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "id",
-            customMessage: "product not found",
-          },
-        });
-      }
+      const product = await productById(id, info);
 
       return product;
     },
     products: async (_, { range, limit, offset, filters }, __, info) => {
-      const searchedCap = await Cap.findOne({
-        cap: filters.cap,
-      });
-
-      if (!searchedCap) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "cap",
-            customMessage: "cap not found",
-          },
-        });
-      }
+      const searchedCap = await capByCap(filters.cap);
 
       const coordinates = searchedCap.location.coordinates;
       const latitude = coordinates[0];
@@ -226,36 +204,12 @@ const resolvers = {
       return products;
     },
     shop: async (_, { id }, __, info) => {
-      checkObjectID(id);
-
-      const requestedFields = getRequestedFields(info);
-
-      const shop = await Shop.findById(id, requestedFields);
-
-      if (!shop) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "id",
-            customMessage: "shop not found",
-          },
-        });
-      }
+      const shop = await shopById(id, info);
 
       return shop;
     },
-    shopByFirebaseId: async (_, { firebaseId }) => {
-      const shop = await Shop.findOne({ firebaseId });
-
-      if (!shop) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "id",
-            customMessage: "shop not found",
-          },
-        });
-      }
+    shopByFirebaseId: async (_, { firebaseId }, __, info) => {
+      const shop = await shopByFirebaseId(firebaseId, info);
 
       return shop;
     },
@@ -269,17 +223,7 @@ const resolvers = {
       }
     },
     shops: async (_, { range, limit, offset, filters }, __, info) => {
-      const searchedCap = await Cap.findOne({ cap: filters.cap });
-
-      if (!searchedCap) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "cap",
-            customMessage: "cap not found",
-          },
-        });
-      }
+      const searchedCap = await capByCap(filters.cap);
 
       const coordinates = searchedCap.location.coordinates;
 
@@ -405,17 +349,7 @@ const resolvers = {
         });
       }
 
-      const shop = await Shop.findById(shopId);
-
-      if (!shop) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "shop",
-            customMessage: "shop not found",
-          },
-        });
-      }
+      const shop = await shopById(shopId);
 
       //token operations
       if (process.env.NODE_ENV !== "development")
@@ -513,17 +447,7 @@ const resolvers = {
         }
       }
 
-      const product = await Product.findById(id);
-
-      if (!product) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "id",
-            customMessage: "product not found",
-          },
-        });
-      }
+      const product = await productById(id);
 
       //token operations
       if (process.env.NODE_ENV !== "development")
@@ -591,17 +515,7 @@ const resolvers = {
         }
       }
 
-      const product = await Product.findById(id);
-
-      if (!product) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "id",
-            customMessage: "product not found",
-          },
-        });
-      }
+      const product = await productById(id);
 
       //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
@@ -625,17 +539,7 @@ const resolvers = {
         }
       }
 
-      const product = await Product.findById(id);
-
-      if (!product) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "id",
-            customMessage: "product not found",
-          },
-        });
-      }
+      const product = await productById(id);
 
       //token operations
       if (process.env.NODE_ENV !== "development")
@@ -735,17 +639,7 @@ const resolvers = {
         }
       }
 
-      const shop = await Shop.findById(id);
-
-      if (!shop) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "404",
-            customPath: "id",
-            customMessage: "shop not found",
-          },
-        });
-      }
+      const shop = await shopById(id);
 
       //token operations
       if (process.env.NODE_ENV !== "development")
