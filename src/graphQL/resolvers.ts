@@ -23,6 +23,7 @@ import uploadToSpaces from "../controllers/uploadToSpaces";
 import deleteFromSpaces from "../controllers/deleteFromSpaces";
 import getUpdatedPhotosId from "../controllers/getUpdatedPhotosId";
 import graphqlFields from "graphql-fields";
+import handlePriceEdit from "../controllers/handlePriceEdit";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -491,6 +492,19 @@ const resolvers = {
       let newPhotosId = [];
       let discountPercentage: null | number;
 
+      if (
+        options.status &&
+        (options.status != "active" || options.status != "not_active")
+      ) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "400",
+            customPath: "status",
+            customMessage: "status can only be 'active' or 'not_active",
+          },
+        });
+      }
+
       if (process.env.NODE_ENV !== "development") {
         try {
           token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -515,74 +529,14 @@ const resolvers = {
       if (process.env.NODE_ENV !== "development")
         authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
-      if (
-        options.price.v1 === options.price.v2 ||
-        product.price.v1 === product.price.v2 ||
-        product.price.v1 === options.price.v2
-        // options.price.v1 === product.price.v2
-      ) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "400",
-            customPath: "product",
-            customMessage: "price v2 cannot be the same of price v1",
-          },
-        });
+      if (options.price) {
+        options.price = handlePriceEdit(options, product);
       }
-
-      if (
-        options.price.v2 > product.price.v1 ||
-        product.price.v2 > options.price.v1 ||
-        options.price.v2 > options.price.v1
-      ) {
-        throw Object.assign(new Error("Error"), {
-          extensions: {
-            customCode: "400",
-            customPath: "price",
-            customMessage: "pricev2 cannot be greater than pricev1",
-          },
-        });
-      }
-
-      //price and discount operations
-      if (
-        options.price.v1 != product.price.v1 ||
-        options.price.v2 != product.price.v2
-      ) {
-        if (!options.price.v1) {
-          options.price.v1 = product.price.v1;
-          discountPercentage = +(
-            100 -
-            (100 * options.price.v2) / options.price.v1
-          ).toFixed(2);
-        } else {
-          console.log("ok");
-          discountPercentage = +(
-            100 -
-            (100 * options.price.v2) / options.price.v1
-          ).toFixed(2);
-
-          console.log(discountPercentage);
-        }
-        if (Number.isNaN(discountPercentage)) {
-          discountPercentage = null;
-        }
-        options.price.discountPercentage = discountPercentage;
-      } else {
-        discountPercentage = product.price.discountPercentage;
-      }
-
-      console.log("=====================================");
-
-      console.log(options.price.v1, product.price.v1);
-      console.log(options.price.v2, product.price.v2);
-
-      console.log(discountPercentage);
-
-      console.log("=====================================");
 
       //merging product with options (overwrite equal values)
       const { merge, diffs, isDifferent } = getDiffs(product, options);
+
+      // console.log(merge);
 
       //check if the editedProduct = product
       if (!isDifferent && !options.newPhotos && !options.deletedPhotos) {
@@ -594,6 +548,8 @@ const resolvers = {
           },
         });
       }
+
+      // throw new Error("ok");
 
       //check the fields with the constants
       checkConstants(merge, "product");

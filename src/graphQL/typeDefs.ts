@@ -118,7 +118,7 @@ const typeDefs = gql`
   }
 
   input EditPriceInput {
-    v1: Float
+    v1: Float!
     v2: Float
   }
 
@@ -155,6 +155,7 @@ const typeDefs = gql`
     brand: String
     newPhotos: [Upload!]
     deletedPhotos: [String!]
+    status: String
   }
 
   #=============QUERIES=================
