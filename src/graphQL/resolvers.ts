@@ -28,6 +28,7 @@ import productById from "../controllers/queries/productById";
 import capByCap from "../controllers/queries/capByCap";
 import shopById from "../controllers/queries/shopById";
 import shopByFirebaseId from "../controllers/queries/shopByFirebaseId";
+import customError from "../controllers/errors/customError";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -658,8 +659,23 @@ const resolvers = {
 
       return true;
     },
-    createImages: async (_, { images }, { s3Client }) => {
+    uploadImages: async (_, { images, proportion }, { s3Client }) => {
       const promises = [];
+      let width = 1528;
+      let height = 2220;
+      if (proportion != "product" && proportion != "shop") {
+        customError({
+          code: "400",
+          path: "image",
+          message: "proportion can either be 'product' or 'shop'",
+        });
+      }
+
+      if (proportion === "shop") {
+        width = 720;
+        height = 450;
+      }
+
       for (let i = 0; i < images.length; i++) {
         promises.push(
           new Promise(async (resolve, reject) => {
@@ -669,7 +685,7 @@ const resolvers = {
             // await finished(stream);
             let blob: any = await streamToBlob(stream);
             // console.log(`foto numero ${i} convertita`);
-            blob = sharp(blob).resize(1528, 2200);
+            blob = sharp(blob).resize(width, height);
 
             const newBlob = await streamToBlob(blob);
 

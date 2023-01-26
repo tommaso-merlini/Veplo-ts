@@ -200,7 +200,7 @@ const typeDefs = gql`
     #TODO editShop
 
     #image
-    createImages(images: [Upload!]!): [String!]!
+    uploadImages(images: [Upload!]!, proportion: String!): [String!]!
   }
 `;
 
