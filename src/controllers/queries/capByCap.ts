@@ -2,6 +2,7 @@ import getRequestedFields from "../getRequestedFields";
 import checkObjectID from "../checkObjectID";
 import Product from "../../schemas/Product.model";
 import Cap from "../../schemas/Cap.model";
+import customError from "../errors/customError";
 
 const capByCap = async (cap) => {
   const searchedCap = await Cap.findOne({
@@ -9,12 +10,10 @@ const capByCap = async (cap) => {
   });
 
   if (!searchedCap) {
-    throw Object.assign(new Error("Error"), {
-      extensions: {
-        customCode: "404",
-        customPath: "cap",
-        customMessage: "cap not found",
-      },
+    customError({
+      code: "404",
+      path: "cap",
+      message: "cap not found",
     });
   }
 

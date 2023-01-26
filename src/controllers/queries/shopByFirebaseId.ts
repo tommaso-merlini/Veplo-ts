@@ -1,6 +1,7 @@
 import getRequestedFields from "../getRequestedFields";
 import checkObjectID from "../checkObjectID";
 import Shop from "../../schemas/Shop.model";
+import customError from "../errors/customError";
 
 const shopByFirebaseId = async (firebaseId, info?) => {
   let requestedFields = {};
@@ -12,12 +13,10 @@ const shopByFirebaseId = async (firebaseId, info?) => {
   const shop = await Shop.findOne({ firebaseId }, requestedFields);
 
   if (!shop) {
-    throw Object.assign(new Error("Error"), {
-      extensions: {
-        customCode: "404",
-        customPath: "id",
-        customMessage: "shop not found",
-      },
+    customError({
+      code: "404",
+      path: "id",
+      message: "shop not found",
     });
   }
 

@@ -658,34 +658,40 @@ const resolvers = {
 
       return true;
     },
-    createImage: async (_, { files }, { s3Client }) => {
-      for (let i = 0; i < files.length; i++) {
-        const { createReadStream, filename, mimetype, encoding } = await files[
-          i
-        ];
-        const stream = await createReadStream();
-        let blob: any = await streamToBlob(stream);
+    createImages: async (_, { images }, { s3Client }) => {
+      const promises = [];
+      for (let i = 0; i < images.length; i++) {
+        promises.push(
+          new Promise(async (resolve, reject) => {
+            const { createReadStream } = await images[i];
+            const stream = await createReadStream();
+            // stream.pipe(stream);
+            // await finished(stream);
+            let blob: any = await streamToBlob(stream);
+            // console.log(`foto numero ${i} convertita`);
+            blob = sharp(blob).resize(1528, 2200);
 
-        blob = sharp(blob).resize(1801, 2600);
+            const newBlob = await streamToBlob(blob);
 
-        const newBlob = await streamToBlob(blob);
+            const id = uuidv4();
 
-        const params: any = {
-          Bucket: "spaceprova1", // The path to the directory you want to upload the object to, starting with your Space name.
-          Key: uuidv4(), // Object key, referenced whenever you want to access this file later.
-          Body: newBlob, // The object's contents. This variable is an object, not a string.
-          ACL: "public-read", // Defines ACL permissions, such as private or public.
-          Metadata: {
-            // Defines metadata tags.
-            "x-amz-meta-my-key": "your-value",
-          },
-          ContentType: "image/webp",
-        };
+            const params: any = {
+              Bucket: "spaceprova1", // The path to the directory you want to upload the object to, starting with your Space name.
+              Key: id, // Object key, referenced whenever you want to access this file later.
+              Body: newBlob, // The object's contents. This variable is an object, not a string.
+              ACL: "public-read", // Defines ACL permissions, such as private or public.
+              ContentType: "image/webp",
+            };
 
-        await s3Client.send(new PutObjectCommand(params));
+            s3Client.send(new PutObjectCommand(params));
+            resolve(id);
+          })
+        );
       }
 
-      return true;
+      const Ids = await Promise.all(promises);
+
+      return Ids;
     },
   },
 

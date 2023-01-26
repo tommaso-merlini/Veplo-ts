@@ -200,7 +200,7 @@ const typeDefs = gql`
     #TODO editShop
 
     #image
-    createImage(files: [Upload!]!): Boolean!
+    createImages(images: [Upload!]!): [String!]!
   }
 `;
 
