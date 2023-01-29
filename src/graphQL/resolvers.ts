@@ -429,7 +429,8 @@ const resolvers = {
 
       if (
         options.status &&
-        (options.status != "active" || options.status != "not_active")
+        options.status != "active" &&
+        options.status != "not_active"
       ) {
         throw Object.assign(new Error("Error"), {
           extensions: {
