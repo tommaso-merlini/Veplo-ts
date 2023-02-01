@@ -299,6 +299,11 @@ const resolvers = {
             },
           },
         },
+        {
+          $match: {
+            status: "active",
+          },
+        },
 
         {
           $project: {
