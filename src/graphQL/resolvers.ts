@@ -184,6 +184,12 @@ const resolvers = {
         { $match: checkMinPrice() },
         { $match: checkMaxPrice() },
         { $match: checkColors() },
+        {
+          $match: {
+            status: "active",
+            "shopOptions.status": "active",
+          },
+        },
 
         {
           $project: {
