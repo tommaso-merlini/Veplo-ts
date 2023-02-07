@@ -115,7 +115,12 @@ const resolvers = {
 
       const checkMaxPrice = () => {
         if (filters.maxPrice != null) {
-          return { price: { $lte: filters.maxPrice } };
+          return {
+            $or: [
+              { "price.v2": { $lte: filters.maxPrice } },
+              { "price.v1": { $lte: filters.maxPrice } },
+            ],
+          };
         } else {
           return {};
         }
@@ -123,7 +128,12 @@ const resolvers = {
 
       const checkMinPrice = () => {
         if (filters.minPrice != null) {
-          return { price: { $gte: filters.minPrice } };
+          return {
+            $or: [
+              { "price.v2": { $gte: filters.maxPrice } },
+              { "price.v1": { $gte: filters.maxPrice } },
+            ],
+          };
         } else {
           return {};
         }
