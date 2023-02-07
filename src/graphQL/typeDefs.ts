@@ -59,7 +59,7 @@ const typeDefs = gql`
     id: ID
     name: String
     status: String
-    products(limit: Int!, offset: Int!): [Product!]
+    products(limit: Int!, offset: Int!, see: String): [Product!]
     firebaseId: String
     address: AddressShop
     #macroCategories: [String!]

@@ -732,9 +732,14 @@ const resolvers = {
   },
 
   Shop: {
-    products: async (shop, { limit, offset }) => {
+    products: async (shop, { limit, offset, see }) => {
+      let status: any = "active";
+      if (see === "everything") {
+        status = { $exists: true };
+      }
       const products = await Product.find({
         shopId: shop.id,
+        status,
       })
         .skip(offset)
         .limit(limit);
