@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from "uuid";
 import sharp from "sharp";
 import uploadToSpaces from "../controllers/uploadToSpaces";
 import deleteFromSpaces from "../controllers/deleteFromSpaces";
-import getUpdatedPhotosId from "../controllers/getUpdatedPhotosId";
+import handleUpdatedPhotos from "../controllers/handleUpdatedPhotos";
 import graphqlFields from "graphql-fields";
 import handlePriceEdit from "../controllers/handlePriceEdit";
 import productById from "../controllers/queries/productById";
@@ -466,6 +466,7 @@ const resolvers = {
       if (process.env.NODE_ENV !== "development")
         authenticateToken(token.uid, product.firebaseShopId, token.isShop);
 
+      //if the price is modified
       if (options.price) {
         options.price = handlePriceEdit(options, product);
       }
@@ -473,9 +474,7 @@ const resolvers = {
       //merging product with options (overwrite equal values)
       const { merge, diffs, isDifferent } = getDiffs(product, options);
 
-      // console.log(merge);
-
-      //check if the editedProduct = product
+      //check if the product has been modified
       if (!isDifferent && !options.newPhotos && !options.deletedPhotos) {
         throw Object.assign(new Error("Error"), {
           extensions: {
@@ -488,32 +487,15 @@ const resolvers = {
 
       // throw new Error("ok");
 
-      //check the fields with the constants
+      //check the validity of the fields based on the constants
       checkConstants(merge, "product");
 
-      if (options.newPhotos) {
-        newPhotosId = await uploadToSpaces(options.newPhotos);
+      //delete the removed photos
+      if (options.photos) {
+        handleUpdatedPhotos(product.photos, options.photos);
       }
 
-      if (options.deletedPhotos) await deleteFromSpaces(options.deletedPhotos);
-
-      updatedPhotosId = getUpdatedPhotosId(
-        product.photos,
-        options.deletedPhotos,
-        newPhotosId
-      );
-
-      const arePhotosDifferent =
-        JSON.stringify(product.photos) != JSON.stringify(updatedPhotosId);
-
-      if (arePhotosDifferent) {
-        await Product.updateOne(
-          { _id: id },
-          { ...diffs, photos: updatedPhotosId }
-        );
-      } else {
-        await Product.updateOne({ _id: id }, { ...diffs });
-      }
+      await Product.updateOne({ _id: id }, { ...diffs });
 
       return product.id;
     },
@@ -632,7 +614,7 @@ const resolvers = {
       if (isShop === token.isShop) {
         throw Object.assign(new Error("Error"), {
           extensions: {
-            customCode: "304 ",
+            customCode: "304",
             customPath: "shop",
             customMessage: "shop not modified",
           },
@@ -671,7 +653,23 @@ const resolvers = {
 
       return true;
     },
-    uploadImages: async (_, { images, proportion }, { s3Client }) => {
+    uploadImages: async (
+      _,
+      { images, proportion },
+      { s3Client, admin, req }
+    ) => {
+      const token = await admin.auth().verifyIdToken(req.headers.authorization);
+
+      if (!token.isShop) {
+        throw Object.assign(new Error("Error"), {
+          extensions: {
+            customCode: "401",
+            customPath: "authorization",
+            customMessage: "the user is not authorized to uplaod images",
+          },
+        });
+      }
+
       const promises = [];
       let width = 1528;
       let height = 2220;

@@ -153,8 +153,7 @@ const typeDefs = gql`
     microCategory: String
     gender: String
     brand: String
-    newPhotos: [Upload!]
-    deletedPhotos: [String!]
+    photos: [String!]
     status: String
   }
 
