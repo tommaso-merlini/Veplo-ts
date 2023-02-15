@@ -705,7 +705,6 @@ const resolvers = {
         width = 720;
         height = 450;
       }
-
       for (let i = 0; i < images.length; i++) {
         promises.push(
           new Promise(async (resolve, reject) => {
@@ -722,14 +721,22 @@ const resolvers = {
             const id = uuidv4();
 
             const params: any = {
-              Bucket: "spaceprova1", // The path to the directory you want to upload the object to, starting with your Space name.
+              Bucket: "veplo-images", // The path to the directory you want to upload the object to, starting with your Space name.
               Key: id, // Object key, referenced whenever you want to access this file later.
               Body: newBlob, // The object's contents. This variable is an object, not a string.
               ACL: "public-read", // Defines ACL permissions, such as private or public.
               ContentType: "image/webp",
             };
+            try {
+              await s3Client.send(new PutObjectCommand(params));
+            } catch (e) {
+              customError({
+                code: "500",
+                path: "upload image",
+                message: "an error occured while uploading the image",
+              });
+            }
 
-            s3Client.send(new PutObjectCommand(params));
             resolve(id);
           })
         );

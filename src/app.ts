@@ -14,10 +14,15 @@ require("events").EventEmitter.defaultMaxListeners = 100;
 import { graphqlUploadExpress } from "graphql-upload";
 import cluster from "cluster";
 import os from "os";
+import { v4 as uuidv4 } from "uuid";
 
 process.on("uncaughtException", function (err) {
-  console.error(err);
-  console.log("Node NOT Exiting...");
+  const errorId = uuidv4();
+  console.log("================================================");
+  console.log(`message: ${err.message}`);
+  console.log(`errorId: ${errorId}`);
+  console.log(`date: ${new Date()}`);
+  console.log("===============================================");
 });
 
 // const limiter = rateLimit({
