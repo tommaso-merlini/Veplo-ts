@@ -1,5 +1,6 @@
 import s3Client from "../../spaces/s3Client";
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
+require("dotenv").config();
 
 const deleteFromSpaces = (photos) => {
   const objects = [];
@@ -8,7 +9,7 @@ const deleteFromSpaces = (photos) => {
     objects.push({ Key: photo });
   });
   const params = {
-    Bucket: "spaceprova1",
+    Bucket: process.env.BUCKET_NAME,
     Delete: {
       Objects: objects,
     },

@@ -4,6 +4,7 @@ import { uuidv4 } from "@firebase/util";
 import s3Client from "../../spaces/s3Client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { finished } from "stream/promises";
+require("dotenv").config();
 
 const uploadToSpaces = async (photos, shop?) => {
   let imageIds = [];
@@ -30,7 +31,7 @@ const uploadToSpaces = async (photos, shop?) => {
     imageIds.push(id);
 
     const params: any = {
-      Bucket: "spaceprova1", // The path to the directory you want to upload the object to, starting with your Space name.
+      Bucket: process.env.BUCKET_NAME, // The path to the directory you want to upload the object to, starting with your Space name.
       Key: id, // Object key, referenced whenever you want to access this file later.
       Body: newBlob, // The object's contents. This variable is an object, not a string.
       ACL: "public-read", // Defines ACL permissions, such as private or public.

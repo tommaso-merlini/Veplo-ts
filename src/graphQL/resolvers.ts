@@ -29,6 +29,7 @@ import capByCap from "../controllers/queries/capByCap";
 import shopById from "../controllers/queries/shopById";
 import shopByFirebaseId from "../controllers/queries/shopByFirebaseId";
 import customError from "../controllers/errors/customError";
+require("dotenv").config();
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -406,7 +407,7 @@ const resolvers = {
             const id = uuidv4();
 
             const params: any = {
-              Bucket: "spaceprova1", // The path to the directory you want to upload the object to, starting with your Space name.
+              Bucket: process.env.BUCKET_NAME, // The path to the directory you want to upload the object to, starting with your Space name.
               Key: id, // Object key, referenced whenever you want to access this file later.
               Body: newBlob, // The object's contents. This variable is an object, not a string.
               ACL: "public-read", // Defines ACL permissions, such as private or public.
