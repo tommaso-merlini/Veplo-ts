@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import streamToBlob from "./streamToBlob";
-import { uuidv4 } from "@firebase/util";
+import { v4 as uuidv4 } from "uuid";
 import s3Client from "../../spaces/s3Client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { finished } from "stream/promises";

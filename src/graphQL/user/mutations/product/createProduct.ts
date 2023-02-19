@@ -1,15 +1,15 @@
-import { Context } from "../../../apollo/context";
-import checkConstants from "../../controllers/checkConstants";
-import checkFirebaseErrors from "../../controllers/checkFirebaseErrors";
-import shopById from "../../controllers/queries/shopById";
-import streamToBlob from "../../controllers/streamToBlob";
-import sharp from "sharp";
+import { Context } from "../../../../../apollo/context";
+import authenticateToken from "../../../../controllers/authenticateToken";
+import checkConstants from "../../../../controllers/checkConstants";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
+import shopById from "../../../../controllers/queries/shopById";
+import streamToBlob from "../../../../controllers/streamToBlob";
 import { v4 as uuidv4 } from "uuid";
-import Product from "../../schemas/Product.model";
+import sharp from "sharp";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import customError from "../../controllers/errors/customError";
+import Product from "../../../../schemas/Product.model";
 
-export const adminCreateProduct = async (
+export const createProduct = async (
   _,
   { shopId, options },
   { admin, req, s3Client }: Context
@@ -17,18 +17,12 @@ export const adminCreateProduct = async (
   let token;
   const promises = [];
   console.log("foto arrivate");
-  try {
-    token = await admin.auth().verifyIdToken(req.headers.authorization);
-  } catch (e) {
-    checkFirebaseErrors(e);
-  }
-
-  if (!token.isAdmin) {
-    customError({
-      code: "403",
-      path: "admin",
-      message: "you must be an admin to access this function",
-    });
+  if (process.env.NODE_ENV !== "development") {
+    try {
+      token = await admin.auth().verifyIdToken(req.headers.authorization);
+    } catch (e) {
+      checkFirebaseErrors(e);
+    }
   }
 
   checkConstants(options, "product");
@@ -54,6 +48,10 @@ export const adminCreateProduct = async (
   }
 
   const shop = await shopById(shopId);
+
+  //token operations
+  if (process.env.NODE_ENV !== "development")
+    authenticateToken(token.uid, shop.firebaseId, token.isShop);
 
   //TODO handling the macroCategories => insert macroCategory into shop
 

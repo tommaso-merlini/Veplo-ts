@@ -1,4 +1,6 @@
-export const checkPostCode = async (Cap, postCode) => {
+import Cap from "../schemas/Cap.model";
+
+export const checkPostCode = async (postCode) => {
   const searchedCap = await Cap.findOne({
     cap: postCode,
   });

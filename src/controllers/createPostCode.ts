@@ -1,4 +1,6 @@
-export const createPostCode = async (Cap, postCode, city, center) => {
+import Cap from "../schemas/Cap.model";
+
+export const createPostCode = async (postCode, city, center) => {
   const newCap = await Cap.create({
     cap: postCode,
     location: {

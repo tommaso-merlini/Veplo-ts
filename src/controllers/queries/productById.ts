@@ -17,7 +17,7 @@ const productById = async (id, info?) => {
     customError({
       code: "404",
       path: "id",
-      message: "product not found",
+      message: `product not found (id: ${id})`,
     });
   }
 

@@ -3,7 +3,7 @@ import checkObjectID from "../checkObjectID";
 import Shop from "../../schemas/Shop.model";
 import customError from "../errors/customError";
 
-const shopByFirebaseId = async (firebaseId, info?) => {
+const helperShopByFirebaseId = async (firebaseId, info?) => {
   let requestedFields = {};
 
   if (info) {
@@ -23,4 +23,4 @@ const shopByFirebaseId = async (firebaseId, info?) => {
   return shop;
 };
 
-export default shopByFirebaseId;
+export default helperShopByFirebaseId;
