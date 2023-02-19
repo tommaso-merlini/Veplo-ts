@@ -29,6 +29,7 @@ import capByCap from "../controllers/queries/capByCap";
 import shopById from "../controllers/queries/shopById";
 import shopByFirebaseId from "../controllers/queries/shopByFirebaseId";
 import customError from "../controllers/errors/customError";
+import adminCreateProduct from "./admin/adminCreateProduct";
 require("dotenv").config();
 
 const resolvers = {
@@ -445,9 +446,6 @@ const resolvers = {
     },
     editProduct: async (_, { id, options }, { admin, req }: Context) => {
       let token;
-      let updatedPhotosId = [];
-      let newPhotosId = [];
-      let discountPercentage: null | number;
 
       if (
         options.status &&
@@ -631,7 +629,13 @@ const resolvers = {
           },
         });
       }
-      await admin.auth().setCustomUserClaims(token.uid, { isShop });
+      if (token.email === "business@veplo.it") {
+        await admin
+          .auth()
+          .setCustomUserClaims(token.uid, { isShop, isAdmin: true });
+      } else {
+        await admin.auth().setCustomUserClaims(token.uid, { isShop });
+      }
 
       return true;
     },
@@ -747,6 +751,7 @@ const resolvers = {
 
       return Ids;
     },
+    adminCreateProduct,
   },
 
   Shop: {

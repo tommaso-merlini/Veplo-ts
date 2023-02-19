@@ -200,6 +200,14 @@ const typeDefs = gql`
 
     #image
     uploadImages(images: [Upload!]!, proportion: String!): [String!]!
+
+    #ADMIN
+    adminCreateProduct(
+      shopId: ID!
+      options: ProductInput!
+    ): CreateProductResponse
+
+    adminEditProduct(id: ID!, options: EditProductInput!): ID!
   }
 `;
 
