@@ -15,6 +15,7 @@ import { setIsShop } from "./user/mutations/shop/setIsShop";
 import { changeShopStatus } from "./user/mutations/shop/changeShopStatus";
 import { uploadImages } from "./user/mutations/images/uploadImages";
 import Product from "../schemas/Product.model";
+import { adminDeleteProduct } from "./admin/adminDeleteProduct";
 require("dotenv").config();
 
 const resolvers = {
@@ -41,6 +42,7 @@ const resolvers = {
     changeShopStatus: changeShopStatus,
     uploadImages,
     adminCreateProduct,
+    adminDeleteProduct,
   },
 
   Shop: {

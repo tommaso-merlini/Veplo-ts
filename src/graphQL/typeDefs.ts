@@ -206,8 +206,8 @@ const typeDefs = gql`
       shopId: ID!
       options: ProductInput!
     ): CreateProductResponse
-
     adminEditProduct(id: ID!, options: EditProductInput!): ID!
+    adminDeleteProduct(id: ID!): ID!
   }
 `;
 

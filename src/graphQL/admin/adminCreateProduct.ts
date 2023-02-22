@@ -14,7 +14,7 @@ export const adminCreateProduct = async (
   { shopId, options },
   { admin, req, s3Client }: Context
 ) => {
-  let token;
+  let token = {};
   const promises = [];
   console.log("foto arrivate");
   try {
