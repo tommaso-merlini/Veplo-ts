@@ -17,16 +17,6 @@ export const createBusinessStep1 = async (_, {}, { req, admin }: Context) => {
     }
   }
 
-  if (!token.isBusiness && process.env.NODE_ENV !== "development") {
-    throw Object.assign(new Error("Error"), {
-      extensions: {
-        customCode: "403",
-        customPath: "token",
-        customMessage: "token's owner is not a business",
-      },
-    });
-  }
-
   const alreadyExists = await Business.findOne({
     firebaseId: token.uid,
   });
