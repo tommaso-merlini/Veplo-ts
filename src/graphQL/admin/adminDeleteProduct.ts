@@ -10,7 +10,7 @@ export const adminDeleteProduct = async (
   { id },
   { admin, req, s3Client }: Context
 ) => {
-  let token = {};
+  let token;
 
   try {
     token = await admin.auth().verifyIdToken(req.headers.authorization);

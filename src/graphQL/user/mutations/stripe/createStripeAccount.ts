@@ -8,18 +8,21 @@ export const createStripeAccount = async (
   { businessName, vatId, phone },
   { admin, req, stripe }: Context
 ) => {
-  let token = {
-    email: "prova@prova.it",
-    uid: "firebaseId",
-    mongoId: "63fcea8f60c595a4975d71dc",
-    isBusiness: true,
-  };
+  let token;
+
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
     } catch (e) {
       checkFirebaseErrors(e);
     }
+  } else {
+    token = {
+      mongoId: "mongoId",
+      isBusiness: true,
+      email: "prova@prova.it",
+      uid: "firebaseId",
+    };
   }
 
   if (!token.isBusiness && process.env.NODE_ENV !== "development") {

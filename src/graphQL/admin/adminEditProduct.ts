@@ -14,7 +14,7 @@ const adminEditProduct = async (
   { id, options },
   { admin, req }: Context
 ) => {
-  let token = {};
+  let token;
 
   if (
     options.status &&
