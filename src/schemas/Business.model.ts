@@ -30,6 +30,10 @@ const BusinessSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  vatId: {
+    type: String,
+    required: false,
+  },
   stripe: {
     id: {
       type: String,
