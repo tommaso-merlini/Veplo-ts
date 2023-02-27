@@ -18,7 +18,6 @@ import Product from "../schemas/Product.model";
 import { adminDeleteProduct } from "./admin/adminDeleteProduct";
 import { createBusinessStep1 } from "./user/mutations/business/createBusiness/createBusinessStep1";
 import { createStripeAccount } from "./user/mutations/stripe/createStripeAccount";
-import { createBusinessStep2 } from "./user/mutations/business/createBusiness/createBusinessStep2";
 require("dotenv").config();
 
 const resolvers = {
