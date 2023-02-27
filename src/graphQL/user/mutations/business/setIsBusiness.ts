@@ -1,22 +1,26 @@
 import { Context } from "../../../../../apollo/context";
 
-export const setIsShop = async (_, { isShop }, { req, admin }: Context) => {
+export const setIsBusiness = async (
+  _,
+  { isBusiness },
+  { req, admin }: Context
+) => {
   const token = await admin.auth().verifyIdToken(req.headers.authorization);
-  if (isShop === token.isShop) {
+  if (isBusiness === token.isBusiness) {
     throw Object.assign(new Error("Error"), {
       extensions: {
         customCode: "304",
         customPath: "shop",
-        customMessage: "shop not modified",
+        customMessage: "business not modified",
       },
     });
   }
   if (token.email === "business@veplo.it") {
     await admin
       .auth()
-      .setCustomUserClaims(token.uid, { isShop, isAdmin: true });
+      .setCustomUserClaims(token.uid, { isBusiness, isAdmin: true });
   } else {
-    await admin.auth().setCustomUserClaims(token.uid, { isShop });
+    await admin.auth().setCustomUserClaims(token.uid, { isBusiness });
   }
 
   return true;

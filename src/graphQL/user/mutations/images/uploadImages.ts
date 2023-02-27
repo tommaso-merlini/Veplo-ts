@@ -12,7 +12,7 @@ export const uploadImages = async (
 ) => {
   let token: any = {
     uid: "prova",
-    isShop: true,
+    isBusiness: true,
   };
   if (process.env.NODE_ENV !== "development") {
     try {
@@ -22,7 +22,7 @@ export const uploadImages = async (
     }
   }
 
-  if (!token.isShop) {
+  if (!token.isBusiness) {
     throw Object.assign(new Error("Error"), {
       extensions: {
         customCode: "401",

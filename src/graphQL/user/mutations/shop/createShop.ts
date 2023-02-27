@@ -11,7 +11,7 @@ export const createShop = async (_, { options }, { req, admin }: Context) => {
   //token operations
   let token: any = {
     uid: "prova",
-    isShop: true,
+    isBusiness: true,
   };
   let photosId = [];
   if (process.env.NODE_ENV !== "development") {
@@ -22,26 +22,12 @@ export const createShop = async (_, { options }, { req, admin }: Context) => {
     }
   }
 
-  if (!token.isShop && process.env.NODE_ENV !== "development") {
+  if (!token.isBusiness && process.env.NODE_ENV !== "development") {
     throw Object.assign(new Error("Error"), {
       extensions: {
         customCode: "403",
         customPath: "token",
-        customMessage: "token's owner is not a shop",
-      },
-    });
-  }
-
-  const alreadyExists = await Shop.findOne({
-    firebaseId: token.uid,
-  });
-
-  if (alreadyExists) {
-    throw Object.assign(new Error("Error"), {
-      extensions: {
-        customCode: "409",
-        customPath: "shop",
-        customMessage: "already exists",
+        customMessage: "token's owner is not a business",
       },
     });
   }
@@ -64,7 +50,6 @@ export const createShop = async (_, { options }, { req, admin }: Context) => {
   options.address.postcode = postCode;
   const newShop = await Shop.create({
     ...options,
-    firebaseId: token.uid,
     status: "active",
     createdAt: new Date(),
     photo: photosId[0],

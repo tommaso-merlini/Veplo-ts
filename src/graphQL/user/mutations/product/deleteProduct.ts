@@ -25,7 +25,7 @@ export const deleteProduct = async (
 
   if (process.env.NODE_ENV !== "development")
     //token operations
-    authenticateToken(token.uid, product.firebaseShopId, token.isShop);
+    authenticateToken(token.mongoId, product.shopId, token.isBusiness);
 
   deleteFromSpaces(product.photos);
 

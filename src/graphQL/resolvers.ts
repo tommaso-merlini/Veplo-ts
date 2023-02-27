@@ -4,18 +4,21 @@ import { product } from "./user/queries/product/product";
 import { products } from "./user/queries/product/products";
 import { shop } from "./user/queries/shop/shop";
 import { shopByFirebaseId } from "./user/queries/shop/shopByFirebaseId";
-import { isShop } from "./user/queries/shop/isShop";
+import { isBusiness } from "./user/queries/business/isBusiness";
 import { shops } from "./user/queries/shop/shops";
 import { createProduct } from "./user/mutations/product/createProduct";
 import { editProduct } from "./user/mutations/product/editProduct";
 import { deleteProduct } from "./user/mutations/product/deleteProduct";
 import { changeProductStatus } from "./user/mutations/product/changeProductsStatus";
 import { createShop } from "./user/mutations/shop/createShop";
-import { setIsShop } from "./user/mutations/shop/setIsShop";
+import { setIsBusiness } from "./user/mutations/business/setIsBusiness";
 import { changeShopStatus } from "./user/mutations/shop/changeShopStatus";
 import { uploadImages } from "./user/mutations/images/uploadImages";
 import Product from "../schemas/Product.model";
 import { adminDeleteProduct } from "./admin/adminDeleteProduct";
+import { createBusinessStep1 } from "./user/mutations/business/createBusiness/createBusinessStep1";
+import { createStripeAccount } from "./user/mutations/stripe/createStripeAccount";
+import { createBusinessStep2 } from "./user/mutations/business/createBusiness/createBusinessStep2";
 require("dotenv").config();
 
 const resolvers = {
@@ -28,7 +31,7 @@ const resolvers = {
     products,
     shop,
     shopByFirebaseId,
-    isShop,
+    isBusiness,
     shops,
   },
 
@@ -38,11 +41,13 @@ const resolvers = {
     deleteProduct,
     changeProductStatus,
     createShop,
-    setIsShop,
+    setIsBusiness,
     changeShopStatus: changeShopStatus,
     uploadImages,
     adminCreateProduct,
     adminDeleteProduct,
+    createBusinessStep1,
+    createStripeAccount,
   },
 
   Shop: {

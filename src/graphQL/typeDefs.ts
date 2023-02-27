@@ -34,6 +34,22 @@ const typeDefs = gql`
     discountPercentage: Float
   }
 
+  type Stripe {
+    id: String
+  }
+
+  type Business {
+    firebaseId: String!
+    businessName: String
+    name: String
+    vatNumber: String
+    email: String!
+    phone: String
+    status: String!
+    createdAt: String
+    stripe: Stripe
+  }
+
   type Product {
     id: ID
     name: String
@@ -174,7 +190,7 @@ const typeDefs = gql`
     #shop
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
-    isShop: Boolean!
+    isBusiness: Boolean!
     shops(
       range: Int!
       limit: Int!
@@ -194,12 +210,22 @@ const typeDefs = gql`
 
     #shop
     createShop(options: ShopInput!): ID!
-    setIsShop(isShop: Boolean!): Boolean!
     changeShopStatus(id: ID!, status: String!): Boolean
     #TODO editShop
 
     #image
     uploadImages(images: [Upload!]!, proportion: String!): [String!]!
+
+    #business
+    createBusinessStep1: ID!
+    setIsBusiness(isBusiness: Boolean!): Boolean!
+
+    #stripe
+    createStripeAccount(
+      businessName: String!
+      vatId: String!
+      phone: String!
+    ): String
 
     #ADMIN
     adminCreateProduct(

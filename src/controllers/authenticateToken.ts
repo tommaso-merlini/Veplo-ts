@@ -1,14 +1,18 @@
-const authenticateToken = (tokenId: string, id: string, isShop: Boolean) => {
+const authenticateToken = (
+  tokenId: string,
+  id: string,
+  isBusiness: Boolean
+) => {
   // console.log(tokenId);
   // console.log(id);
 
   //check if it is a shop
-  if (!isShop) {
+  if (!isBusiness) {
     throw Object.assign(new Error("Error"), {
       extensions: {
         customCode: "403",
         customPath: "token",
-        customMessage: "token's owner is not a shop",
+        customMessage: "token's owner is not a business",
       },
     });
   }
@@ -19,7 +23,7 @@ const authenticateToken = (tokenId: string, id: string, isShop: Boolean) => {
       extensions: {
         customCode: "403",
         customPath: "token",
-        customMessage: "token belongs to another shop",
+        customMessage: "token belongs to another business",
       },
     });
   }

@@ -23,7 +23,7 @@ export const changeShopStatus = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token.uid, shop.firebaseId, token.isShop);
+    authenticateToken(token.mongoId, shop.id, token.isBusiness);
 
   await Shop.updateOne({ _id: id }, { status: status });
 
