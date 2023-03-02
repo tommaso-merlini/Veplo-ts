@@ -1,8 +1,9 @@
 import getRequestedFields from "../../../../controllers/getRequestedFields";
 import capByCap from "../../../../controllers/queries/capByCap";
 import Product from "../../../../schemas/Product.model";
+import Variation from "../../../../schemas/Variation.model";
 
-export const products = async (
+export const variations = async (
   _,
   { range, limit, offset, filters },
   __,
@@ -41,14 +42,14 @@ export const products = async (
   };
   const checkGender = () => {
     if (gender != null) {
-      return { "info.gender": gender };
+      return { "product.info.gender": gender };
     } else {
       return {};
     }
   };
   const checkBrands = () => {
     if (brand != null) {
-      return { "info.brand": brand };
+      return { "product.info.brand": brand };
     } else {
       return {};
     }
@@ -56,7 +57,7 @@ export const products = async (
   const checkSizes = () => {
     if (sizes != null) {
       return {
-        "variations.lots.size": { $in: sizes },
+        "lots.size": { $in: sizes },
       };
     } else {
       return {};
@@ -64,7 +65,7 @@ export const products = async (
   };
   const checkMacroCategory = () => {
     if (filters.macroCategory != null && filters.macroCategory != "") {
-      return { macroCategory };
+      return { "product.info.macroCategory": macroCategory };
     } else {
       return {};
     }
@@ -98,16 +99,16 @@ export const products = async (
 
   const checkColors = () => {
     if (colors != null) {
-      return { "variations.color": { $in: colors } };
+      return { color: { $in: colors } };
     } else {
       return {};
     }
   };
 
-  let products: any = await Product.aggregate([
+  let variations: any = await Variation.aggregate([
     {
       $search: {
-        index: "ProductSearchIndex",
+        index: "VariationSearchIndex",
         compound: {
           must: [
             {
@@ -154,14 +155,13 @@ export const products = async (
     {
       $match: {
         status: "active",
-        "shopInfo.status": "active",
+        // "shopInfo.status": "active",
       },
     },
 
     {
       $project: {
         score: { $meta: "searchScore" },
-        // name: 1,
         ...getRequestedFields(info),
         _id: 0,
         id: "$_id",
@@ -171,9 +171,9 @@ export const products = async (
     .skip(offset)
     .limit(limit);
 
-  // console.log("=====================================");
-  // console.log(products);
-  // console.log("=====================================");
+  console.log("==================");
+  console.log(variations);
+  console.log("==================");
 
-  return products;
+  return variations;
 };

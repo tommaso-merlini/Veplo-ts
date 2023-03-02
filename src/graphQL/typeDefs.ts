@@ -109,6 +109,39 @@ const typeDefs = gql`
     id: ID!
     photos: [String!]!
   }
+  type VariationProductInfo {
+    id: ID
+    status: String
+    canBuy: Boolean
+    info: VariationProductInfoInfo
+  }
+
+  type VariationProductInfoInfo {
+    gender: String
+    macroCategory: String
+    microCategory: String
+    brand: String
+  }
+
+  type VariationShopInfo {
+    id: ID
+    name: String
+    status: String
+  }
+
+  type Variation {
+    id: ID
+    color: String
+    name: String
+    updatedAt: String
+    status: String
+    price: Price
+    photos: [String!]
+    lots: [Lot!]
+    product: VariationProductInfo
+    shopInfo: VariationShopInfo
+    location: Location
+  }
 
   #===========INPUTS===============
 
@@ -217,12 +250,12 @@ const typeDefs = gql`
 
     #product
     product(id: ID!): Product
-    products(
+    variations(
       range: Float!
       limit: Int!
       offset: Int!
       filters: ProductFilters!
-    ): [Product!]
+    ): [Variation!]
 
     #shop
     shop(id: ID!): Shop

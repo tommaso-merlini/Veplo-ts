@@ -31,7 +31,7 @@ export const changeShopStatus = async (
     { firebaseShopId: shop.firebaseId },
     {
       $set: {
-        "shopOptions.status": status,
+        "shopInfo.status": status,
       },
     }
   );

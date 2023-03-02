@@ -9,6 +9,7 @@ import sharp from "sharp";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1";
 import Product from "../../../../schemas/Product.model";
+import { createVariations } from "../../../../controllers/mutations/createVariations";
 
 export const createProduct = async (
   _,
@@ -16,13 +17,16 @@ export const createProduct = async (
   { admin, req }: Context
 ) => {
   let token;
-  console.log("foto arrivate");
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
     } catch (e) {
       checkFirebaseErrors(e);
     }
+  } else {
+    token = {
+      firebaseId: "prova",
+    };
   }
 
   //TODO check status
@@ -60,7 +64,7 @@ export const createProduct = async (
     firebaseShopId: shop.firebaseId,
     shopInfo: {
       id: shop.id,
-      firebaseId: shop.firebaseId,
+      firebaseId: token.firebaseId,
       name: shop.name,
       city: shop.address.city,
       status: shop.status,
@@ -68,6 +72,8 @@ export const createProduct = async (
     createdAt: new Date(),
     updatedAt: new Date(),
   });
+
+  await createVariations(newProduct);
 
   return { id: newProduct.id };
 };

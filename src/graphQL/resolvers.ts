@@ -1,7 +1,7 @@
 import { GraphQLUpload } from "graphql-upload";
 import { adminCreateProduct } from "./admin/adminCreateProduct";
 import { product } from "./user/queries/product/product";
-import { products } from "./user/queries/product/products";
+import { variations } from "./user/queries/product/variations";
 import { shop } from "./user/queries/shop/shop";
 import { shopByFirebaseId } from "./user/queries/shop/shopByFirebaseId";
 import { isBusiness } from "./user/queries/business/isBusiness";
@@ -29,7 +29,7 @@ const resolvers = {
       return "everything works";
     },
     product,
-    products,
+    variations,
     shop,
     shopByFirebaseId,
     isBusiness,
