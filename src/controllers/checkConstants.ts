@@ -12,12 +12,12 @@ const checkConstants = (obj, is: String) => {
     let macroCategory;
 
     //---CHECK GENDER
-    if (product.gender !== "M" && product.gender !== "F") {
+    if (product.info.gender !== "M" && product.info.gender !== "F") {
       throw new Error(`gender deve essere 'M' o 'F'`);
     }
 
     //---CHECK MACRO-iCATEGORY
-    if (product.gender === "M") {
+    if (product.info.gender === "M") {
       for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
         if (
           product.macroCategory === constants.genders.uomo.abbigliamento[i].name
@@ -35,7 +35,7 @@ const checkConstants = (obj, is: String) => {
     } else {
       for (let i = 0; i < constants.genders.donna.abbigliamento.length; i++) {
         if (
-          product.macroCategory ===
+          product.info.macroCategory ===
           constants.genders.donna.abbigliamento[i].name
         ) {
           macroCategoryIndex = i;
@@ -51,8 +51,8 @@ const checkConstants = (obj, is: String) => {
     }
 
     //---CHECK COLORS
-    const areColorsOk = product.colors.every((color) =>
-      constants.colors.includes(color)
+    const areColorsOk = product.variations.every((variation) =>
+      constants.colors.includes(variation.color)
     );
 
     if (!areColorsOk)
@@ -60,14 +60,7 @@ const checkConstants = (obj, is: String) => {
         `i colori che hai scelto non vanno bene, ecco la lista dei colori accettati: ${constants.colors}`
       );
 
-    //---CHECK BRAND
-    const isBrandOk = constants.brands.includes(product.brand);
-    console.log;
-    if (!isBrandOk)
-      throw new Error(
-        `il brand che hai scelto non e' supportato, lista dei brand supportati: ${constants.brands}`
-      );
-
+    //TODO
     //---CHECK SIZES
     const areSizesOk = product.sizes.every((size) =>
       macroCategory.sizes.includes(size)
@@ -79,9 +72,17 @@ const checkConstants = (obj, is: String) => {
       );
     }
 
+    //---CHECK BRAND
+    const isBrandOk = constants.brands.includes(product.info.brand);
+    console.log;
+    if (!isBrandOk)
+      throw new Error(
+        `il brand che hai scelto non e' supportato, lista dei brand supportati: ${constants.brands}`
+      );
+
     //---CHECK MICRO-CATEGORY
     const isMicroCategoryOk = macroCategory.types.includes(
-      product.microCategory
+      product.info.microCategory
     );
 
     if (!isMicroCategoryOk) {

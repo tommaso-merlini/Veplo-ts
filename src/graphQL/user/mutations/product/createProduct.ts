@@ -7,15 +7,15 @@ import streamToBlob from "../../../../controllers/streamToBlob";
 import { v4 as uuidv4 } from "uuid";
 import sharp from "sharp";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1";
 import Product from "../../../../schemas/Product.model";
 
 export const createProduct = async (
   _,
   { shopId, options },
-  { admin, req, s3Client }: Context
+  { admin, req }: Context
 ) => {
   let token;
-  const promises = [];
   console.log("foto arrivate");
   if (process.env.NODE_ENV !== "development") {
     try {
@@ -25,27 +25,11 @@ export const createProduct = async (
     }
   }
 
-  checkConstants(options, "product");
+  //TODO check status
 
-  if (options.price.v2 != null && options.price.v2 > options.price.v1) {
-    throw Object.assign(new Error("Error"), {
-      extensions: {
-        customCode: "400",
-        customPath: "price",
-        customMessage: "pricev2 cannot be greater than pricev1",
-      },
-    });
-  }
+  // TODO checkConstants(options, "product");
 
-  if (options.price.v2 === options.price.v1) {
-    throw Object.assign(new Error("Error"), {
-      extensions: {
-        customCode: "400",
-        customPath: "price",
-        customMessage: "pricev2 cannot be the same of pricev1",
-      },
-    });
-  }
+  checkPriceV2BelowV1(options.variations);
 
   const shop = await shopById(shopId);
 
@@ -53,49 +37,18 @@ export const createProduct = async (
   if (process.env.NODE_ENV !== "development")
     authenticateToken(token.mongoId, shop.id, token.isBusiness);
 
-  //TODO handling the macroCategories => insert macroCategory into shop
+  options.variations.map((variation) => {
+    let discountPercentage = +(
+      100 -
+      (100 * variation.price.v2) / variation.price.v1
+    ).toFixed(2);
 
-  let discountPercentage = +(
-    100 -
-    (100 * options.price.v2) / options.price.v1
-  ).toFixed(2);
+    if (Number.isNaN(discountPercentage)) {
+      discountPercentage = null;
+    }
 
-  if (Number.isNaN(discountPercentage)) {
-    discountPercentage = null;
-  }
-
-  options.price.discountPercentage = discountPercentage;
-
-  for (let i = 0; i < options.photos.length; i++) {
-    promises.push(
-      new Promise(async (resolve, reject) => {
-        const { createReadStream } = await options.photos[i];
-        const stream = await createReadStream();
-        // stream.pipe(stream);
-        // await finished(stream);
-        let blob: any = await streamToBlob(stream);
-        console.log(`foto numero ${i} convertita`);
-        blob = sharp(blob).resize(1528, 2200);
-
-        const newBlob = await streamToBlob(blob);
-
-        const id = uuidv4();
-
-        const params: any = {
-          Bucket: process.env.BUCKET_NAME, // The path to the directory you want to upload the object to, starting with your Space name.
-          Key: id, // Object key, referenced whenever you want to access this file later.
-          Body: newBlob, // The object's contents. This variable is an object, not a string.
-          ACL: "public-read", // Defines ACL permissions, such as private or public.
-          ContentType: "image/webp",
-        };
-
-        s3Client.send(new PutObjectCommand(params));
-        resolve(id);
-      })
-    );
-  }
-
-  const photosId = await Promise.all(promises);
+    variation.price.discountPercentage = discountPercentage;
+  });
 
   const newProduct = await Product.create({
     ...options,
@@ -105,16 +58,16 @@ export const createProduct = async (
     },
     shopId: shopId,
     firebaseShopId: shop.firebaseId,
-    shopOptions: {
-      city: shop.address.city,
+    shopInfo: {
+      id: shop.id,
+      firebaseId: shop.firebaseId,
       name: shop.name,
+      city: shop.address.city,
       status: shop.status,
     },
     createdAt: new Date(),
     updatedAt: new Date(),
-    photos: photosId,
-    status: "active",
   });
 
-  return { id: newProduct.id, photos: photosId };
+  return { id: newProduct.id };
 };

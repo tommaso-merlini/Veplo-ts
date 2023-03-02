@@ -10,9 +10,11 @@ const typeDefs = gql`
     coordinates: [Float!]!
   }
 
-  type ShopOptions {
-    city: String!
+  type ShopInfo {
+    id: ID
+    firebaseId: String
     name: String
+    city: String!
     status: String!
   }
 
@@ -38,6 +40,27 @@ const typeDefs = gql`
     id: String
   }
 
+  type ProductInfo {
+    gender: String
+    macroCategory: String
+    microCategory: String
+    brand: String
+  }
+
+  type Lot {
+    size: String
+    quantity: Int
+  }
+
+  type ProductVariation {
+    id: ID
+    color: String
+    status: String
+    price: Price
+    photos: [String!]
+    lots: [Lot!]
+  }
+
   type Business {
     firebaseId: String!
     businessName: String
@@ -53,22 +76,14 @@ const typeDefs = gql`
   type Product {
     id: ID
     name: String
-    price: Price
-    colors: [String!]
-    sizes: [String!]
-    macroCategory: String
-    microCategory: String
-    gender: String
-    brand: String
-    location: Location
-    shopId: ID
-    firebaseShopId: String
-    shopOptions: ShopOptions
-    photos: [String!]
-    updatedAt: String
-    createdAt: String
-    discountedPrice: Int
     status: String
+    canBuy: Boolean
+    createdAt: String
+    updatedAt: String
+    info: ProductInfo
+    location: Location
+    shopInfo: ShopInfo
+    variations: [ProductVariation!]
   }
 
   type Shop {
@@ -98,7 +113,7 @@ const typeDefs = gql`
   input ProductFilters {
     colors: [String!]
     sizes: [String!]
-    brands: [String!]
+    brand: String
     minPrice: Int
     maxPrice: Int
     name: String
@@ -133,6 +148,26 @@ const typeDefs = gql`
     v2: Float
   }
 
+  input ProductInfoInput {
+    gender: String!
+    macroCategory: String!
+    microCategory: String!
+    brand: String!
+  }
+
+  input ProductLotInput {
+    size: String!
+    quantity: Int
+  }
+
+  input ProductVariationInput {
+    color: String!
+    status: String!
+    price: PriceInput!
+    photos: [String!]!
+    lots: [ProductLotInput!]!
+  }
+
   input EditPriceInput {
     v1: Float!
     v2: Float
@@ -140,14 +175,10 @@ const typeDefs = gql`
 
   input ProductInput {
     name: String!
-    price: PriceInput!
-    colors: [String!]!
-    sizes: [String!]!
-    macroCategory: String!
-    microCategory: String!
-    gender: String!
-    brand: String!
-    photos: [Upload!]!
+    status: String!
+    canBuy: Boolean!
+    info: ProductInfoInput!
+    variations: [ProductVariationInput!]!
   }
 
   input ShopInput {

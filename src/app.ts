@@ -15,6 +15,8 @@ import { graphqlUploadExpress } from "graphql-upload";
 import cluster from "cluster";
 import os from "os";
 import { v4 as uuidv4 } from "uuid";
+import stripe from "../stripe/stripe";
+import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated";
 
 process.on("uncaughtException", function (err) {
   const errorId = uuidv4();
@@ -35,6 +37,7 @@ process.on("uncaughtException", function (err) {
 const app = express();
 const port = process.env.PORT || 3000;
 const numCpus = os.cpus().length;
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 async function startServer() {
   // if (cluster.isPrimary) {
@@ -55,6 +58,41 @@ async function startServer() {
     app.get("/", (req, res) => {
       res.send({ status: "ok" });
     });
+
+    app.post(
+      "/webhook",
+      express.raw({ type: "application/json" }),
+      (request, response) => {
+        const sig = request.headers["stripe-signature"];
+
+        let event;
+
+        try {
+          event = stripe.webhooks.constructEvent(
+            request.body,
+            sig,
+            endpointSecret
+          );
+        } catch (err) {
+          console.log(err.message);
+          response.status(400).send(`Webhook Error: ${err.message}`);
+          return;
+        }
+
+        switch (event.type) {
+          case "account.updated":
+            handleAccountUpdated(event.data.object);
+            // Then define and call a function to handle the event payment_intent.succeeded
+            break;
+          // ... handle other event types
+          default:
+            console.log(`Unhandled event type ${event.type}`);
+        }
+
+        // Return a 200 response to acknowledge receipt of the event
+        response.send();
+      }
+    );
 
     app.listen(port, () => {
       console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));

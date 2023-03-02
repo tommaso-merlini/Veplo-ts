@@ -7,30 +7,30 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  price: {
-    v1: {
-      type: Number,
+  status: { type: String, required: true },
+  canBuy: { type: Boolean, required: true },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
+  updatedAt: {
+    type: Date,
+    required: true,
+  },
+  info: {
+    gender: {
+      type: String,
       required: true,
     },
-    v2: {
-      type: Number,
-      required: false,
+    macroCategory: {
+      type: String,
+      required: true,
     },
-    discountPercentage: { type: Number, required: false },
-  },
-  colors: [{ type: String, required: true }],
-  sizes: [{ type: String, required: true }],
-  macroCategory: {
-    type: String,
-    required: true,
-  },
-  microCategory: {
-    type: String,
-    required: true,
-  },
-  gender: {
-    type: String,
-    required: true,
+    microCategory: {
+      type: String,
+      required: true,
+    },
+    brand: { type: String, required: false },
   },
   location: {
     type: {
@@ -39,10 +39,9 @@ const ProductSchema = new mongoose.Schema({
     },
     coordinates: [{ type: Number, required: true }],
   },
-  brand: { type: String, required: false },
-  shopId: { type: mongoose.Types.ObjectId, required: true },
-  firebaseShopId: { type: String, required: true },
-  shopOptions: {
+  shopInfo: {
+    id: { type: mongoose.Types.ObjectId, required: true },
+    firebaseId: { type: String, required: true },
     name: {
       type: String,
       required: true,
@@ -53,17 +52,30 @@ const ProductSchema = new mongoose.Schema({
     },
     status: { type: String, required: true },
   },
-  photos: [{ type: String, required: true }],
-  createdAt: {
-    type: Date,
-    required: true,
-  },
-  updatedAt: {
-    type: Date,
-    required: true,
-  },
-
-  status: { type: String, required: true },
+  variations: [
+    {
+      color: { type: String, required: true },
+      status: { type: String, required: true },
+      price: {
+        v1: {
+          type: Number,
+          required: true,
+        },
+        v2: {
+          type: Number,
+          required: false,
+        },
+        discountPercentage: { type: Number, required: false },
+      },
+      photos: [{ type: String, required: true }],
+      lots: [
+        {
+          size: { type: String, required: true },
+          quantity: { type: Number, required: false },
+        },
+      ],
+    },
+  ],
 });
 
 ProductSchema.index({

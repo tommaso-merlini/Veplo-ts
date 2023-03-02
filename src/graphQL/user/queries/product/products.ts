@@ -15,8 +15,9 @@ export const products = async (
   const longitude = coordinates[1];
   const gender = filters.gender;
   const macroCategory = filters.macroCategory;
-  const brands = filters.brands;
+  const brand = filters.brand;
   const sizes = filters.sizes;
+  const colors = filters.colors;
   const checkName = () => {
     if (filters.name != null) {
       return {
@@ -39,25 +40,23 @@ export const products = async (
     }
   };
   const checkGender = () => {
-    if (filters.gender != null) {
-      return { gender };
+    if (gender != null) {
+      return { "info.gender": gender };
     } else {
       return {};
     }
   };
   const checkBrands = () => {
-    if (filters.brands != null) {
-      return {
-        brand: { $in: brands },
-      };
+    if (brand != null) {
+      return { "info.brand": brand };
     } else {
       return {};
     }
   };
   const checkSizes = () => {
-    if (filters.sizes != null) {
+    if (sizes != null) {
       return {
-        sizes: { $in: sizes },
+        "variations.lots.size": { $in: sizes },
       };
     } else {
       return {};
@@ -98,8 +97,8 @@ export const products = async (
   };
 
   const checkColors = () => {
-    if (filters.colors != null) {
-      return { colors: { $in: filters.colors } };
+    if (colors != null) {
+      return { "variations.color": { $in: colors } };
     } else {
       return {};
     }
@@ -155,7 +154,7 @@ export const products = async (
     {
       $match: {
         status: "active",
-        "shopOptions.status": "active",
+        "shopInfo.status": "active",
       },
     },
 
