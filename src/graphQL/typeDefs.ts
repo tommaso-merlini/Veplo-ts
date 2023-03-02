@@ -183,14 +183,18 @@ const typeDefs = gql`
     variations: [ProductVariationInput!]!
   }
 
-  input ShopInput {
-    name: String!
-    address: AddressShopInput!
+  input ShopInputInfo {
+    phone: String!
     description: String
     opening: OpeningInput!
-    photo: [Upload!]
-    piva: String!
-    phone: String!
+  }
+
+  input ShopInput {
+    name: String!
+    photo: String!
+    isDigitalOnly: Boolean!
+    info: ShopInputInfo!
+    address: AddressShopInput!
   }
 
   input EditProductInput {

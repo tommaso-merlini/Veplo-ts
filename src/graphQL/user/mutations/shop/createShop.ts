@@ -12,8 +12,8 @@ export const createShop = async (_, { options }, { req, admin }: Context) => {
   let token: any = {
     uid: "prova",
     isBusiness: true,
+    mongoId: "63fcea8f60c595a4975d71dc",
   };
-  let photosId = [];
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -43,16 +43,12 @@ export const createShop = async (_, { options }, { req, admin }: Context) => {
     createPostCode(postCode, city, center);
   }
 
-  if (options.photo) {
-    photosId = await uploadToSpaces(options.photo, "shop");
-  }
-
   options.address.postcode = postCode;
   const newShop = await Shop.create({
     ...options,
-    status: "active",
+    status: "not_active",
     createdAt: new Date(),
-    photo: photosId[0],
+    businessId: token.mongoId,
   });
 
   return newShop.id;
