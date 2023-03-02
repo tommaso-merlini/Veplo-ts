@@ -250,6 +250,10 @@ const typeDefs = gql`
 
     #product
     product(id: ID!): Product
+    productByVariationUniqueId(uniqueId: ID!): Product
+
+    #variation
+    variation(id: ID!): Variation
     variations(
       range: Float!
       limit: Int!

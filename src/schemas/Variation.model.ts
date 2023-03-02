@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 const VariationSchema = new mongoose.Schema({
   color: { type: String, required: true },
+  uniqueId: { type: String, required: true },
   status: { type: String, required: true },
   name: { type: String, required: true },
   updatedAt: { type: Date, required: true },

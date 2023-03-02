@@ -5,6 +5,7 @@ export const createVariations = async (product) => {
   product.variations.forEach((variation) => {
     variations.push({
       color: variation.color,
+      uniqueId: variation.uniqueId,
       name: product.name,
       updatedAt: product.updatedAt,
       status: variation.status,

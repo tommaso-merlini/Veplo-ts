@@ -10,6 +10,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1";
 import Product from "../../../../schemas/Product.model";
 import { createVariations } from "../../../../controllers/mutations/createVariations";
+import { forEach } from "lodash";
 
 export const createProduct = async (
   _,
@@ -17,6 +18,7 @@ export const createProduct = async (
   { admin, req }: Context
 ) => {
   let token;
+  let variationsUniqueIds = [];
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -42,6 +44,7 @@ export const createProduct = async (
     authenticateToken(token.mongoId, shop.id, token.isBusiness);
 
   options.variations.map((variation) => {
+    //calculate discount
     let discountPercentage = +(
       100 -
       (100 * variation.price.v2) / variation.price.v1
@@ -52,6 +55,9 @@ export const createProduct = async (
     }
 
     variation.price.discountPercentage = discountPercentage;
+
+    //calculate uniqueIds
+    variation.uniqueId = uuidv4();
   });
 
   const newProduct = await Product.create({
