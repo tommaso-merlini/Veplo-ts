@@ -35,7 +35,6 @@ export const createStripeAccount = async (
     });
   }
 
-  //TODO check that the business does not have already the stripeId from mongodb
   const business = await businessById(token.mongoId);
 
   if (business.stripe.id != null) {

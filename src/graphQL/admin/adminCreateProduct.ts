@@ -55,8 +55,6 @@ export const adminCreateProduct = async (
 
   const shop = await shopById(shopId);
 
-  //TODO handling the macroCategories => insert macroCategory into shop
-
   let discountPercentage = +(
     100 -
     (100 * options.price.v2) / options.price.v1
