@@ -7,15 +7,15 @@ export const handleAccountUpdated = async (object) => {
   const payoutsEnabled = object.payouts_enabled;
   const metadata = object.metedata;
 
-  console.log(`id: ${id}`);
-  console.log(`chargesEnabled: ${chargesEnabled}`);
-  console.log(`detailsSumbitted: ${detailsSumbitted}`);
-  console.log(`payoutsEnabled: ${payoutsEnabled}`);
+  // console.log(`id: ${id}`);
+  // console.log(`chargesEnabled: ${chargesEnabled}`);
+  // console.log(`detailsSumbitted: ${detailsSumbitted}`);
+  // console.log(`payoutsEnabled: ${payoutsEnabled}`);
+  // console.log(`metadata: ${metadata}`);
 
   if (detailsSumbitted === false) {
-    console.log("qui1");
     await Business.updateOne(
-      { _id: id },
+      { "stripe.id": id },
       {
         status: "onboarding_KYC_requested",
       }
@@ -27,9 +27,8 @@ export const handleAccountUpdated = async (object) => {
     detailsSumbitted === true &&
     (payoutsEnabled === false || chargesEnabled === false)
   ) {
-    console.log("qui2");
     await Business.updateOne(
-      { _id: id },
+      { "stripe.id": id },
       {
         status: "not_active",
       }
@@ -42,9 +41,8 @@ export const handleAccountUpdated = async (object) => {
     payoutsEnabled === true &&
     chargesEnabled === true
   ) {
-    console.log("qui3");
     await Business.updateOne(
-      { _id: id },
+      { "stripe.id": id },
       {
         status: "active",
       }
