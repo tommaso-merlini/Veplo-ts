@@ -34,7 +34,7 @@ export const createBusinessStep1 = async (_, {}, { req, admin }: Context) => {
   const newBusiness = await Business.create({
     firebaseId: token.uid,
     email: token.email,
-    status: "onboarding_required",
+    status: "stripe_id_requested",
     createdAt: new Date(),
   });
 

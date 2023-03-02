@@ -3,17 +3,34 @@ const mongoose = require("mongoose");
 // mongoose.set("useCreateIndex", true);
 
 const ShopSchema = new mongoose.Schema({
+  businessId: { type: mongoose.Types.ObjectId, required: true },
   name: {
     type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
     required: true,
   },
   status: {
     type: String,
     required: true,
   },
-  opening: {
-    days: [{ type: Number, required: true }],
-    hours: [{ type: String, required: true }],
+  photo: { type: String, required: false },
+  isDigitalOnly: { type: Boolean, required: false },
+  info: {
+    phone: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: false,
+    },
+    opening: {
+      days: [{ type: Number, required: true }],
+      hours: [{ type: String, required: true }],
+    },
   },
   address: {
     postcode: {
@@ -36,36 +53,6 @@ const ShopSchema = new mongoose.Schema({
       coordinates: [{ type: Number, required: true }],
     },
   },
-  description: {
-    type: String,
-    required: false,
-  },
-  piva: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    required: true,
-  },
-  firebaseId: { type: String, required: true },
-  photo: { type: String, required: false },
-  macroCategories: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
-  genders: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
 });
 
 // ShopSchema.index({

@@ -6,10 +6,6 @@ const BusinessSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  name: {
-    type: String,
-    required: false,
-  },
   vatNumber: {
     type: String,
     required: false,

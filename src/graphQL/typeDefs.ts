@@ -63,14 +63,14 @@ const typeDefs = gql`
 
   type Business {
     firebaseId: String!
-    businessName: String
-    name: String
     vatNumber: String
     email: String!
+    businessName: String
     phone: String
     status: String!
     createdAt: String
     stripe: Stripe
+    shops: [Shop!]
   }
 
   type Product {
@@ -86,21 +86,23 @@ const typeDefs = gql`
     variations: [ProductVariation!]
   }
 
+  type ShopInformations {
+    phone: String
+    description: String
+    opening: Opening
+  }
+
   type Shop {
     id: ID
+    businessId: ID
     name: String
-    status: String
-    products(limit: Int!, offset: Int!, see: String): [Product!]
-    firebaseId: String
-    address: AddressShop
-    #macroCategories: [String!]
-    description: String
     createdAt: String
-    #gender: [String!]
+    status: String
     photo: String
-    piva: String
-    phone: String
-    opening: Opening
+    isDigitalOnly: Boolean
+    info: ShopInformations
+    address: AddressShop
+    products(limit: Int!, offset: Int!, see: String): [Product!]
   }
 
   type CreateProductResponse {
@@ -221,13 +223,16 @@ const typeDefs = gql`
     #shop
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
-    isBusiness: Boolean!
     shops(
       range: Int!
       limit: Int!
       offset: Int!
       filters: ShopFilters!
     ): [Shop!]!
+
+    #business
+    isBusiness: Boolean!
+    business(id: ID): Business
   }
 
   #===================MUTATIONS===================

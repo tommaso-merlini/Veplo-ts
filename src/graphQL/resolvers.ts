@@ -18,6 +18,8 @@ import Product from "../schemas/Product.model";
 import { adminDeleteProduct } from "./admin/adminDeleteProduct";
 import { createBusinessStep1 } from "./user/mutations/business/createBusiness/createBusinessStep1";
 import { createStripeAccount } from "./user/mutations/stripe/createStripeAccount";
+import { business } from "./user/queries/business/business";
+import Shop from "../schemas/Shop.model";
 require("dotenv").config();
 
 const resolvers = {
@@ -32,6 +34,7 @@ const resolvers = {
     shopByFirebaseId,
     isBusiness,
     shops,
+    business,
   },
 
   Mutation: {
@@ -63,6 +66,16 @@ const resolvers = {
         .limit(limit);
 
       return products;
+    },
+  },
+
+  Business: {
+    shops: async (business, { _ }) => {
+      const shops = await Shop.find({
+        businessId: business.id,
+      });
+
+      return shops;
     },
   },
 };
