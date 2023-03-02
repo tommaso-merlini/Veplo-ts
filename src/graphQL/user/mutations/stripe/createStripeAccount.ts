@@ -54,10 +54,20 @@ export const createStripeAccount = async (
     company: {
       name: businessName,
       vat_id: vatId,
+      tax_id: vatId,
     },
     metadata: {
       firebaseId: token.uid,
       mongoId: token.mongoId,
+    },
+    settings: {
+      payouts: {
+        schedule: {
+          delay_days: 30,
+          interval: "weekly",
+          weekly_anchor: "monday",
+        },
+      },
     },
   });
 
@@ -67,7 +77,7 @@ export const createStripeAccount = async (
       businessName,
       phone,
       vatId,
-      status: "first_KYC_required",
+      status: "onboarding_KYC_requested",
       stripe: {
         id: account.id,
       },
