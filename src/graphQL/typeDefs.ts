@@ -224,7 +224,7 @@ const typeDefs = gql`
 
   input ShopInput {
     name: String!
-    photo: String!
+    photo: String
     isDigitalOnly: Boolean!
     info: ShopInputInfo!
     address: AddressShopInput!
