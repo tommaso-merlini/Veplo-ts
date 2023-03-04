@@ -28,7 +28,7 @@ const apolloserver = new ApolloServer({
       ? ApolloServerPluginLandingPageDisabled()
       : ApolloServerPluginLandingPageGraphQLPlayground(),
   ],
-  validationRules: [depthLimit(3)],
+  validationRules: [depthLimit(7)],
   formatError: (err: any) => {
     let path = err.path;
     if (err.path === undefined) {
