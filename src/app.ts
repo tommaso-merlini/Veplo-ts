@@ -59,6 +59,17 @@ async function startServer() {
       res.send({ status: "ok" });
     });
 
+    app.use(
+      bodyParser.json({
+        verify: function (req, res, buf) {
+          var url = req.originalUrl;
+          if (url.startsWith("/webhook")) {
+            req.rawBody = buf.toString();
+          }
+        },
+      })
+    );
+
     app.post(
       "/webhook",
       express.raw({ type: "application/json" }),
@@ -69,7 +80,7 @@ async function startServer() {
 
         try {
           event = stripe.webhooks.constructEvent(
-            request.body,
+            request.rawBody,
             sig,
             endpointSecret
           );
