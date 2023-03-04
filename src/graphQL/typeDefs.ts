@@ -300,7 +300,7 @@ const typeDefs = gql`
     #stripe
     createStripeAccount(
       businessName: String!
-      vatId: String!
+      vatNumber: String!
       phone: String!
     ): String
 

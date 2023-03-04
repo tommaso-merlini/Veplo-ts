@@ -5,7 +5,7 @@ import Business from "../../../../schemas/Business.model";
 
 export const createStripeAccount = async (
   _,
-  { businessName, vatId, phone },
+  { businessName, vatNumber, phone },
   { admin, req, stripe }: Context
 ) => {
   let token;
@@ -52,8 +52,8 @@ export const createStripeAccount = async (
     business_type: "company",
     company: {
       name: businessName,
-      vat_id: vatId,
-      tax_id: vatId,
+      vat_id: vatNumber,
+      tax_id: vatNumber,
     },
     metadata: {
       firebaseId: token.uid,
@@ -75,7 +75,7 @@ export const createStripeAccount = async (
     {
       businessName,
       phone,
-      vatId,
+      vatNumber,
       status: "onboarding_KYC_requested",
       stripe: {
         id: account.id,
