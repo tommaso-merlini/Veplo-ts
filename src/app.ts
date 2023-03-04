@@ -38,7 +38,15 @@ process.on("uncaughtException", function (err) {
 const app = express();
 const port = process.env.PORT || 3000;
 const numCpus = os.cpus().length;
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+let endpointSecret;
+
+if (process.env.NODE_ENV === "development") {
+  endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_TESTING_DEVELOPMENT;
+}
+
+if (process.env.NODE_ENV === "testing") {
+  endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_TESTING;
+}
 
 async function startServer() {
   // if (cluster.isPrimary) {
@@ -60,28 +68,23 @@ async function startServer() {
       res.send({ status: "ok" });
     });
 
-    app.use(
-      bodyParser.json({
-        verify: function (req, res, buf) {
-          var url = req.originalUrl;
-          if (url.startsWith("/webhook")) {
-            req.rawBody = buf.toString();
-          }
-        },
-      })
-    );
+    // app.use(express.json());
 
     app.post(
       "/webhook",
       express.raw({ type: "application/json" }),
       (request, response) => {
+        console.log("arriva");
         const sig = request.headers["stripe-signature"];
+
+        console.log(request.body);
+        console.log(sig);
 
         let event;
 
         try {
           event = stripe.webhooks.constructEvent(
-            request.rawBody,
+            request.body,
             sig,
             endpointSecret
           );
@@ -94,6 +97,7 @@ async function startServer() {
         switch (event.type) {
           case "account.updated":
             handleAccountUpdated(event.data.object);
+            console.log("ok");
             // Then define and call a function to handle the event payment_intent.succeeded
             break;
 
