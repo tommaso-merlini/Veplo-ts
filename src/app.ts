@@ -7,6 +7,7 @@ import rateLimit from "express-rate-limit";
 import { GraphQLError } from "graphql";
 import initMongoose from "../mongoose/initMongoose";
 var mongoose = require("mongoose");
+import bodyParser from "body-parser";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 require("dotenv").config();
