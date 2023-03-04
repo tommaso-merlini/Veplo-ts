@@ -84,6 +84,11 @@ async function startServer() {
             handleAccountUpdated(event.data.object);
             // Then define and call a function to handle the event payment_intent.succeeded
             break;
+
+          default:
+            if (process.env.NODE_ENV !== "production") {
+              console.log(`event.type not handled`);
+            }
         }
 
         // Return a 200 response to acknowledge receipt of the event
