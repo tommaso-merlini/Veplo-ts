@@ -302,6 +302,9 @@ const typeDefs = gql`
     #business
     isBusiness: Boolean!
     business(id: ID): Business
+
+    #user
+    user(id: ID!): User
   }
 
   #===================MUTATIONS===================

@@ -67,7 +67,7 @@ const resolvers = {
         status = { $exists: true };
       }
       const products = await Product.find({
-        shopId: shop.id,
+        "shopInfo.id": shop.id,
         status,
       })
         .skip(offset)
