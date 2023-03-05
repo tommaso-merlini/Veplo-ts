@@ -1,6 +1,6 @@
 import { brands } from "../brands.js";
 
-const clothes_sizes = [
+export const clothes_sizes = [
   "xxs",
   "xs",
   "s",
@@ -13,7 +13,7 @@ const clothes_sizes = [
   "5xl",
 ];
 
-const shoes_sizes = [
+export const shoes_sizes = [
   "35",
   "35.5",
   "36",

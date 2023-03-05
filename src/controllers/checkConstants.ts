@@ -1,4 +1,4 @@
-import { constants } from "../../constants/constants";
+import { clothes_sizes, constants } from "../../constants/constants";
 
 const checkConstants = (obj, is: String) => {
   if (is !== "product" && is !== "shop") {
@@ -20,7 +20,8 @@ const checkConstants = (obj, is: String) => {
     if (product.info.gender === "M") {
       for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
         if (
-          product.macroCategory === constants.genders.uomo.abbigliamento[i].name
+          product.info.macroCategory ===
+          constants.genders.uomo.abbigliamento[i].name
         ) {
           macroCategoryIndex = i;
         }
@@ -29,10 +30,12 @@ const checkConstants = (obj, is: String) => {
       macroCategory = constants.genders.uomo.abbigliamento[macroCategoryIndex];
       if (macroCategoryIndex === null || macroCategoryIndex === undefined) {
         throw new Error(
-          `la category ${product.macroCategory} non e' una category accetata`
+          `la category ${product.info.macroCategory} non e' una category accetata`
         );
       }
-    } else {
+    }
+
+    if (product.info.gender === "F") {
       for (let i = 0; i < constants.genders.donna.abbigliamento.length; i++) {
         if (
           product.info.macroCategory ===
@@ -45,7 +48,7 @@ const checkConstants = (obj, is: String) => {
       macroCategory = constants.genders.donna.abbigliamento[macroCategoryIndex];
       if (macroCategoryIndex === null || macroCategoryIndex === undefined) {
         throw new Error(
-          `la category ${product.macroCategory} non e' una category accetata`
+          `la category ${product.info.macroCategory} non e' una category accetata`
         );
       }
     }
@@ -60,17 +63,16 @@ const checkConstants = (obj, is: String) => {
         `i colori che hai scelto non vanno bene, ecco la lista dei colori accettati: ${constants.colors}`
       );
 
-    //TODO
     //---CHECK SIZES
-    const areSizesOk = product.sizes.every((size) =>
-      macroCategory.sizes.includes(size)
-    );
-
-    if (!areSizesOk) {
-      throw new Error(
-        `sizes ${product.sizes} non sono accetate per category ${macroCategory.name}, taglie accettati per ${macroCategory.name}: ${macroCategory.sizes}`
-      );
-    }
+    product.variations.forEach((variation) => {
+      variation.lots.forEach((lot) => {
+        if (!clothes_sizes.includes(lot.size)) {
+          throw new Error(
+            `la taglia ${lot.size}, del prodotto di colore ${variation.color}, non e' una taglia accettata`
+          );
+        }
+      });
+    });
 
     //---CHECK BRAND
     const isBrandOk = constants.brands.includes(product.info.brand);

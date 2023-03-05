@@ -33,7 +33,7 @@ export const createProduct = async (
 
   //TODO check status
 
-  // TODO checkConstants(options, "product");
+  checkConstants(options, "product");
 
   checkPriceV2BelowV1(options.variations);
 
