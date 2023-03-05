@@ -175,8 +175,9 @@ const typeDefs = gql`
   }
 
   type Cart {
-    id: ID!
-    userId: ID!
+    id: ID
+    variationId: ID
+    userId: ID
     total: Float
     status: String
     shopInfo: CartShopInfo
@@ -374,7 +375,7 @@ const typeDefs = gql`
     ): String
 
     #cart
-    addToCart(productVariationId: ID!): Boolean
+    addToCart(productVariationId: ID!, size: String!, quantity: Int!): Boolean
 
     #user
     createUser(options: UserInput!): ID!
