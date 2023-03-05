@@ -157,6 +157,32 @@ const typeDefs = gql`
     location: Location
   }
 
+  type CartShopInfo {
+    id: ID
+    name: String
+    city: String
+  }
+
+  type CartProductVariation {
+    id: ID
+    photo: String
+    name: String
+    price: Price
+    quantity: Int
+    color: String
+    size: String
+    status: String
+  }
+
+  type Cart {
+    id: ID!
+    userId: ID!
+    total: Float
+    status: String
+    shopInfo: CartShopInfo
+    productsVariations: [CartProductVariation!]
+  }
+
   #===========INPUTS===============
 
   input ProductFilters {
@@ -343,6 +369,9 @@ const typeDefs = gql`
       vatNumber: String!
       phone: String!
     ): String
+
+    #cart
+    addToCart(productVariationId: ID!): Boolean
 
     #user
     createUser(options: UserInput!): ID!

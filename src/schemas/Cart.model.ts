@@ -4,12 +4,12 @@ const CartSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, required: true },
   total: { type: Number, required: true },
   status: { type: String, required: true },
-  shop: {
+  shopInfo: {
     id: { type: mongoose.Types.ObjectId, required: true },
     name: { type: String, required: true },
     city: { type: String, required: true },
   },
-  productsVariations: [
+  productVariations: [
     {
       id: { type: mongoose.Types.ObjectId, required: true },
       photo: { type: String, required: true },

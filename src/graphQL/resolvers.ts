@@ -26,6 +26,7 @@ import { products } from "./user/queries/product/products";
 import { createUser } from "./user/mutations/user/createUser";
 import { user } from "./user/queries/user/user";
 import { editUser } from "./user/mutations/user/editUser";
+import { addToCart } from "./user/mutations/Cart/addToCart";
 require("dotenv").config();
 
 const resolvers = {
@@ -62,6 +63,7 @@ const resolvers = {
     createStripeAccount,
     createUser,
     editUser,
+    addToCart,
   },
 
   Shop: {
