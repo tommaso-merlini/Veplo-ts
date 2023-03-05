@@ -22,6 +22,7 @@ import { business } from "./user/queries/business/business";
 import Shop from "../schemas/Shop.model";
 import { variation } from "./user/queries/variation/variation";
 import productByVariationUniqueId from "./user/queries/product/productByVariationUniqueId";
+import { products } from "./user/queries/product/products";
 require("dotenv").config();
 
 const resolvers = {
@@ -39,6 +40,7 @@ const resolvers = {
     business,
     variation,
     productByVariationUniqueId,
+    products,
   },
 
   Mutation: {

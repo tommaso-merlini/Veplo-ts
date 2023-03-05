@@ -1,27 +1,16 @@
 import { brands } from "../brands.js";
 
-const woman_clothes_sizes = [
-  "xxs (36)",
-  "xs (38)",
-  "s (40)",
-  "m (42)",
-  "l (44)",
-  "xl (46)",
-  "xxl (48)",
-  "3xl (50)",
-  "4xl (52)",
-  "5xl (54)",
-];
-
-const man_clothes_sizes = [
-  "xs (44)",
-  "s (46)",
-  "m (48)",
-  "l (50)",
-  "xl (52)",
-  "xxl (54)",
-  "3xl (56)",
-  "4xl (58)",
+const clothes_sizes = [
+  "xxs",
+  "xs",
+  "s",
+  "m",
+  "l",
+  "xl",
+  "xxl",
+  "3xl",
+  "4xl",
+  "5xl",
 ];
 
 const shoes_sizes = [
@@ -99,19 +88,19 @@ export const constants = {
             "di jeans",
             "di maglia",
           ],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "T-Shirt e Top",
           url: "t-shirt-e-top",
           types: ["top", "t-shirt", "polo", "a maniche lunghe"],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Camicie e Bluse", //Camicie & Bluse
           url: "camicie-e-bluse",
           types: ["camicie", "camiciette", "bluse"],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Pantaloni",
@@ -125,7 +114,7 @@ export const constants = {
             "salopette",
             "tuta",
           ],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Jeans",
@@ -139,13 +128,13 @@ export const constants = {
             "diritti",
             "jeans a zampa d'elefante",
           ],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Felpe",
           url: "felpe",
           types: ["felpe", "con il cappuccio", "con la zip", "pile"],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Giacche & Blazer",
@@ -164,7 +153,7 @@ export const constants = {
             "piumini corti",
             "giacche bomber",
           ],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Cappotti",
@@ -177,20 +166,20 @@ export const constants = {
             "invernali",
             "piumini lunghi",
           ],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Maglieria",
           url: "pullover-e-cardigan",
           types: ["pullover", "cardigan"],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         //!aggiunto costumi: ["costumi"],
         {
           name: "Costumi",
           url: "costumi",
           types: ["costumi interi", "bikini"],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Gonne",
@@ -205,13 +194,13 @@ export const constants = {
             "di pelle",
             "a portafoglio",
           ],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Shorts",
           url: "shorts",
           types: ["jeans", "sportivi"],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Abbigliamento sportivo",
@@ -229,7 +218,7 @@ export const constants = {
             "intimo e strati base",
             "merchandising ufficiale",
           ],
-          sizes: woman_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           //!aggiunte scarpe donna
@@ -262,25 +251,25 @@ export const constants = {
           name: "T-shirt e Polo",
           url: "t-shirt-e-polo",
           types: ["basic", "stampate", "canotte", "polo", "a maniche lunghe"],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Camicie",
           url: "camicie",
           types: ["casual", "eleganti"],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Felpe",
           url: "felpe",
           types: ["con il cappuccio", "felpe", "con la zip", "di pile"],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Maglieria",
           url: "maglieria",
           types: ["cardigan", "pullover"],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Jeans",
@@ -295,7 +284,7 @@ export const constants = {
             "a zampa d'elefente",
             "jeans shorts",
           ],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Pantaloni",
@@ -307,7 +296,7 @@ export const constants = {
           name: "Bermuda",
           url: "bermuda",
           types: ["short casual", "jeans corti", "pantaloncini sportivi"],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Abbigliamento sportivo",
@@ -323,7 +312,7 @@ export const constants = {
             "Moda mare & surf",
             "Intimo e strati base",
           ],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Giacche",
@@ -338,7 +327,7 @@ export const constants = {
             "di pile",
             "gilet",
           ],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Cappotti",
@@ -351,7 +340,7 @@ export const constants = {
             "classici",
             "piumini",
           ],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
         {
           name: "Scarpe",
@@ -375,7 +364,7 @@ export const constants = {
           name: "Costumi",
           url: "costumi",
           types: ["Bermuda & Pantaloncini", "Boxer mare", "Slip"],
-          sizes: man_clothes_sizes,
+          sizes: clothes_sizes,
         },
       ],
     },

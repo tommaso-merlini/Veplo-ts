@@ -251,6 +251,12 @@ const typeDefs = gql`
     #product
     product(id: ID!): Product
     productByVariationUniqueId(uniqueId: ID!): Product
+    products(
+      range: Float!
+      limit: Int!
+      offset: Int!
+      filters: ProductFilters!
+    ): [Product!]
 
     #variation
     variation(id: ID!): Variation
