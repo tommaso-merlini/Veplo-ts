@@ -18,6 +18,7 @@ import os from "os";
 import { v4 as uuidv4 } from "uuid";
 import stripe from "../stripe/stripe";
 import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated";
+import { constants } from "../constants/constants";
 
 process.on("uncaughtException", function (err) {
   const errorId = uuidv4();
@@ -66,6 +67,18 @@ async function startServer() {
 
     app.get("/", (req, res) => {
       res.send({ status: "ok" });
+    });
+
+    app.get("/brands", (req, res) => {
+      const brands = constants.brands;
+
+      res.send(brands);
+    });
+
+    app.get("/categories", (req, res) => {
+      const categories = constants.genders;
+
+      res.send(categories);
     });
 
     // app.use(express.json());
