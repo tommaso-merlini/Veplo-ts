@@ -340,6 +340,9 @@ const typeDefs = gql`
 
     #user
     user(id: ID!): User
+
+    #cart
+    cart(id: ID!): Cart!
   }
 
   #===================MUTATIONS===================

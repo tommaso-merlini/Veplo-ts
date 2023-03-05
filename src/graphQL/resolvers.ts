@@ -29,6 +29,7 @@ import { editUser } from "./user/mutations/user/editUser";
 import { addToCart } from "./user/mutations/Cart/addToCart";
 import { deleteVariation } from "./user/mutations/variation/deleteVariation";
 import Cart from "../schemas/Cart.model";
+import { cart } from "./user/queries/cart/cart";
 require("dotenv").config();
 
 const resolvers = {
@@ -48,6 +49,7 @@ const resolvers = {
     productByVariationUniqueId,
     products,
     user,
+    cart,
   },
 
   Mutation: {
