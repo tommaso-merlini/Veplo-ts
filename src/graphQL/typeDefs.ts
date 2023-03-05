@@ -73,6 +73,20 @@ const typeDefs = gql`
     shops: [Shop!]
   }
 
+  type User {
+    id: ID
+    name: String
+    surname: String
+    stripeId: String
+    firebaseId: String
+    email: String
+    phone: String
+    location: Location
+    gender: String
+    age: String
+    createdAt: String
+  }
+
   type Product {
     id: ID
     name: String
@@ -230,6 +244,14 @@ const typeDefs = gql`
     address: AddressShopInput!
   }
 
+  input UserInput {
+    name: String!
+    surname: String!
+    location: LocationInput
+    gender: String
+    age: Int
+  }
+
   input EditProductInput {
     name: String
     price: EditPriceInput
@@ -309,6 +331,9 @@ const typeDefs = gql`
       vatNumber: String!
       phone: String!
     ): String
+
+    #user
+    createUser(options: UserInput!): ID!
 
     #ADMIN
     adminCreateProduct(

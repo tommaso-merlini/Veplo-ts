@@ -23,6 +23,7 @@ import Shop from "../schemas/Shop.model";
 import { variation } from "./user/queries/variation/variation";
 import productByVariationUniqueId from "./user/queries/product/productByVariationUniqueId";
 import { products } from "./user/queries/product/products";
+import { createUser } from "./user/mutations/user/createUser";
 require("dotenv").config();
 
 const resolvers = {
@@ -56,6 +57,7 @@ const resolvers = {
     adminDeleteProduct,
     createBusinessStep1,
     createStripeAccount,
+    createUser,
   },
 
   Shop: {
