@@ -265,6 +265,15 @@ const typeDefs = gql`
     status: String
   }
 
+  input EditUserInput {
+    name: String
+    surname: String
+    location: LocationInput
+    gender: String
+    phone: String
+    age: Int
+  }
+
   #=============QUERIES=================
 
   type Query {
@@ -337,6 +346,7 @@ const typeDefs = gql`
 
     #user
     createUser(options: UserInput!): ID!
+    editUser(options: EditUserInput!): Boolean
 
     #ADMIN
     adminCreateProduct(
