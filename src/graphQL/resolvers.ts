@@ -28,6 +28,7 @@ import { user } from "./user/queries/user/user";
 import { editUser } from "./user/mutations/user/editUser";
 import { addToCart } from "./user/mutations/Cart/addToCart";
 import { deleteVariation } from "./user/mutations/variation/deleteVariation";
+import Cart from "../schemas/Cart.model";
 require("dotenv").config();
 
 const resolvers = {
@@ -92,6 +93,16 @@ const resolvers = {
       });
 
       return shops;
+    },
+  },
+
+  User: {
+    carts: async (user, { _ }) => {
+      const carts = await Cart.find({
+        userId: user.id,
+      });
+
+      return carts;
     },
   },
 };

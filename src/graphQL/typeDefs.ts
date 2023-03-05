@@ -85,6 +85,7 @@ const typeDefs = gql`
     gender: String
     age: String
     createdAt: String
+    carts: [Cart!]
   }
 
   type Product {
@@ -176,12 +177,10 @@ const typeDefs = gql`
 
   type Cart {
     id: ID
-    variationId: ID
     userId: ID
-    total: Float
     status: String
     shopInfo: CartShopInfo
-    productsVariations: [CartProductVariation!]
+    productVariations: [CartProductVariation!]
   }
 
   #===========INPUTS===============
