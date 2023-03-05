@@ -24,6 +24,7 @@ import { variation } from "./user/queries/variation/variation";
 import productByVariationUniqueId from "./user/queries/product/productByVariationUniqueId";
 import { products } from "./user/queries/product/products";
 import { createUser } from "./user/mutations/user/createUser";
+import { user } from "./user/queries/user/user";
 require("dotenv").config();
 
 const resolvers = {
@@ -42,6 +43,7 @@ const resolvers = {
     variation,
     productByVariationUniqueId,
     products,
+    user,
   },
 
   Mutation: {
