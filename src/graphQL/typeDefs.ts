@@ -351,6 +351,9 @@ const typeDefs = gql`
     changeProductStatus(id: ID!, status: String!): Boolean
     deleteProduct(id: ID!): ID!
 
+    #variation
+    deleteVariation(id: ID!): Boolean
+
     #shop
     createShop(options: ShopInput!): ID!
     changeShopStatus(id: ID!, status: String!): Boolean

@@ -27,6 +27,7 @@ import { createUser } from "./user/mutations/user/createUser";
 import { user } from "./user/queries/user/user";
 import { editUser } from "./user/mutations/user/editUser";
 import { addToCart } from "./user/mutations/Cart/addToCart";
+import { deleteVariation } from "./user/mutations/variation/deleteVariation";
 require("dotenv").config();
 
 const resolvers = {
@@ -64,6 +65,7 @@ const resolvers = {
     createUser,
     editUser,
     addToCart,
+    deleteVariation,
   },
 
   Shop: {

@@ -2,14 +2,11 @@ import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import deleteFromSpaces from "../../../../controllers/deleteFromSpaces";
+import customError from "../../../../controllers/errors/customError";
 import productById from "../../../../controllers/queries/productById";
 import Product from "../../../../schemas/Product.model";
 
-export const deleteProduct = async (
-  _,
-  { id },
-  { admin, req, s3Client }: Context
-) => {
+export const deleteVariation = async (_, { id }, { admin, req }: Context) => {
   let token;
   if (process.env.NODE_ENV !== "development") {
     try {
@@ -19,7 +16,26 @@ export const deleteProduct = async (
     }
   }
 
-  const product = await productById(id);
+  const product = await Product.findOne({
+    "variations._id": id,
+  });
+
+  if (!product) {
+    customError({
+      code: "404",
+      path: "variation and product",
+      message: "there is no product with this variation",
+    });
+  }
+
+  if (product.variations.length === 1) {
+    customError({
+      code: "400",
+      path: "variation",
+      message:
+        "you are trying to remove the only variation that this product has",
+    });
+  }
 
   //TODO check dei gender dei prodotti prodotti => se non ci sono piu' prodotti con quel gender eliminare il gender
 
@@ -27,9 +43,10 @@ export const deleteProduct = async (
     //token operations
     authenticateToken(token.mongoId, product.shopInfo.id, token.isBusiness);
 
-  deleteFromSpaces(product.photos);
+  await Product.updateOne(
+    { "variations._id": id },
+    { $pull: { variations: { _id: id } } }
+  );
 
-  await Product.findByIdAndRemove(id);
-
-  return product.id;
+  return true;
 };

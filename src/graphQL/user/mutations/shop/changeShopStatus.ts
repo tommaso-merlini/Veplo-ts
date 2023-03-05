@@ -28,7 +28,7 @@ export const changeShopStatus = async (
   await Shop.updateOne({ _id: id }, { status: status });
 
   await Product.updateMany(
-    { firebaseShopId: shop.firebaseId },
+    { "shopInfo.id": token.mongoId },
     {
       $set: {
         "shopInfo.status": status,
