@@ -28,9 +28,9 @@ const UserSchema = new mongoose.Schema({
   location: {
     type: {
       type: String,
-      required: true,
+      required: false,
     },
-    coordinates: [{ type: Number, required: true }],
+    coordinates: [{ type: Number, required: false }],
   },
   gender: {
     type: String,

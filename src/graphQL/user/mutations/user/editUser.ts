@@ -14,7 +14,7 @@ export const editUser = async (_, { options }, { admin, req }: Context) => {
     }
   } else {
     token = {
-      mongoId: "mongoId",
+      mongoId: "640c9f3aff10cf6f8c8df3f7",
     };
   }
 

@@ -339,7 +339,7 @@ const typeDefs = gql`
     business(id: ID): Business
 
     #user
-    user(id: ID!): User
+    user: User
 
     #cart
     cart(id: ID!): Cart!

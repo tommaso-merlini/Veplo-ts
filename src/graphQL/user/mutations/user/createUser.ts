@@ -20,7 +20,7 @@ export const createUser = async (
     token = {
       uid: "prova",
       isBusiness: false,
-      email: "tommaso.prova@gmail.com",
+      email: "tommaso2.prova@gmail.com",
       // mongoId: "63fcea8f60c595a4975d71dc",
     };
   }
@@ -85,6 +85,12 @@ export const createUser = async (
       firebaseId: token.uid,
       mongoId: newUser.id,
     },
+  });
+
+  await admin.auth().setCustomUserClaims(token.uid, {
+    isBusiness: false,
+    firebaseId: token.uid,
+    mongoId: newUser.id,
   });
 
   return newUser.id;
