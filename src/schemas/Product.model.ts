@@ -17,6 +17,17 @@ const ProductSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  price: {
+    v1: {
+      type: Number,
+      required: true,
+    },
+    v2: {
+      type: Number,
+      required: false,
+    },
+    discountPercentage: { type: Number, required: false },
+  },
   info: {
     gender: {
       type: String,
@@ -57,17 +68,7 @@ const ProductSchema = new mongoose.Schema({
       uniqueId: { type: String, required: true },
       color: { type: String, required: true },
       status: { type: String, required: true },
-      price: {
-        v1: {
-          type: Number,
-          required: true,
-        },
-        v2: {
-          type: Number,
-          required: false,
-        },
-        discountPercentage: { type: Number, required: false },
-      },
+
       photos: [{ type: String, required: true }],
       lots: [
         {

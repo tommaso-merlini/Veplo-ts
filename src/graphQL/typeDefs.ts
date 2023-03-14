@@ -168,7 +168,6 @@ const typeDefs = gql`
     id: ID
     photo: String
     name: String
-    price: Price
     quantity: Int
     color: String
     size: String
@@ -180,6 +179,7 @@ const typeDefs = gql`
     userId: ID
     status: String
     shopInfo: CartShopInfo
+    price: Price
     productVariations: [CartProductVariation!]
   }
 
@@ -238,7 +238,6 @@ const typeDefs = gql`
   input ProductVariationInput {
     color: String!
     status: String!
-    price: PriceInput!
     photos: [String!]!
     lots: [ProductLotInput!]!
   }
@@ -253,6 +252,7 @@ const typeDefs = gql`
     status: String!
     canBuy: Boolean!
     info: ProductInfoInput!
+    price: PriceInput!
     variations: [ProductVariationInput!]!
   }
 
