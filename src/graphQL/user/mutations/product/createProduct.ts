@@ -18,7 +18,6 @@ export const createProduct = async (
   { admin, req }: Context
 ) => {
   let token;
-  let variationsUniqueIds = [];
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -35,7 +34,7 @@ export const createProduct = async (
 
   checkConstants(options, "product");
 
-  checkPriceV2BelowV1(options.variations);
+  checkPriceV2BelowV1(options);
 
   const shop = await shopById(shopId);
 
@@ -43,22 +42,17 @@ export const createProduct = async (
   if (process.env.NODE_ENV !== "development")
     authenticateToken(token.mongoId, shop.id, token.isBusiness);
 
-  options.variations.map((variation) => {
-    //calculate discount
-    let discountPercentage = +(
-      100 -
-      (100 * variation.price.v2) / variation.price.v1
-    ).toFixed(2);
+  //calculate discount
+  let discountPercentage = +(
+    100 -
+    (100 * options.price.v2) / options.price.v1
+  ).toFixed(2);
 
-    if (Number.isNaN(discountPercentage)) {
-      discountPercentage = null;
-    }
+  if (Number.isNaN(discountPercentage)) {
+    discountPercentage = null;
+  }
 
-    variation.price.discountPercentage = discountPercentage;
-
-    //calculate uniqueIds
-    variation.uniqueId = uuidv4();
-  });
+  options.price.discountPercentage = discountPercentage;
 
   const newProduct = await Product.create({
     ...options,
@@ -79,7 +73,7 @@ export const createProduct = async (
     updatedAt: new Date(),
   });
 
-  await createVariations(newProduct);
+  // await createVariations(newProduct);
 
   return { id: newProduct.id };
 };

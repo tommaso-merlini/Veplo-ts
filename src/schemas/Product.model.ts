@@ -66,7 +66,6 @@ const ProductSchema = new mongoose.Schema({
   },
   variations: [
     {
-      uniqueId: { type: String, required: true },
       color: { type: String, required: true },
       status: { type: String, required: true },
 
