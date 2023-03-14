@@ -19,8 +19,7 @@ export const createUser = async (
   } else {
     token = {
       uid: "prova",
-      isBusiness: false,
-      email: "tommaso2.prova@gmail.com",
+      email: "tommaso3.prova@gmail.com",
       // mongoId: "63fcea8f60c595a4975d71dc",
     };
   }
@@ -87,11 +86,13 @@ export const createUser = async (
     },
   });
 
-  await admin.auth().setCustomUserClaims(token.uid, {
-    isBusiness: false,
-    firebaseId: token.uid,
-    mongoId: newUser.id,
-  });
+  if (process.env.NODE_ENV !== "development") {
+    await admin.auth().setCustomUserClaims(token.uid, {
+      isBusiness: false,
+      firebaseId: token.uid,
+      mongoId: newUser.id,
+    });
+  }
 
   return newUser.id;
 };

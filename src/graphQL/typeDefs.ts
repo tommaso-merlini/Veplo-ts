@@ -275,7 +275,7 @@ const typeDefs = gql`
     surname: String!
     location: LocationInput
     gender: String
-    age: Int
+    dateOfBirth: String
   }
 
   input EditProductInput {
@@ -297,7 +297,6 @@ const typeDefs = gql`
     location: LocationInput
     gender: String
     phone: String
-    age: Int
   }
 
   #=============QUERIES=================

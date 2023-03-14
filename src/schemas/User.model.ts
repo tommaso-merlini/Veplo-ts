@@ -36,11 +36,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  age: {
-    id: {
-      type: Number,
-      required: false,
-    },
+  dateOfBirth: {
+    type: Date,
+    required: true,
   },
   createdAt: {
     type: Date,
