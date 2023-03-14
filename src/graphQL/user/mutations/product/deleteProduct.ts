@@ -27,8 +27,6 @@ export const deleteProduct = async (
     //token operations
     authenticateToken(token.mongoId, product.shopInfo.id, token.isBusiness);
 
-  deleteFromSpaces(product.photos);
-
   await Product.findByIdAndRemove(id);
 
   return product.id;
