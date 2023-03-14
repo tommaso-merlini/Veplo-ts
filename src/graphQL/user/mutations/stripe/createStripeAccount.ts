@@ -56,7 +56,7 @@ export const createStripeAccount = async (
       tax_id: vatNumber,
     },
     metadata: {
-      firebaseId: token.uid,
+      firebaseId: token.user_id,
       mongoId: token.mongoId,
     },
     settings: {

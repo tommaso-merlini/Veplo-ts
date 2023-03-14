@@ -18,9 +18,9 @@ export const setIsBusiness = async (
   if (token.email === "business@veplo.it") {
     await admin
       .auth()
-      .setCustomUserClaims(token.uid, { isBusiness, isAdmin: true });
+      .setCustomUserClaims(token.user_id, { isBusiness, isAdmin: true });
   } else {
-    await admin.auth().setCustomUserClaims(token.uid, { isBusiness });
+    await admin.auth().setCustomUserClaims(token.user_id, { isBusiness });
   }
 
   return true;

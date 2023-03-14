@@ -18,7 +18,7 @@ export const createBusinessStep1 = async (_, {}, { req, admin }: Context) => {
   }
 
   const alreadyExists = await Business.findOne({
-    firebaseId: token.uid,
+    firebaseId: token.user_id,
   });
 
   if (alreadyExists) {
@@ -32,21 +32,21 @@ export const createBusinessStep1 = async (_, {}, { req, admin }: Context) => {
   }
 
   const newBusiness = await Business.create({
-    firebaseId: token.uid,
+    firebaseId: token.user_id,
     email: token.email,
     status: "stripe_id_requested",
     createdAt: new Date(),
   });
 
   if (token.email === "business@veplo.it") {
-    await admin.auth().setCustomUserClaims(token.uid, {
+    await admin.auth().setCustomUserClaims(token.user_id, {
       isBusiness: true,
       isAdmin: true,
       mongoId: newBusiness.id,
     });
   } else {
     if (process.env.NODE_ENV !== "development") {
-      await admin.auth().setCustomUserClaims(token.uid, {
+      await admin.auth().setCustomUserClaims(token.user_id, {
         isBusiness: true,
         mongoId: newBusiness.id,
       });

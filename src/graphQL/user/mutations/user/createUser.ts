@@ -67,29 +67,29 @@ export const createUser = async (
     name: `${options.name} ${options.surname}`,
     preferred_locales: ["IT"],
     metadata: {
-      firebaseId: token.uid,
+      firebaseId: token.user_id,
     },
   });
 
   const newUser = await User.create({
     ...options,
     createdAt: new Date(),
-    firebaseId: token.uid,
+    firebaseId: token.user_id,
     stripeId: customer.id,
     email: token.email,
   });
 
   await stripe.customers.update(customer.id, {
     metadata: {
-      firebaseId: token.uid,
+      firebaseId: token.user_id,
       mongoId: newUser.id,
     },
   });
 
   if (process.env.NODE_ENV !== "development") {
-    await admin.auth().setCustomUserClaims(token.uid, {
+    await admin.auth().setCustomUserClaims(token.user_id, {
       isBusiness: false,
-      firebaseId: token.uid,
+      firebaseId: token.user_id,
       mongoId: newUser.id,
     });
   }
