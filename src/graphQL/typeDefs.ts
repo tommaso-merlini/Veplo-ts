@@ -45,6 +45,7 @@ const typeDefs = gql`
     macroCategory: String
     microCategory: String
     brand: String
+    fit: String
   }
 
   type Lot {
@@ -228,6 +229,7 @@ const typeDefs = gql`
     macroCategory: String!
     microCategory: String!
     brand: String!
+    fit: String!
   }
 
   input ProductLotInput {
