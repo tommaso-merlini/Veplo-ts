@@ -176,18 +176,15 @@ export const products = async (
           {
             variations: {
               $elemMatch: {
-                $and: [
-                  checkSizes(),
-                  checkColors(),
-                  checkMinPrice(),
-                  checkMaxPrice(),
-                ],
+                $and: [checkSizes(), checkColors()],
               },
             },
           },
           checkGender(),
           checkMacroCategory(),
           checkBrands(),
+          checkMinPrice(),
+          checkMaxPrice(),
         ],
       },
     },
