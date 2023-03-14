@@ -12,7 +12,7 @@ const checkConstants = (obj, is: String) => {
     let macroCategory;
 
     //---CHECK GENDER
-    if (product.info.gender !== "m" && product.info.gender !== "m") {
+    if (product.info.gender !== "m" && product.info.gender !== "f") {
       throw new Error(`gender deve essere 'm' o 'f'`);
     }
 

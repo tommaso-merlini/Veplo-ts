@@ -40,7 +40,7 @@ export const createProduct = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token.mongoId, shop.id, token.isBusiness);
+    authenticateToken(token.mongoId, shop.businessId, token.isBusiness);
 
   //calculate discount
   let discountPercentage = +(
