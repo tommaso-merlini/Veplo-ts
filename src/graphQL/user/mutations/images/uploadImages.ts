@@ -11,7 +11,7 @@ export const uploadImages = async (
   { s3Client, admin, req }
 ) => {
   let token: any = {
-    uid: "prova",
+    user_id: "prova",
     isBusiness: true,
   };
   if (process.env.NODE_ENV !== "development") {

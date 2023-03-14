@@ -5,7 +5,7 @@ import Business from "../../../../../schemas/Business.model";
 export const createBusinessStep1 = async (_, {}, { req, admin }: Context) => {
   //token operations
   let token: any = {
-    uid: "prova",
+    user_id: "prova",
     isBusiness: true,
     email: "prova@prova.com",
   };

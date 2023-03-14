@@ -18,11 +18,13 @@ export const createUser = async (
     }
   } else {
     token = {
-      uid: "prova",
+      user_id: "prova",
       email: "tommaso3.prova@gmail.com",
-      // mongoId: "63fcea8f60c595a4975d71dc",
+      mongoId: "63fcea8f60c595a4975d71dc",
     };
   }
+
+  console.log(token);
 
   //check the account belongs to a user
   if (token.isBusiness && process.env.NODE_ENV !== "development") {

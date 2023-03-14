@@ -10,7 +10,7 @@ import Shop from "../../../../schemas/Shop.model";
 export const createShop = async (_, { options }, { req, admin }: Context) => {
   //token operations
   let token: any = {
-    uid: "prova",
+    user_id: "prova",
     isBusiness: true,
     mongoId: "63fcea8f60c595a4975d71dc",
   };

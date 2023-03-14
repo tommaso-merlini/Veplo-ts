@@ -21,7 +21,7 @@ export const createStripeAccount = async (
       mongoId: "mongoId",
       isBusiness: true,
       email: "prova@prova.it",
-      uid: "firebaseId",
+      user_id: "firebaseId",
     };
   }
 
