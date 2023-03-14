@@ -12,12 +12,12 @@ const checkConstants = (obj, is: String) => {
     let macroCategory;
 
     //---CHECK GENDER
-    if (product.info.gender !== "M" && product.info.gender !== "F") {
-      throw new Error(`gender deve essere 'M' o 'F'`);
+    if (product.info.gender !== "m" && product.info.gender !== "m") {
+      throw new Error(`gender deve essere 'm' o 'f'`);
     }
 
     //---CHECK MACRO-iCATEGORY
-    if (product.info.gender === "M") {
+    if (product.info.gender === "m") {
       for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
         if (
           product.info.macroCategory ===
@@ -35,7 +35,7 @@ const checkConstants = (obj, is: String) => {
       }
     }
 
-    if (product.info.gender === "F") {
+    if (product.info.gender === "f") {
       for (let i = 0; i < constants.genders.donna.abbigliamento.length; i++) {
         if (
           product.info.macroCategory ===
@@ -92,19 +92,24 @@ const checkConstants = (obj, is: String) => {
         `micro-category ${product.microCategory} non e' accetata per macro-category ${macroCategory.name}, micro-categories accetate per ${macroCategory.name}: ${macroCategory.types}`
       );
     }
+
+    //---CHECK Fit
+    const isFitOk = constants.fits.includes(product.info.fit);
+    console.log;
+    if (!isFitOk) throw new Error(`il fit che hai scelto non e' supportato`);
   } else {
     //   const shop = obj;
     //   //---CHECK GENDER
     //   if (
-    //     shop.gender[0] !== "M" &&
-    //     shop.gender[0] !== "F" &&
-    //     shop.gender[1] !== "M" &&
-    //     shop.gender[1] !== "F"
+    //     shop.gender[0] !== "m" &&
+    //     shop.gender[0] !== "f" &&
+    //     shop.gender[1] !== "m" &&
+    //     shop.gender[1] !== "f"
     //   ) {
-    //     throw new Error(`gender deve essere 'M' o 'F'`);
+    //     throw new Error(`gender deve essere 'm' o 'f'`);
     //   }
     //   for (let l = 0; l < shop.gender.length; l++) {
-    //     if (shop.gender[l] === "M") {
+    //     if (shop.gender[l] === "mM") {
     //       //cycles trough the shop macrocategories
     //       for (
     //         let macroCategoryIndex = 0;

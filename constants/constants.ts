@@ -49,6 +49,7 @@ export const shoes_sizes = [
 
 export const constants = {
   brands: brands,
+  fits: ["skinny", "slim", "regular", "oversize", "baggy"],
 
   colors: [
     "Nero",

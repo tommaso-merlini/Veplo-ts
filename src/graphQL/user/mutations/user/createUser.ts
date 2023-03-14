@@ -35,16 +35,16 @@ export const createUser = async (
     });
   }
 
-  //check gender is M or F
+  //check gender is m or f
   if (
     options.gender != null &&
-    options.gender !== "M" &&
-    options.gender !== "F"
+    options.gender !== "m" &&
+    options.gender !== "f"
   ) {
     customError({
       code: "400",
       path: "user gender",
-      message: `user gender can only be M or F`,
+      message: `user gender can only be m or f`,
     });
   }
 
