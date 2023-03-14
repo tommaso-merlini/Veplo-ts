@@ -60,11 +60,9 @@ export const createProduct = async (
       type: "Point",
       coordinates: shop.address.location.coordinates,
     },
-    shopId: shopId,
-    firebaseShopId: shop.firebaseId,
     shopInfo: {
       id: shop.id,
-      firebaseId: token.firebaseId,
+      firebaseId: token.user_id,
       name: shop.name,
       city: shop.address.city,
       status: shop.status,
