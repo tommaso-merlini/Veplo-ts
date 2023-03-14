@@ -6,16 +6,16 @@ const typeDefs = gql`
 
   #===========TYPES===============
   type Location {
-    type: String!
-    coordinates: [Float!]!
+    type: String
+    coordinates: [Float!]
   }
 
   type ShopInfo {
     id: ID
     firebaseId: String
     name: String
-    city: String!
-    status: String!
+    city: String
+    status: String
   }
 
   type Opening {
@@ -63,12 +63,12 @@ const typeDefs = gql`
   }
 
   type Business {
-    firebaseId: String!
+    firebaseId: String
     vatNumber: String
-    email: String!
+    email: String
     businessName: String
     phone: String
-    status: String!
+    status: String
     createdAt: String
     stripe: Stripe
     shops: [Shop!]
@@ -123,7 +123,7 @@ const typeDefs = gql`
 
   type CreateProductResponse {
     id: ID!
-    photos: [String!]!
+    photos: [String!]
   }
   type VariationProductInfo {
     id: ID

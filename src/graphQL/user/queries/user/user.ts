@@ -11,7 +11,7 @@ export const user = async (_, ___, { admin, req }, info) => {
     }
   } else {
     token = {
-      mongoId: "mongoId",
+      mongoId: "6410ace3850a8aeb92bcbc9e",
     };
   }
   const id = token.mongoId;

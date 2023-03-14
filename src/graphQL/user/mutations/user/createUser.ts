@@ -24,8 +24,6 @@ export const createUser = async (
     };
   }
 
-  console.log(token);
-
   //check the account belongs to a user
   if (token.isBusiness && process.env.NODE_ENV !== "development") {
     throw Object.assign(new Error("Error"), {
