@@ -108,7 +108,7 @@ export const products = async (
 
   const checkQuantity = () => {
     if (sizes !== null) {
-      return { quantity: { $gt: 0 } };
+      return { $or: [{ quantity: null }, { quantity: { $gt: 0 } }] };
     }
   };
 
