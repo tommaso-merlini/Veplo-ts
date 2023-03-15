@@ -262,16 +262,18 @@ const typeDefs = gql`
   }
 
   input EditProductInput {
-    name: String
-    price: EditPriceInput
-    colors: [String!]
-    sizes: [String!]
-    macroCategory: String
-    microCategory: String
-    gender: String
-    brand: String
-    photos: [String!]
+    canBuy: Boolean
     status: String
+    name: String
+    info: EditProductInfo
+  }
+
+  input EditProductInfo {
+    gender: String
+    microCategory: String
+    macroCategory: String
+    brand: String
+    fit: String
   }
 
   input EditUserInput {

@@ -9,13 +9,6 @@ const handleUpdatedPhotos = async (photos, updatedPhotos) => {
       message: "the user must upload at least two photos",
     });
   }
-
-  //delete the removed photos
-  const removedPhotos = photos.filter((x) => updatedPhotos.indexOf(x) === -1);
-
-  if (removedPhotos.length > 0) {
-    await deleteFromSpaces(removedPhotos);
-  }
 };
 
 export default handleUpdatedPhotos;

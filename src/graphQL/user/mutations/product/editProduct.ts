@@ -5,8 +5,10 @@ import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import getDiffs from "../../../../controllers/getDiffs";
 import handlePriceEdit from "../../../../controllers/handlePriceEdit";
 import handleUpdatedPhotos from "../../../../controllers/handleUpdatedPhotos";
+import mergeDeep from "../../../../controllers/mergeDeep";
 import productById from "../../../../controllers/queries/productById";
 import Product from "../../../../schemas/Product.model";
+import lodash from "lodash";
 
 export const editProduct = async (
   _,
@@ -48,31 +50,21 @@ export const editProduct = async (
     options.price = handlePriceEdit(options, product);
   }
 
-  //merging product with options (overwrite equal values)
-  const { merge, diffs, isDifferent } = getDiffs(product, options);
+  const mergedProduct = lodash.merge(product, options);
 
-  //check if the product has been modified
-  if (!isDifferent && !options.newPhotos && !options.deletedPhotos) {
-    throw Object.assign(new Error("Error"), {
-      extensions: {
-        customCode: "304",
-        customPath: "product",
-        customMessage: "product not modified",
-      },
-    });
-  }
-
-  // throw new Error("ok");
+  console.log("==================================");
+  console.log(mergedProduct);
+  console.log("==================================");
 
   //check the validity of the fields based on the constants
-  checkConstants(merge, "product");
+  checkConstants(mergedProduct, "product");
 
   //delete the removed photos
   if (options.photos) {
     handleUpdatedPhotos(product.photos, options.photos);
   }
 
-  await Product.updateOne({ _id: id }, { ...diffs });
+  await Product.updateOne({ _id: id }, mergedProduct);
 
   return product.id;
 };
