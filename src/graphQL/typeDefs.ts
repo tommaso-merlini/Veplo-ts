@@ -57,7 +57,6 @@ const typeDefs = gql`
     id: ID
     color: String
     status: String
-    price: Price
     photos: [String!]
     lots: [Lot!]
   }
@@ -99,6 +98,7 @@ const typeDefs = gql`
     info: ProductInfo
     location: Location
     shopInfo: ShopInfo
+    price: Price
     variations: [ProductVariation!]
   }
 
