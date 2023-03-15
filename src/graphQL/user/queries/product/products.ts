@@ -58,7 +58,7 @@ export const products = async (
   const checkSizes = () => {
     if (sizes != null) {
       return {
-        "lots.size": { $in: sizes },
+        size: { $in: sizes },
       };
     } else {
       return {};
@@ -103,6 +103,12 @@ export const products = async (
       return { color: { $in: colors } };
     } else {
       return {};
+    }
+  };
+
+  const checkQuantity = () => {
+    if (sizes !== null) {
+      return { quantity: { $gt: 0 } };
     }
   };
 
@@ -176,10 +182,28 @@ export const products = async (
           {
             variations: {
               $elemMatch: {
-                $and: [checkSizes(), checkColors()],
+                $and: [
+                  checkColors(),
+                  {
+                    lots: {
+                      $elemMatch: {
+                        $and: [checkSizes(), checkQuantity()],
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
+          // {
+          //   variations: {
+          //     lots: {
+          //       $elemMatch: {
+          //         $and: [checkQuantity()],
+          //       },
+          //     },
+          //   },
+          // },
           checkGender(),
           checkMacroCategory(),
           checkBrands(),
