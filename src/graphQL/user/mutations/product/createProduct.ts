@@ -62,7 +62,7 @@ export const createProduct = async (
     },
     shopInfo: {
       id: shop.id,
-      businessId: token.mongoId,
+      businessId: shop.businessId,
       name: shop.name,
       city: shop.address.city,
       status: shop.status,
