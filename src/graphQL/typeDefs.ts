@@ -265,6 +265,7 @@ const typeDefs = gql`
     canBuy: Boolean
     status: String
     name: String
+    price: PriceInput
     info: EditProductInfo
   }
 
@@ -282,6 +283,18 @@ const typeDefs = gql`
     location: LocationInput
     gender: String
     phone: String
+  }
+
+  input EditVariationInput {
+    color: String
+    status: String
+    photos: [String!]!
+    lots: [EditLotsInput!]!
+  }
+
+  input EditLotsInput {
+    size: String
+    quantity: Int
   }
 
   #=============QUERIES=================
@@ -353,6 +366,9 @@ const typeDefs = gql`
 
     #cart
     addToCart(productVariationId: ID!, size: String!, quantity: Int!): Boolean
+
+    #variation
+    editVariation(id: ID!, options: EditVariationInput!): Boolean
 
     #user
     createUser(options: UserInput!): ID!
