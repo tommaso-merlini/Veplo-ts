@@ -12,7 +12,7 @@ const typeDefs = gql`
 
   type ShopInfo {
     id: ID
-    firebaseId: String
+    businessId: ID
     name: String
     city: String
     status: String
@@ -139,30 +139,11 @@ const typeDefs = gql`
     brand: String
   }
 
-  type VariationShopInfo {
-    id: ID
-    name: String
-    status: String
-  }
-
-  type Variation {
-    id: ID
-    color: String
-    name: String
-    updatedAt: String
-    status: String
-    price: Price
-    photos: [String!]
-    lots: [Lot!]
-    product: VariationProductInfo
-    shopInfo: VariationShopInfo
-    location: Location
-  }
-
   type CartShopInfo {
     id: ID
     name: String
     city: String
+    status: String
   }
 
   type CartProductVariation {
@@ -315,15 +296,6 @@ const typeDefs = gql`
       offset: Int!
       filters: ProductFilters!
     ): [Product!]
-
-    #variation
-    variation(id: ID!): Variation
-    variations(
-      range: Float!
-      limit: Int!
-      offset: Int!
-      filters: ProductFilters!
-    ): [Variation!]
 
     #shop
     shop(id: ID!): Shop

@@ -8,6 +8,7 @@ const CartSchema = new mongoose.Schema({
     name: { type: String, required: true },
     city: { type: String, required: true },
     status: { type: String, required: true },
+    businessId: { type: mongoose.Types.ObjectId, required: true },
   },
   productVariations: [
     {

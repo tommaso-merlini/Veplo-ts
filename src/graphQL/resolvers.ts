@@ -39,13 +39,11 @@ const resolvers = {
       return "everything works";
     },
     product,
-    variations,
     shop,
     shopByFirebaseId,
     isBusiness,
     shops,
     business,
-    variation,
     productByVariationUniqueId,
     products,
     user,
