@@ -80,11 +80,12 @@ export const uploadImages = async (
         }
 
         resolve(id);
+        // console.log(`foto numero ${i} risoluta: id ${id}`);
       })
     );
   }
 
-  const Ids = await Promise.all(promises);
+  const ids = await Promise.all(promises);
 
-  return Ids;
+  return ids;
 };
