@@ -106,6 +106,9 @@ const resolvers = {
       const carts = await Cart.find({
         userId: user.id,
       });
+      // .explain("executionStats");
+
+      // console.log(carts.queryPlanner.winningPlan.inputStage);
 
       carts.forEach((cart) => {
         cart.productVariations.forEach((variation) => {
