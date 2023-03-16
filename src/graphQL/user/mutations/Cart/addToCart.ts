@@ -77,7 +77,10 @@ export const addToCart = async (
   if (cart) {
     //vedere se la variation e' gia' presente nel carrello
     cart.productVariations.forEach(async (variation) => {
-      if (variation.variationId == productVariationId) {
+      if (
+        variation.variationId == productVariationId &&
+        variation.size == size
+      ) {
         //se e' presente
         isVariationDuplicate = true;
       } else {
