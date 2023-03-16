@@ -130,6 +130,12 @@ export const products = async (
                 },
               },
             },
+            {
+              text: {
+                path: "status",
+                query: "active",
+              },
+            },
           ],
 
           should: [
@@ -151,30 +157,12 @@ export const products = async (
         },
       },
     },
-    //TODO check mongodb $filters(aggregation) for better filters
-
-    // { $match: checkGender() },
-    // { $match: checkMacroCategory() },
-    // { $match: checkBrands() },
-    // // { $match: checkMinPrice() },
-    // // { $match: checkMaxPrice() },
-
-    //!uncomment if there are problems
     // {
-    //   $unwind: {
-    //     path: "$variations",
-    //     includeArrayIndex: "arrayIndex",
+    //   $match: {
+    //     status: "active",
+    //     //! "shopInfo.status": "active",
     //   },
     // },
-    // { $match: checkSizes() },
-    // { $match: checkColors() },
-    // { $group: { _id: "$_id", variations: { $push: "$variations.color" } } },
-    {
-      $match: {
-        status: "active",
-        // "shopInfo.status": "active",
-      },
-    },
 
     {
       $match: {
