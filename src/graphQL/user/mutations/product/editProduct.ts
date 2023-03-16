@@ -43,7 +43,11 @@ export const editProduct = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token.mongoId, product.shopId, token.isBusiness);
+    authenticateToken(
+      token.mongoId,
+      product.shopInfo.businessId,
+      token.isBusiness
+    );
 
   //if the price is modified
   if (options.price) {
