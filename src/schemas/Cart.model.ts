@@ -14,6 +14,7 @@ const CartSchema = new mongoose.Schema({
     {
       variationId: { type: mongoose.Types.ObjectId, required: true },
       quantity: { type: Number, required: true },
+      size: { type: String, required: true },
     },
   ],
 });

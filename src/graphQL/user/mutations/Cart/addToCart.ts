@@ -30,12 +30,20 @@ export const addToCart = async (
     "variations._id": productVariationId,
   });
 
+  if (!product) {
+    customError({
+      code: "404",
+      path: "product",
+      message: "cannot find a product with the specified variation id",
+    });
+  }
+
   //check if shop is active
   if (product.shopInfo.status !== "active") {
     customError({
       code: "400",
       path: "shop status",
-      message: "the status is not active",
+      message: "the shop is not active",
     });
   }
 
@@ -67,41 +75,36 @@ export const addToCart = async (
   });
 
   if (cart) {
-    //check if there is the variation in the cart
-    cart.productVariations.forEach((variation) => {
-      if (String(variation.variationId) === productVariationId) {
+    //vedere se la variation e' gia' presente nel carrello
+    cart.productVariations.forEach(async (variation) => {
+      if (variation.variationId == productVariationId) {
+        //se e' presente
         isVariationDuplicate = true;
+      } else {
+        //se non e' presente
+        isVariationDuplicate = false;
       }
     });
 
     if (isVariationDuplicate) {
-      // incrementare solo la quantita
+      //la variation e' duplicata
       await Cart.updateOne(
         {
           _id: cart.id,
           "productVariations.variationId": productVariationId,
         },
         { $inc: { "productVariations.$.quantity": quantity } }
-        // false,
-        // true
       );
-    }
-
-    if (!isVariationDuplicate) {
-      // aggiungere la variation nell'array variations
+      return true;
+    } else {
       await Cart.updateOne(
         { _id: cart.id },
         {
           $push: {
             productVariations: {
               variationId: productVariationId,
-              photo: searchedVariation.photos[0],
-              name: product.name,
-              price: searchedVariation.price,
               quantity,
-              color: searchedVariation.color,
               size,
-              status: searchedVariation.status,
             },
           },
         }
@@ -114,18 +117,7 @@ export const addToCart = async (
       userId: token.mongoId,
       status: "active",
       shopInfo: product.shopInfo,
-      productVariations: [
-        {
-          variationId: productVariationId,
-          photo: searchedVariation.photos[0],
-          name: product.name,
-          price: searchedVariation.price,
-          quantity,
-          color: searchedVariation.color,
-          size,
-          status: searchedVariation.status,
-        },
-      ],
+      productVariations: [{ variationId: productVariationId, size, quantity }],
     });
   }
 
