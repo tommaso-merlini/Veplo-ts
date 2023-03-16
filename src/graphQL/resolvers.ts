@@ -102,10 +102,27 @@ const resolvers = {
 
   User: {
     carts: async (user, { _ }) => {
+      const variationsIds = [];
       const carts = await Cart.find({
         userId: user.id,
       });
 
+      carts.forEach((cart) => {
+        cart.productVariations.forEach((variation) => {
+          variationsIds.push(variation.variationId);
+        });
+      });
+
+      const variations = await Product.find({
+        "variations._id": {
+          $in: variationsIds,
+        },
+      });
+
+      // console.log(variations);
+      //!quando cerco le variation tramite un array di id, se ci sono due variation con lo
+      //!stesso id, ma nel carrello con due size diverse, mi ritorna il prodotto per intero.
+      //!quindi devo fare un check per variationId e per size e poi metterle dentro l'array carts
       return carts;
     },
   },

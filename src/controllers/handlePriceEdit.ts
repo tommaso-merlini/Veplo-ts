@@ -1,4 +1,4 @@
-const handlePriceEdit = (options, product) => {
+const handlePriceEdit = (options) => {
   let price = options.price;
   if (options.price.v1 <= 0) {
     throw Object.assign(new Error("Error"), {
@@ -43,7 +43,7 @@ const handlePriceEdit = (options, product) => {
     };
   }
 
-  //   console.log(price);
+  console.log(price);
 
   return price;
 };

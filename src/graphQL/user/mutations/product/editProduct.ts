@@ -49,12 +49,12 @@ export const editProduct = async (
       token.isBusiness
     );
 
+  const mergedProduct = lodash.merge(product, options);
+
   //if the price is modified
   if (options.price) {
-    options.price = handlePriceEdit(options, product);
+    mergedProduct.price = handlePriceEdit(options);
   }
-
-  const mergedProduct = lodash.merge(product, options);
 
   console.log("==================================");
   console.log(mergedProduct);
