@@ -73,6 +73,21 @@ const typeDefs = gql`
     shops: [Shop!]
   }
 
+  type CartWarning {
+    variationId: ID
+    color: String
+    size: String
+    isSizeNonExisting: Boolean
+    isQuantityTooMuch: Boolean
+    name: String
+    quantity: Int
+  }
+
+  type UserCarts {
+    carts: [Cart!]
+    warnings: [CartWarning!]!
+  }
+
   type User {
     id: ID
     name: String
@@ -85,7 +100,7 @@ const typeDefs = gql`
     gender: String
     age: String
     createdAt: String
-    carts: [Cart!]
+    carts: UserCarts
   }
 
   type Product {
@@ -155,6 +170,7 @@ const typeDefs = gql`
     color: String
     size: String
     status: String
+    price: Price
   }
 
   type Cart {

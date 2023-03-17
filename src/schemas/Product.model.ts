@@ -68,7 +68,6 @@ const ProductSchema = new mongoose.Schema({
     {
       color: { type: String, required: true },
       status: { type: String, required: true },
-
       photos: [{ type: String, required: true }],
       lots: [
         {
