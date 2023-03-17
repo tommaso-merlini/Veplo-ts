@@ -35,6 +35,7 @@ import { removeFromCart } from "./user/mutations/Cart/removeFromCart";
 import customError from "../controllers/errors/customError";
 import { last } from "lodash";
 import { carts } from "./user/queries/cart/carts";
+import { deleteCart } from "./user/mutations/Cart/deleteCart";
 require("dotenv").config();
 
 const resolvers = {
@@ -74,6 +75,7 @@ const resolvers = {
     deleteVariation,
     editVariation,
     removeFromCart,
+    deleteCart,
   },
 
   Shop: {

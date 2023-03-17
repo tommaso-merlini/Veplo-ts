@@ -388,6 +388,7 @@ const typeDefs = gql`
       size: String!
       quantity: Int!
     ): Boolean
+    deleteCart(shopId: ID!): Boolean
 
     #variation
     editVariation(id: ID!, options: EditVariationInput!): Boolean
