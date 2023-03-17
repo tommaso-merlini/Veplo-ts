@@ -178,7 +178,7 @@ const typeDefs = gql`
     userId: ID
     status: String
     shopInfo: CartShopInfo
-    price: Price
+    total: Float
     productVariations: [CartProductVariation!]
   }
 
