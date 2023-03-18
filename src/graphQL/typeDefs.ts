@@ -173,6 +173,7 @@ const typeDefs = gql`
     size: String
     status: String
     price: Price
+    productId: ID
   }
 
   type Cart {
@@ -379,6 +380,7 @@ const typeDefs = gql`
       vatNumber: String!
       phone: String!
     ): String
+    checkout(cartId: ID!): String
 
     #cart
     addToCart(productVariationId: ID!, size: String!, quantity: Int!): Boolean

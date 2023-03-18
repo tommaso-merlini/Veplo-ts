@@ -72,6 +72,7 @@ export const carts = async (user, { _ }) => {
     product.variations.forEach((variation) => {
       variations.push({
         _id: variation._id,
+        productId: product._id,
         photo: variation.photos[0],
         brand: product.info.brand,
         name: product.name,
@@ -240,6 +241,8 @@ export const carts = async (user, { _ }) => {
             variations[variationIndex].status;
           carts[cartIndex].productVariations[cartVariationIndex].brand =
             variations[variationIndex].brand;
+          carts[cartIndex].productVariations[cartVariationIndex].productId =
+            variations[variationIndex].productId;
           break;
         }
       }

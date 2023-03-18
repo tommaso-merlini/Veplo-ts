@@ -20,7 +20,7 @@ export const deleteVariation = async (
     }
   }
 
-  const product = await Product.findOneById(productId);
+  const product = await Product.findById(productId);
 
   if (!product) {
     customError({

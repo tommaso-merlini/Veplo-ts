@@ -37,6 +37,7 @@ import { last } from "lodash";
 import { carts } from "./user/queries/cart/carts";
 import { deleteCart } from "./user/mutations/Cart/deleteCart";
 import { editCart } from "./user/mutations/Cart/editCart";
+import { checkout } from "./user/mutations/stripe/checkout";
 require("dotenv").config();
 
 const resolvers = {
@@ -78,6 +79,7 @@ const resolvers = {
     removeFromCart,
     deleteCart,
     editCart,
+    checkout,
   },
 
   Shop: {
