@@ -36,6 +36,7 @@ import customError from "../controllers/errors/customError";
 import { last } from "lodash";
 import { carts } from "./user/queries/cart/carts";
 import { deleteCart } from "./user/mutations/Cart/deleteCart";
+import { editCart } from "./user/mutations/Cart/editCart";
 require("dotenv").config();
 
 const resolvers = {
@@ -76,6 +77,7 @@ const resolvers = {
     editVariation,
     removeFromCart,
     deleteCart,
+    editCart,
   },
 
   Shop: {

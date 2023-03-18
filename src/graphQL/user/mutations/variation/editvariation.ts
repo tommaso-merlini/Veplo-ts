@@ -55,13 +55,17 @@ export const editVariation = async (
 
   if (process.env.NODE_ENV !== "development")
     //token operations
-  authenticateToken(token.mongoId, product.shopInfo.businessId, token.isBusiness);
+    authenticateToken(
+      token.mongoId,
+      product.shopInfo.businessId,
+      token.isBusiness
+    );
 
   await Product.updateOne(
     { "variations._id": id },
     {
       $set: {
-        "variations.0": mergedVariation,
+        "variations.0": mergedVariation, //!variation.0?
       },
     }
   );
