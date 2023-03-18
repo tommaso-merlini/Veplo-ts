@@ -1,5 +1,4 @@
 import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
 import Business from "../../../../schemas/Business.model";
