@@ -198,7 +198,7 @@ const typeDefs = gql`
   }
 
   input ShopFilters {
-    cap: String!
+    cap: String
     name: String
   }
 
@@ -334,7 +334,7 @@ const typeDefs = gql`
     shop(id: ID!): Shop
     shopByFirebaseId(firebaseId: String!): Shop
     shops(
-      range: Int!
+      #range: Int!
       limit: Int!
       offset: Int!
       filters: ShopFilters!

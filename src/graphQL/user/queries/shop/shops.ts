@@ -3,9 +3,9 @@ import capByCap from "../../../../controllers/queries/capByCap";
 import Shop from "../../../../schemas/Shop.model";
 
 export const shops = async (_, { range, limit, offset, filters }, __, info) => {
-  const searchedCap = await capByCap(filters.cap);
+  // const searchedCap = await capByCap(filters.cap);
 
-  const coordinates = searchedCap.location.coordinates;
+  // const coordinates = searchedCap.location.coordinates;
 
   const checkName = () => {
     if (filters.name != null) {
@@ -36,23 +36,23 @@ export const shops = async (_, { range, limit, offset, filters }, __, info) => {
         compound: {
           must: [
             checkName(),
-            {
-              geoWithin: {
-                path: "address.location",
-                score: {
-                  boost: {
-                    value: 3,
-                  },
-                },
-                circle: {
-                  center: {
-                    type: "Point",
-                    coordinates: [coordinates[0], coordinates[1]],
-                  },
-                  radius: range,
-                },
-              },
-            },
+            // {
+            //   geoWithin: {
+            //     path: "address.location",
+            //     score: {
+            //       boost: {
+            //         value: 3,
+            //       },
+            //     },
+            //     circle: {
+            //       center: {
+            //         type: "Point",
+            //         coordinates: [coordinates[0], coordinates[1]],
+            //       },
+            //       radius: range,
+            //     },
+            //   },
+            // },
           ],
           should: [
             //!get the best ranked name on the top of the list
