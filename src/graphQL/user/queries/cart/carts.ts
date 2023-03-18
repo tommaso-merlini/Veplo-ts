@@ -264,7 +264,7 @@ export const carts = async (user, { _ }) => {
       total = total + subTotal;
     });
 
-    cart.total = total;
+    cart.total = Number(total.toFixed(2));
   });
 
   return {

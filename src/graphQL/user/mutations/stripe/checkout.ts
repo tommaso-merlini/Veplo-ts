@@ -17,6 +17,8 @@ export const checkout = async (
   const lineItems = [];
   const variations = [];
   const variationsIds = [];
+  const variationsInCart = [];
+  const variationsInCartWithSize = [];
   let IVA;
   if (process.env.NODE_ENV !== "production") {
     IVA = process.env.STRIPE_IVA_TEST;
@@ -67,66 +69,113 @@ export const checkout = async (
     variationsIds.push(variation.variationId);
   });
 
-  //insert the variations fields inside variations array
-  for (let productVariation of cart.productVariations) {
-    const product = await Product.findOne({
-      "variations._id": productVariation.variationId,
-    });
+  // //insert the variations fields inside variations array
+  // for (let productVariation of cart.productVariations) {
+  //   const product = await Product.findOne({
+  //     "variations._id": productVariation.variationId,
+  //   });
 
+  //   for (let id of variationsIds) {
+  //     let ok = false;
+  //     for (let variation of product.variations) {
+  //       if (variation._id.toString() === id.toString()) {
+  //         for (let cartVariation of cart.productVariations) {
+  //           if (cartVariation.variationId.toString() === id.toString()) {
+  //             variations.push({
+  //               name: product.name,
+  //               price: product.price,
+  //               color: variation.color,
+  //               quantity: cartVariation.quantity,
+  //               size: cartVariation.size,
+  //               brand: product.info.brand,
+  //               photo: variation.photos[0],
+  //               lots: variation.lots,
+  //             });
+  //             ok = true;
+  //             break;
+  //           }
+  //         }
+  //         if (ok) break;
+  //       }
+  //       if (ok) break;
+  //     }
+  //   }
+  // }
+
+  const products = await Product.find({
+    "variations._id": {
+      $in: variationsIds,
+    },
+  });
+
+  //get all the variations of every product
+  for (let product of products) {
+    for (let variation of product.variations) {
+      variations.push({
+        _id: variation._id,
+        name: product.name,
+        color: variation.color,
+        photos: variation.photos,
+        productId: product._id,
+        price: product.price,
+        brand: product.info.brand,
+      });
+    }
+  }
+
+  //get only the variations that match the id from the variationsIds
+  for (let variation of variations) {
     for (let id of variationsIds) {
-      let ok = false;
-      for (let variation of product.variations) {
-        if (variation._id.toString() === id.toString()) {
-          for (let cartVariation of cart.productVariations) {
-            if (cartVariation.variationId.toString() === id.toString()) {
-              variations.push({
-                name: product.name,
-                price: product.price,
-                color: variation.color,
-                quantity: cartVariation.quantity,
-                size: cartVariation.size,
-                brand: product.info.brand,
-                photo: variation.photos[0],
-              });
-              ok = true;
-              break;
-            }
-          }
-          if (ok) break;
-        }
-        if (ok) break;
+      if (variation._id.toString() === id.toString()) {
+        variationsInCart.push(variation);
+        break;
       }
     }
   }
 
-  //insert variations into lineItems
-  for (let variation of variations) {
-    let price;
-    if (variation.price.v2) {
-      price = variation.price.v2;
-    } else {
-      price = variation.price.v1;
+  //get the variation with the cart
+  for (let cartVariation of cart.productVariations) {
+    for (let variation of variationsInCart) {
+      if (cartVariation.variationId.toString() === variation._id.toString()) {
+        // variationsInCartWithSize.push({
+        //   productId: variation.productId,
+        //   variationId: variation._id,
+        //   photo: variation.photos[0],
+        //   name: variation.name,
+        //   price: variation.price,
+        //   quantity: cartVariation.quantity,
+        //   size: cartVariation.size,
+        //   color: variation.color,
+        // });
+        let price;
+        if (variation.price.v2 != null) {
+          price = variation.price.v2;
+        } else {
+          price = variation.price.v1;
+        }
+
+        total = total + price;
+
+        lineItems.push({
+          price_data: {
+            currency: "eur",
+            unit_amount: price * 100,
+            product_data: {
+              name: `${variation.name} - colore ${variation.color}`,
+              description: `taglia ${cartVariation.size.toUpperCase()}, brand ${
+                variation.brand
+              }`,
+              images: [
+                `https://ik.imagekit.io/veploimages/${variation.photos[0]}?tr=w-171,h-247"`,
+              ],
+            },
+          },
+          quantity: cartVariation.quantity,
+          tax_rates: [IVA],
+        });
+        break;
+      }
     }
-
-    total = total + price * variation.quantity;
-
-    lineItems.push({
-      price_data: {
-        currency: "eur",
-        unit_amount: price * 100,
-        product_data: {
-          name: `${variation.name} - colore ${variation.color}`,
-          description: `taglia ${variation.size.toUpperCase()}, brand ${
-            variation.brand
-          }`,
-          images: [
-            `https://ik.imagekit.io/veploimages/${variation.photo}?tr=w-171,h-247"`,
-          ],
-        },
-      },
-      quantity: variation.quantity,
-      tax_rates: [IVA],
-    });
   }
 
   const veploFee: number = +process.env.VEPLO_FEE;

@@ -19,6 +19,8 @@ import { v4 as uuidv4 } from "uuid";
 import stripe from "../stripe/stripe";
 import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated";
 import { constants } from "../constants/constants";
+import { handleCheckoutCompleted } from "./controllers/stripe/handleCheckoutCompleted";
+import { handleCheckoutAsyncPaymentSuccedeed } from "./controllers/stripe/handleCheckoutAsyncPaymentSuccedeed";
 
 process.on("uncaughtException", function (err) {
   const errorId = uuidv4();
@@ -87,11 +89,10 @@ async function startServer() {
       "/webhook",
       express.raw({ type: "application/json" }),
       (request, response) => {
-        console.log("arriva");
         const sig = request.headers["stripe-signature"];
 
-        console.log(request.body);
-        console.log(sig);
+        // console.log(request.body);
+        // console.log(sig);
 
         let event;
 
@@ -110,8 +111,12 @@ async function startServer() {
         switch (event.type) {
           case "account.updated":
             handleAccountUpdated(event.data.object);
-            console.log("ok");
-            // Then define and call a function to handle the event payment_intent.succeeded
+          case "checkout.session.completed":
+            handleCheckoutCompleted(event.data.object);
+          case "checkout.session.async_payment_succeeded":
+            handleCheckoutAsyncPaymentSuccedeed(event.data.object);
+          case "checkout.session.async_payment_failed":
+            console.log("bisogna mandare la mail");
             break;
 
           default:
