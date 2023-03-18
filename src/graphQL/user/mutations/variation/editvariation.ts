@@ -65,7 +65,7 @@ export const editVariation = async (
     { "variations._id": id },
     {
       $set: {
-        "variations.0": mergedVariation, //!variation.0?
+        "variations.$": mergedVariation,
       },
     }
   );
