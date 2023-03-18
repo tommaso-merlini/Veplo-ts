@@ -192,7 +192,7 @@ const typeDefs = gql`
     minPrice: Int
     maxPrice: Int
     name: String
-    cap: String!
+    #cap: String
     gender: String
     macroCategory: String
   }
@@ -324,7 +324,7 @@ const typeDefs = gql`
     product(id: ID!): Product
     productByVariationUniqueId(uniqueId: ID!): Product
     products(
-      range: Float!
+      #range: Float!
       limit: Int!
       offset: Int!
       filters: ProductFilters!

@@ -10,11 +10,11 @@ export const products = async (
   __,
   info
 ) => {
-  const searchedCap = await capByCap(filters.cap);
+  // const searchedCap = await capByCap(filters.cap);
 
-  const coordinates = searchedCap.location.coordinates;
-  const latitude = coordinates[0];
-  const longitude = coordinates[1];
+  // const coordinates = searchedCap.location.coordinates;
+  // const latitude = coordinates[0];
+  // const longitude = coordinates[1];
   const gender = filters.gender;
   const macroCategory = filters.macroCategory;
   const brand = filters.brand;
@@ -118,18 +118,18 @@ export const products = async (
         index: "ProductSearchIndex",
         compound: {
           must: [
-            {
-              geoWithin: {
-                path: "location",
-                circle: {
-                  center: {
-                    type: "Point",
-                    coordinates: [latitude, longitude],
-                  },
-                  radius: range,
-                },
-              },
-            },
+            // {
+            //   geoWithin: {
+            //     path: "location",
+            //     circle: {
+            //       center: {
+            //         type: "Point",
+            //         coordinates: [latitude, longitude],
+            //       },
+            //       radius: range,
+            //     },
+            //   },
+            // },
             {
               text: {
                 path: "status",
@@ -213,9 +213,9 @@ export const products = async (
     .skip(offset)
     .limit(limit);
 
-  console.log("==================");
-  console.log(products);
-  console.log("==================");
+  // console.log("==================");
+  // console.log(products);
+  // console.log("==================");
 
   return products;
 };
