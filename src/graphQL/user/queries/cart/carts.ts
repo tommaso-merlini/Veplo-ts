@@ -5,6 +5,7 @@ export const carts = async (user, { _ }) => {
   const variationsIds = [];
   const variations = [];
   const warnings = [];
+  //get every carts of the user
   const carts = await Cart.find({
     userId: user.id,
   });
@@ -12,6 +13,7 @@ export const carts = async (user, { _ }) => {
 
   // console.log(carts.queryPlanner.winningPlan.inputStage);
 
+  //get every variationId
   carts.forEach((cart) => {
     cart.productVariations.forEach((variation) => {
       variationsIds.push(variation.variationId);
