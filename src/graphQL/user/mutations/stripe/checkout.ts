@@ -1,9 +1,11 @@
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
+import customError from "../../../../controllers/errors/customError";
 import Business from "../../../../schemas/Business.model";
 import Cart from "../../../../schemas/Cart.model";
 import Product from "../../../../schemas/Product.model";
+import User from "../../../../schemas/User.model";
 require("dotenv").config();
 
 export const checkout = async (
@@ -58,6 +60,7 @@ export const checkout = async (
   }
 
   const cart = await Cart.findById(cartId);
+  const user = await User.findById(token.mongoId);
   const business = await Business.findById(cart.shopInfo.businessId);
 
   //get variationsids
@@ -65,6 +68,7 @@ export const checkout = async (
     variationsIds.push(variation.variationId);
   });
 
+  //insert the variations fields inside variations array
   for (let productVariation of cart.productVariations) {
     const product = await Product.findOne({
       "variations._id": productVariation.variationId,
@@ -79,8 +83,10 @@ export const checkout = async (
               variations.push({
                 name: product.name,
                 price: product.price,
+                color: variation.color,
                 quantity: cartVariation.quantity,
                 size: cartVariation.size,
+                brand: product.info.brand,
                 photo: variation.photos[0],
               });
               ok = true;
@@ -110,16 +116,37 @@ export const checkout = async (
         currency: "eur",
         unit_amount: price * 100,
         product_data: {
-          name: `${variation.brand} - ${variation.name} (colore: ${variation.color}, taglia: ${variation.size})`,
+          name: `${variation.name} - colore ${variation.color}`,
+          description: `taglia ${variation.size.toUpperCase()}, brand ${
+            variation.brand
+          }`,
           images: [
             `https://ik.imagekit.io/veploimages/${variation.photo}?tr=w-171,h-247"`,
           ],
         },
       },
       quantity: variation.quantity,
-      tax_rates: IVA,
+      tax_rates: [IVA],
     });
   }
+
+  const veploFee: number = +process.env.VEPLO_FEE;
+  const transactionFeePercentage: number =
+    +process.env.TRANSACTION_FEE_PERCENTAGE;
+  const transactionFeeFixed: number = +process.env.TRANSACTION_FEE_FIXED;
+  if (total < 5) {
+    customError({
+      code: "400",
+      path: "total",
+      message: "total must be grather than 5 euros",
+    });
+  }
+  const applicationFeeAmount = Math.round(
+    (total * veploFee +
+      total * transactionFeePercentage +
+      transactionFeeFixed) *
+      100
+  );
 
   // Create Checkout Sessions from body params.
   const session = await stripe.checkout.sessions.create({
@@ -127,18 +154,20 @@ export const checkout = async (
     //customer_email: 'customer@example.com',
     currency: "eur",
     locale: "it",
-    customer: "cus_NQHMcnKSEq3n2J", //user.stripeId
+    customer: user.stripeId,
+    // automatic_payment_methods: { enabled: true },
+
     payment_intent_data: {
-      automatic_payment_methods: { enabled: true },
       description: `checkout ordine di user ${token.mongoId}`,
       metadata: {
         userId: token.mongoId,
-        shopId: cart.shopInfo.id,
-        businessId: cart.shopInfo.businessId,
+        shopId: cart.shopInfo.id.toString(),
+        businessId: cart.shopInfo.businessId.toString(),
+        cartId: cart._id.toString(),
       },
       receipt_email: token.email,
       setup_future_usage: "off_session",
-      application_fee_amount: 1500, //TODO la fee di veplo + commissioni (costo della transazione 2% + 30c)
+      application_fee_amount: applicationFeeAmount,
       transfer_data: {
         destination: business.stripe.id,
       },
@@ -185,5 +214,4 @@ export const checkout = async (
 
   //TODO DOPO fare l'ordine in mongodb
   return session.url;
-  return;
 };
