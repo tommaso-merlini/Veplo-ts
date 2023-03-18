@@ -30,14 +30,10 @@ export const carts = async (user, { _ }) => {
   //check if all products exists or have status: true
   variationsIds.forEach((id, index) => {
     let exists = false;
-    let productName;
-    let variationColor;
     products.forEach((product) => {
       product.variations.forEach((variation) => {
         if (variation._id.toString() === id.toString()) {
           exists = true;
-          productName = product.name;
-          variationColor = variation.color;
         }
       });
     });
@@ -59,11 +55,9 @@ export const carts = async (user, { _ }) => {
       //push warnigng
       warnings.push({
         variationId: id,
-        color: variationColor,
         isQuantityTooMuch: false,
         isSizeNonExisting: false,
         isProductNonExisting: true,
-        name: productName,
       });
       // console.log(variationsIds);
     }
