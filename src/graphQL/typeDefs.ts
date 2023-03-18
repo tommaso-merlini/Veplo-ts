@@ -79,6 +79,7 @@ const typeDefs = gql`
     size: String
     isSizeNonExisting: Boolean
     isQuantityTooMuch: Boolean
+    isProductNonExisting: Boolean
     name: String
     quantity: Int
   }
@@ -359,9 +360,6 @@ const typeDefs = gql`
     changeProductStatus(id: ID!, status: String!): Boolean
     deleteProduct(id: ID!): ID!
 
-    #variation
-    deleteVariation(id: ID!): Boolean
-
     #shop
     createShop(options: ShopInput!): ID!
     changeShopStatus(id: ID!, status: String!): Boolean
@@ -393,6 +391,8 @@ const typeDefs = gql`
 
     #variation
     editVariation(id: ID!, options: EditVariationInput!): Boolean
+    deleteVariation(id: ID!): Boolean
+    createVariation(productId: ID!, options: ProductVariationInput!): Boolean
 
     #user
     createUser(options: UserInput!): ID!

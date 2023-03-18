@@ -25,13 +25,61 @@ export const carts = async (user, { _ }) => {
       $in: variationsIds,
     },
   });
+  // console.log(variationsIds);
+
+  //check if all products exists or have status: true
+  variationsIds.forEach((id, index) => {
+    let exists = false;
+    let productName;
+    let variationColor;
+    products.forEach((product) => {
+      product.variations.forEach((variation) => {
+        if (variation._id.toString() === id.toString()) {
+          exists = true;
+          productName = product.name;
+          variationColor = variation.color;
+        }
+      });
+    });
+    if (!exists) {
+      //eliminare variation dall'array di variationsIds
+      variationsIds.splice(index, 1);
+
+      //eliminare variation dal cart
+      carts.forEach((cart, cartIndex) => {
+        cart.productVariations.forEach((variation, variationIdex) => {
+          if (variation.variationId.toString() === id.toString()) {
+            carts[cartIndex].productVariations.splice(variationIdex, 1);
+          }
+        });
+      });
+
+      console.log(carts);
+
+      //push warnigng
+      warnings.push({
+        variationId: id,
+        color: variationColor,
+        isQuantityTooMuch: false,
+        isSizeNonExisting: false,
+        isProductNonExisting: true,
+        name: productName,
+      });
+      // console.log(variationsIds);
+    }
+  });
 
   //get every variation of every product
   products.forEach((product) => {
+    // if (!product) {
+    //   console.log("non ce piu");
+    // }
+
     product.variations.forEach((variation) => {
       variations.push({
         _id: variation._id,
         photo: variation.photos[0],
+        brand: product.info.brand,
         name: product.name,
         color: variation.color,
         lots: variation.lots,
@@ -95,6 +143,7 @@ export const carts = async (user, { _ }) => {
                     .size,
                   isQuantityTooMuch: true,
                   isSizeNonExisting: false,
+                  isProductNonExisting: false,
                   name: variations[variationIndex].name,
                   quantity: lot.quantity,
                 });
@@ -109,6 +158,7 @@ export const carts = async (user, { _ }) => {
               size: carts[cartIndex].productVariations[cartVariationIndex].size,
               isSizeNonExisting: true,
               isQuantityTooMuch: false,
+              isProductNonExisting: false,
               name: variations[variationIndex].name,
               quantity: lastQuantity,
             });
@@ -194,6 +244,8 @@ export const carts = async (user, { _ }) => {
             variations[variationIndex].price;
           carts[cartIndex].productVariations[cartVariationIndex].status =
             variations[variationIndex].status;
+          carts[cartIndex].productVariations[cartVariationIndex].brand =
+            variations[variationIndex].brand;
           break;
         }
       }
