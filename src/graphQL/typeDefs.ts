@@ -166,6 +166,7 @@ const typeDefs = gql`
     id: ID
     variationId: ID
     photo: String
+    brand: String
     name: String
     quantity: Int
     color: String
