@@ -9,7 +9,7 @@ require("dotenv").config();
 
 export const checkout = async (
   _,
-  { cartId },
+  { shopId },
   { admin, req, stripe }: Context
 ) => {
   //TODO calcolare amount
@@ -60,7 +60,11 @@ export const checkout = async (
     };
   }
 
-  const cart = await Cart.findById(cartId);
+  const cart = await Cart.findOne({
+    userId: token.mongoId,
+    "shopInfo.id": shopId,
+  });
+
   const user = await User.findById(token.mongoId);
   const business = await Business.findById(cart.shopInfo.businessId);
 

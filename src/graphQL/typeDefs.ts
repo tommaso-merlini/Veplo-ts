@@ -380,7 +380,7 @@ const typeDefs = gql`
       vatNumber: String!
       phone: String!
     ): String
-    checkout(cartId: ID!): String
+    checkout(shopId: ID!): String
 
     #cart
     addToCart(productVariationId: ID!, size: String!, quantity: Int!): Boolean
