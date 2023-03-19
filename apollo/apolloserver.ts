@@ -57,14 +57,6 @@ const apolloserver = new ApolloServer({
         if (!err.extensions.customMessage) {
           err.extensions.customMessage = err.message;
         }
-        // const error = Object.assign(new Error("Internal server error"), {
-        //   extensions: {
-        //     code: err.extensions.customCode,
-        //     path: err.extensions.customPath,
-        //     message: err.extensions.customMessage,
-        //     id: errorId,
-        //   },
-        // });
         return {
           name: err.extensions.customMessage,
           code: err.extensions.customCode,

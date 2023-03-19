@@ -58,13 +58,13 @@ export const editCart = async (
   product.variations[variationIndex].lots.forEach((lot) => {
     if (lot.size === size) {
       sizeMatches = true;
-    }
-    if (lot.quantity < quantity) {
-      customError({
-        code: "409",
-        path: "variation's quantity",
-        message: "too much quantity for this product's variation",
-      });
+      if (lot.quantity < quantity) {
+        customError({
+          code: "409",
+          path: "variation's quantity",
+          message: "too much quantity for this product's variation",
+        });
+      }
     }
   });
   if (!sizeMatches) {
