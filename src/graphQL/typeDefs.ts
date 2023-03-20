@@ -102,6 +102,7 @@ const typeDefs = gql`
     age: String
     createdAt: String
     carts: UserCarts
+    orders: [Order!]
   }
 
   type Product {
@@ -183,6 +184,58 @@ const typeDefs = gql`
     shopInfo: CartShopInfo
     total: Float
     productVariations: [CartProductVariation!]
+  }
+
+  type Order {
+    id: ID
+    cartId: ID
+    uniqueId: String
+    createdAt: String
+    user: UserOrder
+    totalDetails: TotalDetailsOrder
+    shop: ShopOrder
+    productVariations: [ProductVariationsOrder!]
+  }
+
+  type UserOrder {
+    id: ID
+    name: String
+    surname: String
+    address: UserOrderAddress
+  }
+
+  type UserOrderAddress {
+    city: String
+    country: String
+    line1: String
+    line2: String
+    postalCode: String
+    state: String
+  }
+
+  type TotalDetailsOrder {
+    amountDiscount: Float
+    amountShipping: Float
+    amountTax: Float
+    subTotal: Float
+    total: Float
+  }
+
+  type ShopOrder {
+    id: ID
+    name: String
+    stripeId: String
+  }
+
+  type ProductVariationsOrder {
+    productId: ID
+    variationId: ID
+    photo: String
+    name: String
+    price: Price
+    quantity: Int
+    color: String
+    size: String
   }
 
   #===========INPUTS===============

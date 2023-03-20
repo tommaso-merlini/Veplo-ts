@@ -103,6 +103,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
       cartId: paymentIntent.metadata.cartId,
       uniqueId,
       status: "paid",
+      createdAt: new Date(),
       user: {
         id: user._id,
         name: user.name,
