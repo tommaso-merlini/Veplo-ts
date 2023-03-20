@@ -48,7 +48,7 @@ const adminEditProduct = async (
 
   //if the price is modified
   if (options.price) {
-    options.price = handlePriceEdit(options, product);
+    options.price = handlePriceEdit(options);
   }
 
   //merging product with options (overwrite equal values)
