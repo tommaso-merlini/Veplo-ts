@@ -43,7 +43,7 @@ const port = process.env.PORT || 3000;
 const numCpus = os.cpus().length;
 let endpointSecret;
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV === "development") {
   endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_TESTING_DEVELOPMENT;
 }
 
@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === "testing") {
   endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_TESTING;
 }
 
-if (process.env.NODE_ENV === "prodcution") {
+if (process.env.NODE_ENV === "production") {
   endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_PRODUCTION;
 }
 
