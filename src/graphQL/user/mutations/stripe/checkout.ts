@@ -163,7 +163,7 @@ export const checkout = async (
         lineItems.push({
           price_data: {
             currency: "eur",
-            unit_amount: price * 100,
+            unit_amount: Math.round(price * 100),
             product_data: {
               name: `${variation.name} - colore ${variation.color}`,
               description: `taglia ${cartVariation.size.toUpperCase()}, brand ${
