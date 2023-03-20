@@ -95,6 +95,9 @@ ProductSchema.index({
       updatedAt: {
         type: "date",
       },
+      status: {
+        type: "string",
+      },
     },
   },
 });
