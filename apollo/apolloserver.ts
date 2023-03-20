@@ -20,7 +20,7 @@ const apolloserver = new ApolloServer({
   schema,
   cache: "bounded",
   context: context,
-  // csrfPrevention: process.env.NODE_ENV !== "development",
+  csrfPrevention: process.env.NODE_ENV !== "development",
   // introspection: process.env.NODE_ENV !== "production",
   introspection: true,
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
