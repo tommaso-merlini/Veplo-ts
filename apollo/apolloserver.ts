@@ -20,14 +20,16 @@ const apolloserver = new ApolloServer({
   schema,
   cache: "bounded",
   context: context,
-  csrfPrevention: process.env.NODE_ENV !== "development",
-  introspection: process.env.NODE_ENV !== "production",
-  // plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
-  plugins: [
-    process.env.NODE_ENV === "production"
-      ? ApolloServerPluginLandingPageDisabled()
-      : ApolloServerPluginLandingPageGraphQLPlayground(),
-  ],
+  // csrfPrevention: process.env.NODE_ENV !== "development",
+  // introspection: process.env.NODE_ENV !== "production",
+  introspection: true,
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
+  //TODO uncomment below when in production
+  // plugins: [
+  //   process.env.NODE_ENV === "production"
+  //     ? ApolloServerPluginLandingPageDisabled()
+  //     : ApolloServerPluginLandingPageGraphQLPlayground(),
+  // ],
   validationRules: [depthLimit(7)],
   formatError: (err: any) => {
     let path = err.path;
