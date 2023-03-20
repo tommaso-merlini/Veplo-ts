@@ -65,6 +65,14 @@ export const checkout = async (
     "shopInfo.id": shopId,
   });
 
+  if (!cart) {
+    customError({
+      code: "404",
+      path: "cart",
+      message: "cart not found",
+    });
+  }
+
   const user = await User.findById(token.mongoId);
   const business = await Business.findById(cart.shopInfo.businessId);
 
