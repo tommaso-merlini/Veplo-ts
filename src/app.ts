@@ -115,10 +115,13 @@ async function startServer() {
         switch (event.type) {
           case "account.updated":
             handleAccountUpdated(event.data.object);
+            break;
           case "checkout.session.completed":
             handleCheckoutCompleted(event.data.object);
+            break;
           case "checkout.session.async_payment_succeeded":
             handleCheckoutAsyncPaymentSuccedeed(event.data.object);
+            break;
           case "checkout.session.async_payment_failed":
             console.log("bisogna mandare la mail");
             break;
