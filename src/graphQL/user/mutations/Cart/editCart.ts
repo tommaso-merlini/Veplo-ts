@@ -135,6 +135,11 @@ export const editCart = async (
         return true;
       }
     } else {
+      if (cart.productVariations.length === 1) {
+        //if the user is removing the last variation
+        //delete the cart
+        await Cart.findByIdAndRemove(cart.id);
+      }
       //delete object
       await Cart.updateOne(
         { _id: cart.id },
