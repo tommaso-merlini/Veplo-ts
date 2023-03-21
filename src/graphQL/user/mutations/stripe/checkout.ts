@@ -65,12 +65,9 @@ export const checkout = async (
 
   if (process.env.NODE_ENV !== "production") {
     successUrl = `http://localhost:3000/orders?shop=${cart.shopInfo.name}`;
-  } else {
-    successUrl = `https://www.veplo.it/orders?shop=${cart.shopInfo.name}`;
-  }
-  if (process.env.NODE_ENV !== "production") {
     cancelUrl = `http://localhost:3000/checkout/${shopId}`;
   } else {
+    successUrl = `https://www.veplo.it/orders?shop=${cart.shopInfo.name}`;
     cancelUrl = `https://www.veplo.it/checkout/${shopId}`;
   }
 
