@@ -1,7 +1,6 @@
 import { GraphQLUpload } from "graphql-upload";
 import { adminCreateProduct } from "./admin/adminCreateProduct";
 import { product } from "./user/queries/product/product";
-import { variations } from "./user/queries/variation/variations";
 import { shop } from "./user/queries/shop/shop";
 import { shopByFirebaseId } from "./user/queries/shop/shopByFirebaseId";
 import { isBusiness } from "./user/queries/business/isBusiness";
@@ -20,7 +19,6 @@ import { createBusinessStep1 } from "./user/mutations/business/createBusiness/cr
 import { createStripeAccount } from "./user/mutations/stripe/createStripeAccount";
 import { business } from "./user/queries/business/business";
 import Shop from "../schemas/Shop.model";
-import { variation } from "./user/queries/variation/variation";
 import productByVariationUniqueId from "./user/queries/product/productByVariationUniqueId";
 import { products } from "./user/queries/product/products";
 import { createUser } from "./user/mutations/user/createUser";

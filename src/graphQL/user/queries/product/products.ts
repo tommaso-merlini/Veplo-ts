@@ -2,7 +2,6 @@ import { size } from "lodash";
 import getRequestedFields from "../../../../controllers/getRequestedFields";
 import capByCap from "../../../../controllers/queries/capByCap";
 import Product from "../../../../schemas/Product.model";
-import Variation from "../../../../schemas/Variation.model";
 
 export const products = async (
   _,

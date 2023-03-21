@@ -9,7 +9,6 @@ import sharp from "sharp";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1";
 import Product from "../../../../schemas/Product.model";
-import { createVariations } from "../../../../controllers/mutations/createVariations";
 import { forEach } from "lodash";
 import customError from "../../../../controllers/errors/customError";
 import { checkLotQuantity } from "../../../../controllers/checkLotQuantity";
@@ -74,8 +73,6 @@ export const createProduct = async (
     createdAt: new Date(),
     updatedAt: new Date(),
   });
-
-  // await createVariations(newProduct);
 
   return { id: newProduct.id };
 };
