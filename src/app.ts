@@ -126,7 +126,7 @@ async function startServer() {
               }
           }
         } catch (e) {
-          console.log(err.message);
+          // console.log(err.message);
           response.status(400).send(`Error: ${e.message}`);
           return;
         }
@@ -151,7 +151,7 @@ async function startServer() {
             endpointSecretCheckout
           );
         } catch (err) {
-          console.log(err.message);
+          // console.log(err.message);
           response.status(400).send(`Webhook Error: ${err.message}`);
           return;
         }
