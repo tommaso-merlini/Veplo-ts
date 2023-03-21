@@ -19,27 +19,17 @@ export const checkout = async (
   const variationsIds = [];
   const variationsInCart = [];
   const variationsInCartWithSize = [];
+  let successUrl;
+  let shippingRate;
+  let cancelUrl;
+
   let IVA;
   if (process.env.NODE_ENV !== "production") {
     IVA = process.env.STRIPE_IVA_TEST;
   } else {
     IVA = process.env.STRIPE_IVA_PROD; //TODO
   }
-  let successUrl;
-  if (process.env.NODE_ENV !== "production") {
-    successUrl = "http://localhost:3000/checkout?success=true";
-  } else {
-    successUrl = "https://www.veplo.it/checkout?success=true";
-  }
 
-  let cancelUrl;
-  if (process.env.NODE_ENV !== "production") {
-    cancelUrl = "http://localhost:3000/checkout?cancelled=true";
-  } else {
-    cancelUrl = "https://www.veplo.it/checkout?cancelled=true";
-  }
-
-  let shippingRate;
   if (process.env.NODE_ENV !== "production") {
     shippingRate = process.env.STRIPE_SHIPPING_RATE_TEST;
   } else {
@@ -71,6 +61,17 @@ export const checkout = async (
       path: "cart",
       message: "cart not found",
     });
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    successUrl = `http://localhost:3000/orders?shop=${cart.shopInfo.name}`;
+  } else {
+    successUrl = `https://www.veplo.it/orders?shop=${cart.shopInfo.name}`;
+  }
+  if (process.env.NODE_ENV !== "production") {
+    cancelUrl = `http://localhost:3000/checkout/${shopId}`;
+  } else {
+    cancelUrl = `https://www.veplo.it/checkout/${shopId}`;
   }
 
   const user = await User.findById(token.mongoId);
