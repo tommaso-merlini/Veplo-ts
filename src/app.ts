@@ -114,15 +114,21 @@ async function startServer() {
           return;
         }
 
-        switch (event.type) {
-          case "account.updated":
-            handleAccountUpdated(event.data.object);
-            break;
+        try {
+          switch (event.type) {
+            case "account.updated":
+              handleAccountUpdated(event.data.object);
+              break;
 
-          default:
-            if (process.env.NODE_ENV !== "production") {
-              console.log(`event.type not handled`);
-            }
+            default:
+              if (process.env.NODE_ENV !== "production") {
+                console.log(`event.type not handled`);
+              }
+          }
+        } catch (e) {
+          console.log(err.message);
+          response.status(400).send(`Error: ${e.message}`);
+          return;
         }
 
         // Return a 200 response to acknowledge receipt of the event
@@ -150,21 +156,27 @@ async function startServer() {
           return;
         }
 
-        switch (event.type) {
-          case "checkout.session.completed":
-            handleCheckoutCompleted(event.data.object);
-            break;
-          case "checkout.session.async_payment_succeeded":
-            handleCheckoutAsyncPaymentSuccedeed(event.data.object);
-            break;
-          case "checkout.session.async_payment_failed":
-            console.log("bisogna mandare la mail");
-            break;
+        try {
+          switch (event.type) {
+            case "checkout.session.completed":
+              handleCheckoutCompleted(event.data.object);
+              break;
+            case "checkout.session.async_payment_succeeded":
+              handleCheckoutAsyncPaymentSuccedeed(event.data.object);
+              break;
+            case "checkout.session.async_payment_failed":
+              console.log("bisogna mandare la mail");
+              break;
 
-          default:
-            if (process.env.NODE_ENV !== "production") {
-              console.log(`event.type not handled`);
-            }
+            default:
+              if (process.env.NODE_ENV !== "production") {
+                console.log(`event.type not handled`);
+              }
+          }
+        } catch (e) {
+          console.log(err.message);
+          response.status(400).send(`Error: ${e.message}`);
+          return;
         }
 
         // Return a 200 response to acknowledge receipt of the event
