@@ -41,18 +41,23 @@ process.on("uncaughtException", function (err) {
 const app = express();
 const port = process.env.PORT || 3000;
 const numCpus = os.cpus().length;
+let endpointSecretCheckout;
+let endpointSecretAccount;
 let endpointSecret;
 
 if (process.env.NODE_ENV === "development") {
-  endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_TESTING_DEVELOPMENT;
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_SECRET_DEV;
+  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_SECRET_DEV;
 }
 
 if (process.env.NODE_ENV === "testing") {
-  endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_TESTING;
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_TEST;
+  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_TEST;
 }
 
 if (process.env.NODE_ENV === "production") {
-  endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_PRODUCTION;
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_PROD;
+  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_PROD;
 }
 
 async function startServer() {
@@ -90,13 +95,10 @@ async function startServer() {
     // app.use(express.json());
 
     app.post(
-      "/webhook",
+      "/webhook/account",
       express.raw({ type: "application/json" }),
       (request, response) => {
         const sig = request.headers["stripe-signature"];
-
-        // console.log(request.body);
-        // console.log(sig);
 
         let event;
 
@@ -104,7 +106,7 @@ async function startServer() {
           event = stripe.webhooks.constructEvent(
             request.body,
             sig,
-            endpointSecret
+            endpointSecretAccount
           );
         } catch (err) {
           console.log(err.message);
@@ -116,6 +118,39 @@ async function startServer() {
           case "account.updated":
             handleAccountUpdated(event.data.object);
             break;
+
+          default:
+            if (process.env.NODE_ENV !== "production") {
+              console.log(`event.type not handled`);
+            }
+        }
+
+        // Return a 200 response to acknowledge receipt of the event
+        response.send();
+      }
+    );
+
+    app.post(
+      "/webhook/checkout",
+      express.raw({ type: "application/json" }),
+      (request, response) => {
+        const sig = request.headers["stripe-signature"];
+
+        let event;
+
+        try {
+          event = stripe.webhooks.constructEvent(
+            request.body,
+            sig,
+            endpointSecretCheckout
+          );
+        } catch (err) {
+          console.log(err.message);
+          response.status(400).send(`Webhook Error: ${err.message}`);
+          return;
+        }
+
+        switch (event.type) {
           case "checkout.session.completed":
             handleCheckoutCompleted(event.data.object);
             break;
