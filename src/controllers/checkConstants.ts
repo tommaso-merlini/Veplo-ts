@@ -76,7 +76,6 @@ const checkConstants = (obj, is: String) => {
 
     //---CHECK BRAND
     const isBrandOk = constants.brands.includes(product.info.brand);
-    console.log;
     if (!isBrandOk)
       throw new Error(
         `il brand che hai scelto non e' supportato, lista dei brand supportati: ${constants.brands}`
@@ -95,7 +94,6 @@ const checkConstants = (obj, is: String) => {
 
     //---CHECK Fit
     const isFitOk = constants.fits.includes(product.info.fit);
-    console.log;
     if (!isFitOk) throw new Error(`il fit che hai scelto non e' supportato`);
   } else {
     //   const shop = obj;

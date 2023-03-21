@@ -11,6 +11,8 @@ import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1
 import Product from "../../../../schemas/Product.model";
 import { createVariations } from "../../../../controllers/mutations/createVariations";
 import { forEach } from "lodash";
+import customError from "../../../../controllers/errors/customError";
+import { checkLotQuantity } from "../../../../controllers/checkLotQuantity";
 
 export const createProduct = async (
   _,
@@ -35,6 +37,8 @@ export const createProduct = async (
   checkConstants(options, "product");
 
   checkPriceV2BelowV1(options);
+
+  checkLotQuantity(options.variations);
 
   const shop = await shopById(shopId);
 

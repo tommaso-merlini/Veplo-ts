@@ -288,7 +288,7 @@ const typeDefs = gql`
 
   input ProductLotInput {
     size: String!
-    quantity: Int
+    quantity: Int!
   }
 
   input ProductVariationInput {
@@ -366,8 +366,8 @@ const typeDefs = gql`
   }
 
   input EditLotsInput {
-    size: String
-    quantity: Int
+    size: String!
+    quantity: Int!
   }
 
   #=============QUERIES=================

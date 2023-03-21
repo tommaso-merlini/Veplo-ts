@@ -1,11 +1,10 @@
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import deleteFromSpaces from "../../../../controllers/deleteFromSpaces";
 import customError from "../../../../controllers/errors/customError";
-import productById from "../../../../controllers/queries/productById";
 import Product from "../../../../schemas/Product.model";
 import lodash from "lodash";
+import { checkLotQuantity } from "../../../../controllers/checkLotQuantity";
 
 export const editVariation = async (
   _,
@@ -21,6 +20,8 @@ export const editVariation = async (
       checkFirebaseErrors(e);
     }
   }
+
+  checkLotQuantity([options]);
 
   const product = await Product.findOne({
     "variations._id": id,
