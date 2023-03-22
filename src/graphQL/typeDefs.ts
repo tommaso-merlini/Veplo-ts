@@ -190,7 +190,7 @@ const typeDefs = gql`
     id: ID
     cartId: ID
     status: String
-    uniqueId: String
+    code: String
     createdAt: String
     user: UserOrder
     totalDetails: TotalDetailsOrder

@@ -1,13 +1,13 @@
 import stripe from "../../../stripe/stripe";
 import Cart from "../../schemas/Cart.model";
 import Order from "../../schemas/Order.model";
-import { v4 as uuidv4 } from "uuid";
 import User from "../../schemas/User.model";
 import Shop from "../../schemas/Shop.model";
 import Product from "../../schemas/Product.model";
 import Business from "../../schemas/Business.model";
 import customError from "../errors/customError";
 import { deleteCartById } from "../mutations/deleteCartById";
+import { generateCode } from "../generateCode";
 
 export const handleCheckoutCompleted = async (session) => {
   const paymentIntentId = session.payment_intent;
@@ -16,7 +16,7 @@ export const handleCheckoutCompleted = async (session) => {
   const variations = [];
   const variationsInCart = [];
   const variationsInCartWithSize = [];
-  const uniqueId = uuidv4();
+  const code = generateCode();
   let status = "pending";
 
   if (session.payment_status === "paid") {
@@ -93,7 +93,7 @@ export const handleCheckoutCompleted = async (session) => {
 
   Order.create({
     cartId: paymentIntent.metadata.cartId,
-    uniqueId,
+    code,
     status,
     createdAt: new Date(),
     user: {

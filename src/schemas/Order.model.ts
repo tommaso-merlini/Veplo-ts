@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema({
-  uniqueId: {
+  code: {
     type: String,
-    required: false,
+    required: true,
   },
   cartId: { type: mongoose.Types.ObjectId, required: true },
   status: {
