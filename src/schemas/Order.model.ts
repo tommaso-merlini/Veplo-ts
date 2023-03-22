@@ -73,6 +73,16 @@ const OrderSchema = new mongoose.Schema({
       required: true,
     },
   },
+  shipping: {
+    url: {
+      type: String,
+      required: true,
+    },
+    courier: {
+      type: String,
+      required: true,
+    },
+  },
   shop: {
     id: { type: mongoose.Types.ObjectId, required: true },
     name: {
@@ -93,6 +103,10 @@ const OrderSchema = new mongoose.Schema({
         required: true,
       },
       name: {
+        type: String,
+        required: true,
+      },
+      brand: {
         type: String,
         required: true,
       },

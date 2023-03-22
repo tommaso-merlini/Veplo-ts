@@ -189,11 +189,13 @@ const typeDefs = gql`
   type Order {
     id: ID
     cartId: ID
+    status: String
     uniqueId: String
     createdAt: String
     user: UserOrder
     totalDetails: TotalDetailsOrder
     shop: ShopOrder
+    shipping: ShippingOrder
     productVariations: [ProductVariationsOrder!]
   }
 
@@ -227,6 +229,11 @@ const typeDefs = gql`
     stripeId: String
   }
 
+  type ShippingOrder {
+    url: String
+    courier: String
+  }
+
   type ProductVariationsOrder {
     productId: ID
     variationId: ID
@@ -236,6 +243,7 @@ const typeDefs = gql`
     quantity: Int
     color: String
     size: String
+    brand: String
   }
 
   #===========INPUTS===============

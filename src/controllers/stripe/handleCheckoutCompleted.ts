@@ -19,6 +19,10 @@ export const handleCheckoutCompleted = async (session) => {
   const uniqueId = uuidv4();
   let status = "pending";
 
+  if (session.payment_status === "paid") {
+    status = "paid";
+  }
+
   const cart = await Cart.findById(paymentIntent.metadata.cartId);
   if (!cart) {
     customError({
@@ -52,6 +56,7 @@ export const handleCheckoutCompleted = async (session) => {
         productId: product._id,
         name: product.name,
         price: product.price,
+        brand: product.info.brand,
       });
     }
   }
@@ -79,14 +84,11 @@ export const handleCheckoutCompleted = async (session) => {
           quantity: cartVariation.quantity,
           size: cartVariation.size,
           color: variation.color,
+          brand: variation.brand,
         });
         break;
       }
     }
-  }
-
-  if (session.payment_status === "paid") {
-    status = "paid";
   }
 
   Order.create({
@@ -118,6 +120,10 @@ export const handleCheckoutCompleted = async (session) => {
       id: shop._id,
       name: shop.name,
       stripeId: business.stripe.id,
+    },
+    shipping: {
+      url: null,
+      courier: null,
     },
     productVariations: variationsInCartWithSize,
   });
