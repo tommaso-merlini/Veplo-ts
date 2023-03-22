@@ -76,11 +76,11 @@ const OrderSchema = new mongoose.Schema({
   shipping: {
     url: {
       type: String,
-      required: true,
+      required: false,
     },
     courier: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   shop: {
