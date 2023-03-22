@@ -7,6 +7,7 @@ import Shop from "../../schemas/Shop.model";
 import Product from "../../schemas/Product.model";
 import Business from "../../schemas/Business.model";
 import customError from "../errors/customError";
+import { deleteCartById } from "../mutations/deleteCartById";
 
 export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
   const paymentIntentId = session.payment_intent;
@@ -50,6 +51,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
         productId: product._id,
         name: product.name,
         price: product.price,
+        brand: product.info.brand,
       });
     }
   }
@@ -77,59 +79,49 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
           quantity: cartVariation.quantity,
           size: cartVariation.size,
           color: variation.color,
+          brand: variation.brand,
         });
         break;
       }
     }
   }
 
-  console.log(variationsInCartWithSize);
-
-  const order = await Order.findOne({
+  Order.create({
     cartId: paymentIntent.metadata.cartId,
+    uniqueId,
+    status: "paid",
+    createdAt: new Date(),
+    user: {
+      id: user._id,
+      name: user.name,
+      surname: user.surname,
+      address: {
+        city: session.customer_details.address.city,
+        country: session.customer_details.address.country,
+        line1: session.customer_details.address.line1,
+        line2: session.customer_details.address.line2,
+        postalCode: session.customer_details.address.postal_code,
+        state: session.customer_details.address.state,
+      },
+    },
+    totalDetails: {
+      amountDiscount: session.total_details.amount_discount,
+      amountShipping: session.total_details.amount_shipping,
+      amountTax: session.total_details.amount_tax,
+      subTotal: session.amount_subtotal,
+      total: session.amount_total,
+    },
+    shop: {
+      id: shop._id,
+      name: shop.name,
+      stripeId: business.stripe.id,
+    },
+    shipping: {
+      url: null,
+      courier: null,
+    },
+    productVariations: variationsInCartWithSize,
   });
 
-  if (order) {
-    await Cart.updateOne(
-      {
-        _id: paymentIntent.metadata.cartId,
-      },
-      {
-        status: "paid",
-      }
-    );
-  } else {
-    Order.create({
-      cartId: paymentIntent.metadata.cartId,
-      uniqueId,
-      status: "paid",
-      createdAt: new Date(),
-      user: {
-        id: user._id,
-        name: user.name,
-        surname: user.surname,
-        address: {
-          city: session.customer_details.address.city,
-          country: session.customer_details.address.country,
-          line1: session.customer_details.address.line1,
-          line2: session.customer_details.address.line2,
-          postalCode: session.customer_details.address.postal_code,
-          state: session.customer_details.address.state,
-        },
-      },
-      totalDetails: {
-        amountDiscount: session.total_details.amount_discount,
-        amountShipping: session.total_details.amount_shipping,
-        amountTax: session.total_details.amount_tax,
-        subTotal: session.amount_subtotal,
-        total: session.amount_total,
-      },
-      shop: {
-        id: shop._id,
-        name: shop.name,
-        stripeId: business.stripe.id,
-      },
-      productVariations: variationsInCartWithSize,
-    });
-  }
+  await deleteCartById(cart._id);
 };
