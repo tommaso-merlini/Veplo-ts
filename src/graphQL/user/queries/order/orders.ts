@@ -7,5 +7,7 @@ export const orders = async (user, { _ }) => {
     "user.id": user.id,
   });
 
+  const reversedOrders = orders.reverse();
+
   return orders;
 };
