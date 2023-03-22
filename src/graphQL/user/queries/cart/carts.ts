@@ -9,6 +9,7 @@ export const carts = async (user, { _ }) => {
   const carts = await Cart.find({
     userId: user.id,
   });
+  let cartsReversed = [];
   // .explain("executionStats");
 
   // console.log(carts.queryPlanner.winningPlan.inputStage);
@@ -266,6 +267,8 @@ export const carts = async (user, { _ }) => {
 
     cart.total = Number(total.toFixed(2));
   });
+
+  cartsReversed = carts.reverse();
 
   return {
     carts,
