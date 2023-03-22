@@ -8,6 +8,7 @@ import Business from "../../schemas/Business.model";
 import customError from "../errors/customError";
 import { deleteCartById } from "../mutations/deleteCartById";
 import { generateCode } from "../generateCode";
+import { getStatus } from "../getStatus";
 
 export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
   const paymentIntentId = session.payment_intent;
@@ -17,6 +18,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
   const variationsInCart = [];
   const variationsInCartWithSize = [];
   const code = generateCode();
+  const status = "PAY01";
 
   const cart = await Cart.findById(paymentIntent.metadata.cartId);
   if (!cart) {
