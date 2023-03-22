@@ -125,6 +125,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     shipping: {
       url: null,
       courier: null,
+      code: null,
     },
     productVariations: variationsInCartWithSize,
   });

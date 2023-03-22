@@ -82,6 +82,10 @@ const OrderSchema = new mongoose.Schema({
       type: String,
       required: false,
     },
+    code: {
+      type: String,
+      required: false,
+    },
   },
   shop: {
     id: { type: mongoose.Types.ObjectId, required: true },

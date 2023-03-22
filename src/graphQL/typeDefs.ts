@@ -232,6 +232,7 @@ const typeDefs = gql`
   type ShippingOrder {
     url: String
     courier: String
+    code: String
   }
 
   type ProductVariationsOrder {
