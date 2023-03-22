@@ -16,6 +16,7 @@ export const handleCheckoutCompleted = async (session) => {
   const variations = [];
   const variationsInCart = [];
   const variationsInCartWithSize = [];
+  let orderCounter = 0;
   const code = generateCode();
   let status = "pending";
 
@@ -48,6 +49,10 @@ export const handleCheckoutCompleted = async (session) => {
 
   //get all the variations of every product
   for (let product of products) {
+    await Product.updateOne(
+      { _id: product._id },
+      { $inc: { orderCounter: 1 } }
+    );
     for (let variation of product.variations) {
       variations.push({
         _id: variation._id,

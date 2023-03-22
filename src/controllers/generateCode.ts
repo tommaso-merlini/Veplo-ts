@@ -10,7 +10,7 @@ export const generateCode = () => {
 
   // Genera quattro lettere casuali
   for (let i = 0; i < 4; i++) {
-    code += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    code += letters.charAt(Math.floor(Math.random() * numbers.length));
   }
 
   return code;

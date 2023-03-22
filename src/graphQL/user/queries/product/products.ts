@@ -152,6 +152,30 @@ export const products = async (
                 },
               },
             },
+            {
+              near: {
+                path: "price.discountPercentage",
+                origin: 100,
+                pivot: 1,
+                score: {
+                  boost: {
+                    value: 5,
+                  },
+                },
+              },
+            },
+            {
+              near: {
+                path: "orderCounter",
+                origin: 1000,
+                pivot: 1,
+                score: {
+                  boost: {
+                    value: 10,
+                  },
+                },
+              },
+            },
           ],
         },
       },
@@ -212,9 +236,9 @@ export const products = async (
     .skip(offset)
     .limit(limit);
 
-  // console.log("==================");
-  // console.log(products);
-  // console.log("==================");
+  console.log("==================");
+  console.log(products);
+  console.log("==================");
 
   return products;
 };

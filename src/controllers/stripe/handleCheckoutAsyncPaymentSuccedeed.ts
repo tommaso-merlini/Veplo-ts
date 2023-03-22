@@ -43,6 +43,10 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
 
   //get all the variations of every product
   for (let product of products) {
+    await Product.updateOne(
+      { _id: product._id },
+      { $inc: { orderCounter: 1 } }
+    );
     for (let variation of product.variations) {
       variations.push({
         _id: variation._id,

@@ -9,6 +9,7 @@ const ProductSchema = new mongoose.Schema({
   },
   status: { type: String, required: true },
   canBuy: { type: Boolean, required: true },
+  orderCounter: { type: Number, required: false },
   createdAt: {
     type: Date,
     required: true,
@@ -97,6 +98,19 @@ ProductSchema.index({
       },
       status: {
         type: "string",
+      },
+      variations: {
+        type: "embeddedDocuments",
+        dynamic: true,
+      },
+      price: {
+        fields: {
+          discountPercentage: {
+            type: "number",
+          },
+        },
+        type: "document",
+        dynamic: false,
       },
     },
   },
