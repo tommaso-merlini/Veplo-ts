@@ -110,11 +110,11 @@ export const handleCheckoutCompleted = async (session) => {
       },
     },
     totalDetails: {
-      amountDiscount: session.total_details.amount_discount,
-      amountShipping: session.total_details.amount_shipping,
-      amountTax: session.total_details.amount_tax,
-      subTotal: session.amount_subtotal,
-      total: session.amount_total,
+      amountDiscount: session.total_details.amount_discount / 100,
+      amountShipping: session.total_details.amount_shipping / 100,
+      amountTax: session.total_details.amount_tax / 100,
+      subTotal: session.amount_subtotal / 100,
+      total: session.amount_total / 100,
     },
     shop: {
       id: shop._id,
