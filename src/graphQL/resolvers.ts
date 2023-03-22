@@ -37,6 +37,7 @@ import { deleteCart } from "./user/mutations/Cart/deleteCart";
 import { editCart } from "./user/mutations/Cart/editCart";
 import { checkout } from "./user/mutations/stripe/checkout";
 import { orders } from "./user/queries/order/orders";
+import { editOrder } from "./user/mutations/order/editOrder";
 require("dotenv").config();
 
 const resolvers = {
@@ -79,6 +80,7 @@ const resolvers = {
     deleteCart,
     editCart,
     checkout,
+    editOrder,
   },
 
   Shop: {

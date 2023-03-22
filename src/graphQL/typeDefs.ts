@@ -379,6 +379,12 @@ const typeDefs = gql`
     quantity: Int!
   }
 
+  input EditOrderInput {
+    url: String
+    courier: String
+    code: String
+  }
+
   #=============QUERIES=================
 
   type Query {
@@ -462,6 +468,9 @@ const typeDefs = gql`
     #user
     createUser(options: UserInput!): ID!
     editUser(options: EditUserInput!): Boolean
+
+    #order
+    editOrder(id: ID!, options: EditOrderInput!): Boolean
 
     #ADMIN
     adminCreateProduct(
