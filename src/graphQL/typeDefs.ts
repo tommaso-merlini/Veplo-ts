@@ -259,6 +259,7 @@ const typeDefs = gql`
     #cap: String
     gender: String
     macroCategory: String
+    microCategory: String
   }
 
   input ShopFilters {
@@ -397,7 +398,7 @@ const typeDefs = gql`
       #range: Float!
       limit: Int!
       offset: Int!
-      filters: ProductFilters!
+      filters: ProductFilters
     ): [Product!]
 
     #shop

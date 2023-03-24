@@ -16,6 +16,7 @@ export const products = async (
   // const longitude = coordinates[1];
   const gender = filters.gender;
   const macroCategory = filters.macroCategory;
+  const microCategory = filters.microCategory;
   const brand = filters.brand;
   const sizes = filters.sizes;
   const colors = filters.colors;
@@ -66,6 +67,14 @@ export const products = async (
   const checkMacroCategory = () => {
     if (filters.macroCategory != null && filters.macroCategory != "") {
       return { "info.macroCategory": macroCategory };
+    } else {
+      return {};
+    }
+  };
+
+  const checkMicroCategory = () => {
+    if (filters.microCategory != null && filters.microCategory != "") {
+      return { "info.microCategory": microCategory };
     } else {
       return {};
     }
@@ -217,6 +226,7 @@ export const products = async (
           // },
           checkGender(),
           checkMacroCategory(),
+          checkMicroCategory(),
           checkBrands(),
           checkMinPrice(),
           checkMaxPrice(),
