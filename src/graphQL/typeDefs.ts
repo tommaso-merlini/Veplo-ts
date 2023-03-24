@@ -421,6 +421,9 @@ const typeDefs = gql`
 
     #cart
     cart(id: ID!): Cart!
+
+    #constants
+    brands: [String!]
   }
 
   #===================MUTATIONS===================
