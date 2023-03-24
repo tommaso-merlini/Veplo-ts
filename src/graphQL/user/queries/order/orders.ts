@@ -8,16 +8,22 @@ import Product from "../../../../schemas/Product.model";
 
 export const orders = async (
   account,
-  _,
+  { statuses },
   { admin, req }: Context,
   queryInfo
 ) => {
   let orders;
   let token;
-  // console.log(account);
+  let checkStatuses;
+  if (statuses != null) {
+    checkStatuses = { $in: statuses };
+  } else {
+    checkStatuses = { $exists: true };
+  }
   if (queryInfo.path.prev.key === "user") {
     orders = await Order.find({
       "recipient.id": account.id,
+      status: checkStatuses,
     });
   }
   if (queryInfo.path.prev.key === "shop") {
@@ -43,6 +49,7 @@ export const orders = async (
 
     orders = await Order.find({
       "shop.id": account.id,
+      status: checkStatuses,
     });
   }
 

@@ -102,7 +102,7 @@ const typeDefs = gql`
     age: String
     createdAt: String
     carts: UserCarts
-    orders: [Order!]
+    orders(statuses: [String!]): [Order!]
   }
 
   type Product {
@@ -136,7 +136,7 @@ const typeDefs = gql`
     info: ShopInformations
     address: AddressShop
     products(limit: Int!, offset: Int!, see: String): [Product!]
-    orders: [Order!]
+    orders(statuses: [String!]): [Order!]
   }
 
   type CreateProductResponse {
