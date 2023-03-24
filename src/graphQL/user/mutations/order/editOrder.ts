@@ -12,6 +12,7 @@ export const editOrder = async (
   { admin, req }: Context
 ) => {
   let token;
+  let status = "SHIP01";
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -41,6 +42,11 @@ export const editOrder = async (
     }
   }
 
+  if (options.url != null) {
+    //if the admin inputted the url
+    status = "SHIP02";
+  }
+
   const order = await orderById(id);
 
   //token operations
@@ -57,7 +63,7 @@ export const editOrder = async (
     { _id: id },
     {
       shipping: mergedShipping,
-      status: "SHIP01",
+      status: status,
     }
   );
 
