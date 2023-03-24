@@ -9,6 +9,7 @@ import customError from "../errors/customError";
 import { deleteCartById } from "../mutations/deleteCartById";
 import { generateCode } from "../generateCode";
 import { getStatus } from "../getStatus";
+import { removeBoughtQuantityFromVariation } from "../removeBoughtQuantityFromVariation";
 
 export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
   const paymentIntentId = session.payment_intent;
@@ -130,5 +131,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     productVariations: variationsInCartWithSize,
   });
 
-  await deleteCartById(cart._id);
+  deleteCartById(cart._id);
+
+  removeBoughtQuantityFromVariation(variationsInCartWithSize);
 };

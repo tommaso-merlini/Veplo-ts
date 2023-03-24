@@ -85,7 +85,8 @@ export const editCart = async (
     //vedere se la variation e' gia' presente nel carrello
     //cart.productVariations.map(async (variation) =>
     for (const variation of cart.productVariations) {
-      //   console.log(variation.size.toString() == size.toString());
+      console.log(variation.size.toString());
+      console.log();
       if (
         variation.variationId.toString() === productVariationId.toString() &&
         variation.size.toString() == size.toString()
@@ -135,6 +136,15 @@ export const editCart = async (
         return true;
       }
     } else {
+      console.log(isVariationDuplicate);
+
+      if (!isVariationDuplicate) {
+        customError({
+          code: "400",
+          path: "quantity",
+          message: "you can't add a product with quantity 0",
+        });
+      }
       if (cart.productVariations.length === 1) {
         //if the user is removing the last variation
         //delete the cart
@@ -157,6 +167,13 @@ export const editCart = async (
   }
 
   if (!cart) {
+    if (quantity === 0) {
+      customError({
+        code: "400",
+        path: "quantity",
+        message: "you can't add a product with quantity 0",
+      });
+    }
     await Cart.create({
       userId: token.mongoId,
       status: "active",
