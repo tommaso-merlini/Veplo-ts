@@ -263,6 +263,11 @@ const typeDefs = gql`
     microCategory: String
   }
 
+  input ProductSort {
+    ascending: Boolean
+    for: String
+  }
+
   input ShopFilters {
     cap: String
     name: String
@@ -399,6 +404,7 @@ const typeDefs = gql`
       #range: Float!
       limit: Int!
       offset: Int!
+      sort: ProductSort
       filters: ProductFilters
     ): [Product!]
 

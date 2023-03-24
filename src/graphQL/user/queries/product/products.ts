@@ -1,11 +1,12 @@
 import { size } from "lodash";
+import customError from "../../../../controllers/errors/customError";
 import getRequestedFields from "../../../../controllers/getRequestedFields";
 import capByCap from "../../../../controllers/queries/capByCap";
 import Product from "../../../../schemas/Product.model";
 
 export const products = async (
   _,
-  { range, limit, offset, filters },
+  { limit, sort, offset, filters },
   __,
   info
 ) => {
@@ -20,6 +21,28 @@ export const products = async (
   const brand = filters.brand;
   const sizes = filters.sizes;
   const colors = filters.colors;
+  let checkSort: any = { score: -1 };
+  if (sort != null) {
+    switch (sort.for) {
+      case "price":
+        checkSort = { price: sort.ascending === true ? 1 : -1 };
+        break;
+      case "createdAt":
+        checkSort = { createdAt: sort.ascending === true ? 1 : -1 };
+        break;
+      case "sale":
+        checkSort = { sale: sort.ascending === true ? 1 : -1 };
+        break;
+
+      default:
+        customError({
+          code: "400",
+          path: "sort",
+          message: `you can't sort for ${sort.for}`,
+        });
+        break;
+    }
+  }
   const checkName = () => {
     if (filters.name != null) {
       return {
@@ -242,6 +265,7 @@ export const products = async (
         id: "$_id",
       },
     },
+    { $sort: checkSort },
   ])
     .skip(offset)
     .limit(limit);
