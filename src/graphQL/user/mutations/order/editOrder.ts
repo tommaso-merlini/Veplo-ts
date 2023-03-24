@@ -38,6 +38,7 @@ export const editOrder = async (
     { _id: id },
     {
       shipping: mergedShipping,
+      status: "SHIP01",
     }
   );
 

@@ -380,9 +380,9 @@ const typeDefs = gql`
   }
 
   input EditOrderInput {
-    url: String
-    courier: String
-    code: String
+    #url: String
+    courier: String!
+    code: String!
   }
 
   #=============QUERIES=================
