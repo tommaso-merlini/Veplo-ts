@@ -98,6 +98,7 @@ const resolvers = {
 
       return products;
     },
+    orders,
   },
 
   Business: {

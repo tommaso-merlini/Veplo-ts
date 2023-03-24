@@ -136,6 +136,7 @@ const typeDefs = gql`
     info: ShopInformations
     address: AddressShop
     products(limit: Int!, offset: Int!, see: String): [Product!]
+    orders: [Order!]
   }
 
   type CreateProductResponse {
