@@ -97,10 +97,9 @@ export const handleCheckoutCompleted = async (session) => {
     code,
     status,
     createdAt: new Date(),
-    user: {
+    recipient: {
       id: user._id,
-      name: user.name,
-      surname: user.surname,
+      name: session.customer_details.name,
       address: {
         city: session.customer_details.address.city,
         country: session.customer_details.address.country,

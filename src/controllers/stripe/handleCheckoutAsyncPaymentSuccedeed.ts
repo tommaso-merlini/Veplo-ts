@@ -97,9 +97,9 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     code,
     status: "paid",
     createdAt: new Date(),
-    user: {
+    recipient: {
       id: user._id,
-      name: user.name,
+      name: session.customer_details.name,
       surname: user.surname,
       address: {
         city: session.customer_details.address.city,

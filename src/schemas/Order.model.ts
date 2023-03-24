@@ -14,13 +14,9 @@ const OrderSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  user: {
+  recipient: {
     id: { type: mongoose.Types.ObjectId, required: true },
     name: {
-      type: String,
-      required: true,
-    },
-    surname: {
       type: String,
       required: true,
     },
