@@ -57,8 +57,6 @@ export const editOrder = async (
 
   const mergedShipping = lodash.merge(orderShipping, options);
 
-  console.log(mergedShipping);
-
   await Order.updateOne(
     { _id: id },
     {
