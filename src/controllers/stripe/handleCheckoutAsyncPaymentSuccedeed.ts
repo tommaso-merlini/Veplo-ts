@@ -101,7 +101,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     recipient: {
       id: user._id,
       name: session.customer_details.name,
-      surname: user.surname,
+      phone: session.customer_details.phone,
       address: {
         city: session.customer_details.address.city,
         country: session.customer_details.address.country,

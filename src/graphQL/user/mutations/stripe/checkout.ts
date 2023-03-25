@@ -1,6 +1,8 @@
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
+import businessById from "../../../../controllers/queries/businessById";
+import userById from "../../../../controllers/queries/userById";
 import Business from "../../../../schemas/Business.model";
 import Cart from "../../../../schemas/Cart.model";
 import Product from "../../../../schemas/Product.model";
@@ -71,8 +73,8 @@ export const checkout = async (
     cancelUrl = `https://www.veplo.it/checkout/${shopId}`;
   }
 
-  const user = await User.findById(token.mongoId);
-  const business = await Business.findById(cart.shopInfo.businessId);
+  const user = await userById(token.mongoId);
+  const business = await businessById(cart.shopInfo.businessId);
 
   //get variationsids
   cart.productVariations.forEach((variation) => {

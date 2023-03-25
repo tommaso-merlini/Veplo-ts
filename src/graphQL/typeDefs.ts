@@ -203,6 +203,7 @@ const typeDefs = gql`
   type RecipientOrder {
     id: ID
     name: String
+    phone: String
     address: UserOrderAddress
   }
 
@@ -263,8 +264,8 @@ const typeDefs = gql`
   }
 
   input ProductSort {
-    ascending: Boolean
-    for: String
+    ascending: Boolean!
+    for: String!
   }
 
   input ShopFilters {

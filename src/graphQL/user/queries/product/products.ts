@@ -22,6 +22,7 @@ export const products = async (
   const sizes = filters.sizes;
   const colors = filters.colors;
   let checkSort: any = { score: -1 };
+  console.log(filters.minPrice);
   if (sort != null) {
     switch (sort.for) {
       case "price":
@@ -106,7 +107,11 @@ export const products = async (
   const checkMaxPrice = () => {
     if (filters.maxPrice != null) {
       return {
-        $or: [
+        // $or: [
+        //   { "price.v2": { $lte: filters.maxPrice } },
+        //   { "price.v1": { $lte: filters.maxPrice } },
+        // ],
+        $ifNull: [
           { "price.v2": { $lte: filters.maxPrice } },
           { "price.v1": { $lte: filters.maxPrice } },
         ],
@@ -119,10 +124,11 @@ export const products = async (
   const checkMinPrice = () => {
     if (filters.minPrice != null) {
       return {
-        $or: [
-          { "price.v2": { $gte: filters.minPrice } },
-          { "price.v1": { $gte: filters.minPrice } },
-        ],
+        // $ifNull: [
+        //   { "price.v2": { $gte: filters.minPrice } },
+        //   { "price.v1": { $gte: filters.minPrice } },
+        // ],
+        gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters.minPrice],
       };
     } else {
       return {};
@@ -251,7 +257,10 @@ export const products = async (
           checkMacroCategory(),
           checkMicroCategory(),
           checkBrands(),
-          checkMinPrice(),
+          // checkMinPrice(),
+          {
+            gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters.minPrice],
+          },
           checkMaxPrice(),
         ],
       },

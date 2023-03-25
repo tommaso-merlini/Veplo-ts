@@ -18,7 +18,7 @@ export const createStripeAccount = async (
     }
   } else {
     token = {
-      mongoId: "mongoId",
+      mongoId: "641f178dca22d34c3ca1ec01",
       isBusiness: true,
       email: "prova@prova.it",
       user_id: "firebaseId",
@@ -49,12 +49,15 @@ export const createStripeAccount = async (
       card_payments: { requested: true },
       transfers: { requested: true },
     },
-    business_type: "company",
-    company: {
-      name: businessName,
-      vat_id: vatNumber,
-      tax_id: vatNumber,
-    },
+    // business_type: Object.freeze({
+    //   individual: "individual",
+    //   company: "company",
+    // }),
+    // company: {
+    //   name: businessName,
+    //   vat_id: vatNumber,
+    //   tax_id: vatNumber,
+    // },
     metadata: {
       firebaseId: token.user_id,
       mongoId: token.mongoId,
