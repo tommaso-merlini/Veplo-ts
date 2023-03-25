@@ -193,17 +193,16 @@ const typeDefs = gql`
     status: String
     code: String
     createdAt: String
-    user: UserOrder
+    recipient: RecipientOrder
     totalDetails: TotalDetailsOrder
     shop: ShopOrder
     shipping: ShippingOrder
     productVariations: [ProductVariationsOrder!]
   }
 
-  type UserOrder {
+  type RecipientOrder {
     id: ID
     name: String
-    surname: String
     address: UserOrderAddress
   }
 
