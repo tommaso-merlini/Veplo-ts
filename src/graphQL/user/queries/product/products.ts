@@ -257,10 +257,10 @@ export const products = async (
           checkMacroCategory(),
           checkMicroCategory(),
           checkBrands(),
-          // checkMinPrice(),
-          {
-            gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters.minPrice],
-          },
+          checkMinPrice(),
+          // {
+          //   gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters.minPrice],
+          // },
           checkMaxPrice(),
         ],
       },
