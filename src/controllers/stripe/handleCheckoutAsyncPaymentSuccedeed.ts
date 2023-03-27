@@ -100,15 +100,15 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     createdAt: new Date(),
     recipient: {
       id: user._id,
-      name: session.customer_details.name,
-      phone: session.customer_details.phone,
+      name: session.shipping_details.name,
+      phone: session.shipping_details.phone,
       address: {
-        city: session.customer_details.address.city,
-        country: session.customer_details.address.country,
-        line1: session.customer_details.address.line1,
-        line2: session.customer_details.address.line2,
-        postalCode: session.customer_details.address.postal_code,
-        state: session.customer_details.address.state,
+        city: session.shipping_details.address.city,
+        country: session.shipping_details.address.country,
+        line1: session.shipping_details.address.line1,
+        line2: session.shipping_details.address.line2,
+        postalCode: session.shipping_details.address.postal_code,
+        state: session.shipping_details.address.state,
       },
     },
     totalDetails: {
