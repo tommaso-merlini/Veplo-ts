@@ -102,6 +102,7 @@ export const handleCheckoutCompleted = async (session) => {
       name: user.name,
       surname: user.surname,
       email: user.email,
+      stripeId: user.stripeId,
     },
     recipient: {
       name: session.shipping_details.name,

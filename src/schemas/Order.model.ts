@@ -27,6 +27,10 @@ const OrderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    stripeId: {
+      type: String,
+      required: true,
+    },
   },
   recipient: {
     name: {

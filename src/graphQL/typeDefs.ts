@@ -210,6 +210,7 @@ const typeDefs = gql`
   type UserOrder {
     id: ID
     email: String
+    stripeId: String
     name: String
     surname: String
   }
