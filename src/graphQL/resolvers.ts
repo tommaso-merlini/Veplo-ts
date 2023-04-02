@@ -40,6 +40,7 @@ import { orders } from "./user/queries/order/orders";
 import { editOrder } from "./user/mutations/order/editOrder";
 import { brands } from "./user/queries/constants/brands";
 import { createInformation } from "./user/mutations/Information/createInformation";
+import { order } from "./user/queries/order/order";
 require("dotenv").config();
 
 const resolvers = {
@@ -59,6 +60,7 @@ const resolvers = {
     user,
     cart,
     brands,
+    order,
   },
 
   Mutation: {

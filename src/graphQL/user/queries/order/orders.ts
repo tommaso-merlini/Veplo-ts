@@ -13,19 +13,23 @@ export const orders = async (
   queryInfo
 ) => {
   let orders;
+
   let token;
+
   let checkStatuses;
   if (statuses != null) {
     checkStatuses = { $in: statuses };
   } else {
     checkStatuses = { $exists: true };
   }
+
   if (queryInfo.path.prev.key === "user") {
     orders = await Order.find({
-      "recipient.id": account.id,
+      "user.id": account.id,
       status: checkStatuses,
     });
   }
+
   if (queryInfo.path.prev.key === "shop") {
     //check account token
     if (process.env.NODE_ENV !== "development") {
@@ -36,7 +40,7 @@ export const orders = async (
       }
     } else {
       token = {
-        mongoId: "6410a4d66c8721c863f3d1c8",
+        mongoId: "6421b881ca22d34c3ca1fc52",
         isBusiness: true,
       };
     }
@@ -45,7 +49,7 @@ export const orders = async (
 
     if (process.env.NODE_ENV !== "development")
       //token operations
-      authenticateToken(token.mongoId, shop.businessId, token.isBusiness);
+      authenticateToken(token.mongoId, [shop.businessId], token.isBusiness);
 
     orders = await Order.find({
       "shop.id": account.id,

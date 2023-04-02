@@ -444,6 +444,9 @@ const typeDefs = gql`
     #cart
     cart(id: ID!): Cart!
 
+    #order
+    order(id: ID!): Order
+
     #constants
     brands: [String!]
   }
