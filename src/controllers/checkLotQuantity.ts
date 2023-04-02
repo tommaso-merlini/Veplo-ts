@@ -1,6 +1,6 @@
 import customError from "./errors/customError";
 
-export const checkLotQuantity = (variations) => {
+export const checkLotQuantity = (variations: any) => {
   for (let variation of variations) {
     for (let lot of variation.lots) {
       if (lot.quantity < 0) {

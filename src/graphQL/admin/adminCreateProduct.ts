@@ -8,10 +8,11 @@ import { v4 as uuidv4 } from "uuid";
 import Product from "../../schemas/Product.model";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import customError from "../../controllers/errors/customError";
+import { MutationAdminCreateProductArgs } from "../types/types";
 
 export const adminCreateProduct = async (
-  _,
-  { shopId, options },
+  _: any,
+  { shopId, options }: MutationAdminCreateProductArgs,
   { admin, req, s3Client }: Context
 ) => {
   let token;
@@ -23,7 +24,7 @@ export const adminCreateProduct = async (
     checkFirebaseErrors(e);
   }
 
-  if (!token.isAdmin) {
+  if (!token?.isAdmin) {
     customError({
       code: "403",
       path: "admin",
@@ -64,12 +65,12 @@ export const adminCreateProduct = async (
     discountPercentage = null;
   }
 
-  options.price.discountPercentage = discountPercentage;
+  (options.price as any).discountPercentage = discountPercentage;
 
-  for (let i = 0; i < options.photos.length; i++) {
+  for (let i = 0; i < (options as any).photos.length; i++) {
     promises.push(
       new Promise(async (resolve, reject) => {
-        const { createReadStream } = await options.photos[i];
+        const { createReadStream } = await (options as any).photos[i];
         const stream = await createReadStream();
         // stream.pipe(stream);
         // await finished(stream);

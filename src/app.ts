@@ -10,6 +10,7 @@ var mongoose = require("mongoose");
 // import fs from "fs";
 require("dotenv").config();
 require("events").EventEmitter.defaultMaxListeners = 100;
+// @ts-ignore
 import { graphqlUploadExpress } from "graphql-upload";
 // import cluster from "cluster";
 // import os from "os";

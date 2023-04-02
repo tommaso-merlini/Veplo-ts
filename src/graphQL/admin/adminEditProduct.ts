@@ -72,7 +72,7 @@ const adminEditProduct = async (
 
   //delete the removed photos
   if (options.photos) {
-    handleUpdatedPhotos(product.photos, options.photos);
+    handleUpdatedPhotos(options.photos);
   }
 
   await Product.updateOne({ _id: id }, { ...diffs });

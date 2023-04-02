@@ -38,8 +38,8 @@ export const createShop = async (
 
   checkConstants(options, "shop");
   let { center, city, postCode }: any = await reverseGeocoding(
-    options.address.location.coordinates[0],
-    options.address.location.coordinates[1]
+    (options.address.location as any).coordinates[0],
+    (options.address.location as any).coordinates[1]
   );
 
   const postCodeExists = await checkPostCode(postCode);
@@ -47,7 +47,7 @@ export const createShop = async (
     createPostCode(postCode, city, center);
   }
 
-  options.address.postcode = postCode;
+  (options.address as any).postcode = postCode;
   const newShop = await Shop.create({
     ...options,
     status: "not_active",

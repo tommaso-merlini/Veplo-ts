@@ -52,7 +52,7 @@ export const createProduct = async (
     discountPercentage = null;
   }
 
-  options.price.discountPercentage = discountPercentage;
+  (options.price as any).discountPercentage = discountPercentage;
 
   const newProduct = await Product.create({
     ...options,

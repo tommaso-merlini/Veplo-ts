@@ -1,4 +1,6 @@
+// @ts-ignore
 import { GraphQLUpload } from "graphql-upload";
+
 import { adminCreateProduct } from "./admin/adminCreateProduct";
 import { product } from "./user/queries/product/product";
 import { shop } from "./user/queries/shop/shop";
