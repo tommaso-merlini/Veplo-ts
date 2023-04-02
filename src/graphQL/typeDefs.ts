@@ -201,10 +201,16 @@ const typeDefs = gql`
   }
 
   type RecipientOrder {
-    id: ID
     name: String
     phone: String
     address: UserOrderAddress
+  }
+
+  type UserOrder {
+    id: ID
+    email: String
+    name: String
+    surname: String
   }
 
   type UserOrderAddress {

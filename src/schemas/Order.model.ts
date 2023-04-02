@@ -5,7 +5,6 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  cartId: { type: mongoose.Types.ObjectId, required: true },
   status: {
     type: String,
     required: false,
@@ -14,13 +13,27 @@ const OrderSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  recipient: {
+  user: {
     id: { type: mongoose.Types.ObjectId, required: true },
+    email: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
     },
-    phoneNumber: {
+    surname: {
+      type: String,
+      required: true,
+    },
+  },
+  recipient: {
+    name: {
+      type: String,
+      required: true,
+    },
+    phone: {
       type: String,
       required: true,
     },
@@ -97,6 +110,7 @@ const OrderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    businessId: { type: mongoose.Types.ObjectId, required: true },
   },
   productVariations: [
     {

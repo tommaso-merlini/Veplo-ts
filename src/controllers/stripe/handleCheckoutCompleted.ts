@@ -94,12 +94,16 @@ export const handleCheckoutCompleted = async (session) => {
   }
 
   Order.create({
-    cartId: paymentIntent.metadata.cartId,
     code,
     status,
     createdAt: new Date(),
-    recipient: {
+    user: {
       id: user._id,
+      name: user.name,
+      surname: user.surname,
+      email: user.email,
+    },
+    recipient: {
       name: session.shipping_details.name,
       phone: session.shipping_details.phone,
       address: {
