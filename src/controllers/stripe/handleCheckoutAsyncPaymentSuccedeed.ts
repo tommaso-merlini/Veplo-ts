@@ -126,6 +126,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
       id: shop._id,
       name: shop.name,
       stripeId: business.stripe.id,
+      businessId: business.id,
     },
     shipping: {
       url: null,

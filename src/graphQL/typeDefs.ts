@@ -235,6 +235,7 @@ const typeDefs = gql`
     id: ID
     name: String
     stripeId: String
+    businessId: ID
   }
 
   type ShippingOrder {
