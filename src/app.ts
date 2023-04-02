@@ -160,10 +160,10 @@ async function startServer() {
         try {
           switch (event.type) {
             case "checkout.session.completed":
-              handleCheckoutCompleted(event.data.object);
+              await handleCheckoutCompleted(event.data.object);
               break;
             case "checkout.session.async_payment_succeeded":
-              handleCheckoutAsyncPaymentSuccedeed(event.data.object);
+              await handleCheckoutAsyncPaymentSuccedeed(event.data.object);
               break;
             case "checkout.session.async_payment_failed":
               console.log("bisogna mandare la mail");
