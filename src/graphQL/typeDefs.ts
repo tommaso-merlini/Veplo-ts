@@ -436,7 +436,7 @@ const typeDefs = gql`
 
     #business
     isBusiness: Boolean!
-    business(id: ID): Business
+    business(id: ID!): Business
 
     #user
     user: User

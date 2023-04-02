@@ -1,8 +1,8 @@
 import { Context } from "../../../../../apollo/context";
 
 export const setIsBusiness = async (
-  _,
-  { isBusiness },
+  _: any,
+  { isBusiness }: { isBusiness: Boolean },
   { req, admin }: Context
 ) => {
   const token = await admin.auth().verifyIdToken(req.headers.authorization);

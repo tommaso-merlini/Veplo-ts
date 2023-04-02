@@ -3,7 +3,7 @@ import checkObjectID from "../checkObjectID";
 import Product from "../../schemas/Product.model";
 import customError from "../errors/customError";
 
-const productById = async (id, info?) => {
+const productById = async (id: string, info?: any) => {
   let requestedFields = {};
   checkObjectID(id);
 

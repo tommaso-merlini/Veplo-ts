@@ -19,19 +19,15 @@ import { createBusinessStep1 } from "./user/mutations/business/createBusiness/cr
 import { createStripeAccount } from "./user/mutations/stripe/createStripeAccount";
 import { business } from "./user/queries/business/business";
 import Shop from "../schemas/Shop.model";
-import productByVariationUniqueId from "./user/queries/product/productByVariationUniqueId";
 import { products } from "./user/queries/product/products";
 import { createUser } from "./user/mutations/user/createUser";
 import { user } from "./user/queries/user/user";
 import { editUser } from "./user/mutations/user/editUser";
 import { addToCart } from "./user/mutations/Cart/addToCart";
 import { deleteVariation } from "./user/mutations/variation/deleteVariation";
-import Cart from "../schemas/Cart.model";
 import { cart } from "./user/queries/cart/cart";
 import { editVariation } from "./user/mutations/variation/editvariation";
 import { removeFromCart } from "./user/mutations/Cart/removeFromCart";
-import customError from "../controllers/errors/customError";
-import { last } from "lodash";
 import { carts } from "./user/queries/cart/carts";
 import { deleteCart } from "./user/mutations/Cart/deleteCart";
 import { editCart } from "./user/mutations/Cart/editCart";
@@ -41,6 +37,8 @@ import { editOrder } from "./user/mutations/order/editOrder";
 import { brands } from "./user/queries/constants/brands";
 import { createInformation } from "./user/mutations/Information/createInformation";
 import { order } from "./user/queries/order/order";
+import { createVariation } from "./user/mutations/variation/createVariation";
+import { ShopProductsArgs } from "./types/types";
 require("dotenv").config();
 
 const resolvers = {
@@ -55,7 +53,6 @@ const resolvers = {
     isBusiness,
     shops,
     business,
-    productByVariationUniqueId,
     products,
     user,
     cart,
@@ -79,6 +76,7 @@ const resolvers = {
     createUser,
     editUser,
     addToCart,
+    createVariation,
     deleteVariation,
     editVariation,
     removeFromCart,
@@ -90,7 +88,7 @@ const resolvers = {
   },
 
   Shop: {
-    products: async (shop, { limit, offset, see }) => {
+    products: async (shop: any, { limit, offset, see }: ShopProductsArgs) => {
       let status: any = "active";
       if (see === "everything") {
         status = { $exists: true };
@@ -108,7 +106,7 @@ const resolvers = {
   },
 
   Business: {
-    shops: async (business, { _ }) => {
+    shops: async (business: any) => {
       const shops = await Shop.find({
         businessId: business.id,
       });

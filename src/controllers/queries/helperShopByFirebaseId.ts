@@ -1,9 +1,8 @@
 import getRequestedFields from "../getRequestedFields";
-import checkObjectID from "../checkObjectID";
 import Shop from "../../schemas/Shop.model";
 import customError from "../errors/customError";
 
-const helperShopByFirebaseId = async (firebaseId, info?) => {
+const helperShopByFirebaseId = async (firebaseId: string, info: any) => {
   let requestedFields = {};
 
   if (info) {

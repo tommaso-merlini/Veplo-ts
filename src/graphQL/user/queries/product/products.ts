@@ -1,28 +1,28 @@
-import { size } from "lodash";
+import { QueryProductsArgs } from "src/graphQL/types/types";
 import customError from "../../../../controllers/errors/customError";
 import getRequestedFields from "../../../../controllers/getRequestedFields";
-import capByCap from "../../../../controllers/queries/capByCap";
+// import capByCap from "../../../../controllers/queries/capByCap";
 import Product from "../../../../schemas/Product.model";
 
 export const products = async (
-  _,
-  { limit, sort, offset, filters },
-  __,
-  info
+  _: any,
+  { limit, sort, offset, filters }: QueryProductsArgs,
+  __: any,
+  info: any
 ) => {
   // const searchedCap = await capByCap(filters.cap);
 
   // const coordinates = searchedCap.location.coordinates;
   // const latitude = coordinates[0];
   // const longitude = coordinates[1];
-  const gender = filters.gender;
-  const macroCategory = filters.macroCategory;
-  const microCategory = filters.microCategory;
-  const brand = filters.brand;
-  const sizes = filters.sizes;
-  const colors = filters.colors;
+  const gender = filters?.gender;
+  const macroCategory = filters?.macroCategory;
+  const microCategory = filters?.microCategory;
+  const brand = filters?.brand;
+  const sizes = filters?.sizes;
+  const colors = filters?.colors;
   let checkSort: any = { score: -1 };
-  console.log(filters.minPrice);
+  console.log(filters?.minPrice);
   if (sort != null) {
     switch (sort.for) {
       case "price":
@@ -45,10 +45,10 @@ export const products = async (
     }
   }
   const checkName = () => {
-    if (filters.name != null) {
+    if (filters?.name != null) {
       return {
         text: {
-          query: filters.name,
+          query: filters?.name,
           path: "name",
           score: { boost: { value: 1 } },
           fuzzy: {
@@ -89,7 +89,7 @@ export const products = async (
     }
   };
   const checkMacroCategory = () => {
-    if (filters.macroCategory != null && filters.macroCategory != "") {
+    if (filters?.macroCategory != null && filters?.macroCategory != "") {
       return { "info.macroCategory": macroCategory };
     } else {
       return {};
@@ -97,7 +97,7 @@ export const products = async (
   };
 
   const checkMicroCategory = () => {
-    if (filters.microCategory != null && filters.microCategory != "") {
+    if (filters?.microCategory != null && filters?.microCategory != "") {
       return { "info.microCategory": microCategory };
     } else {
       return {};
@@ -105,15 +105,15 @@ export const products = async (
   };
 
   const checkMaxPrice = () => {
-    if (filters.maxPrice != null) {
+    if (filters?.maxPrice != null) {
       return {
         // $or: [
         //   { "price.v2": { $lte: filters.maxPrice } },
         //   { "price.v1": { $lte: filters.maxPrice } },
         // ],
         $ifNull: [
-          { "price.v2": { $lte: filters.maxPrice } },
-          { "price.v1": { $lte: filters.maxPrice } },
+          { "price.v2": { $lte: filters?.maxPrice } },
+          { "price.v1": { $lte: filters?.maxPrice } },
         ],
       };
     } else {
@@ -122,13 +122,13 @@ export const products = async (
   };
 
   const checkMinPrice = () => {
-    if (filters.minPrice != null) {
+    if (filters?.minPrice != null) {
       return {
         // $ifNull: [
         //   { "price.v2": { $gte: filters.minPrice } },
         //   { "price.v1": { $gte: filters.minPrice } },
         // ],
-        gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters.minPrice],
+        gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters?.minPrice],
       };
     } else {
       return {};
@@ -146,6 +146,8 @@ export const products = async (
   const checkQuantity = () => {
     if (sizes !== null) {
       return { $or: [{ quantity: null }, { quantity: { $gt: 0 } }] };
+    } else {
+      return {};
     }
   };
 

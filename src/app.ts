@@ -1,26 +1,25 @@
-// @ts-nocheck
-
-import express from "express";
+import express, { Response } from "express";
 import apolloserver from "../apollo/apolloserver";
 import chalk from "chalk";
-import rateLimit from "express-rate-limit";
-import { GraphQLError } from "graphql";
+// import rateLimit from "express-rate-limit";
+// import { GraphQLError } from "graphql";
 import initMongoose from "../mongoose/initMongoose";
 var mongoose = require("mongoose");
-import bodyParser from "body-parser";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import fs from "fs";
+// import bodyParser from "body-parser";
+// import { PutObjectCommand } from "@aws-sdk/client-s3";
+// import fs from "fs";
 require("dotenv").config();
 require("events").EventEmitter.defaultMaxListeners = 100;
 import { graphqlUploadExpress } from "graphql-upload";
-import cluster from "cluster";
-import os from "os";
+// import cluster from "cluster";
+// import os from "os";
 import { v4 as uuidv4 } from "uuid";
 import stripe from "../stripe/stripe";
 import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated";
 import { constants } from "../constants/constants";
 import { handleCheckoutCompleted } from "./controllers/stripe/handleCheckoutCompleted";
 import { handleCheckoutAsyncPaymentSuccedeed } from "./controllers/stripe/handleCheckoutAsyncPaymentSuccedeed";
+// import Stripe from "stripe";
 
 process.on("uncaughtException", function (err) {
   const errorId = uuidv4();
@@ -40,24 +39,25 @@ process.on("uncaughtException", function (err) {
 
 const app = express();
 const port = process.env.PORT || 3000;
-const numCpus = os.cpus().length;
-let endpointSecretCheckout;
-let endpointSecretAccount;
-let endpointSecret;
+// const numCpus = os.cpus().length;
+let endpointSecretCheckout: string;
+let endpointSecretAccount: string;
 
 if (process.env.NODE_ENV === "development") {
-  endpointSecretAccount = process.env.STRIPE_WEBHOOK_SECRET_DEV;
-  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_SECRET_DEV;
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_SECRET_DEV || "";
+  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_SECRET_DEV || "";
 }
 
 if (process.env.NODE_ENV === "testing") {
-  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_TEST;
-  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_TEST;
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_TEST || "";
+  endpointSecretCheckout =
+    process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_TEST || "";
 }
 
 if (process.env.NODE_ENV === "production") {
-  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_PROD;
-  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_PROD;
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_PROD || "";
+  endpointSecretCheckout =
+    process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_PROD || "";
 }
 
 async function startServer() {
@@ -67,7 +67,7 @@ async function startServer() {
   //   }
   // } else {
   await initMongoose();
-  mongoose.connection.on("connected", async function (ref) {
+  mongoose.connection.on("connected", async function () {
     console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
     app.use(graphqlUploadExpress());
 
@@ -76,17 +76,17 @@ async function startServer() {
 
     // app.use(limiter);
 
-    app.get("/", (req, res) => {
+    app.get("/", (res: Response) => {
       res.send({ status: "ok" });
     });
 
-    app.get("/brands", (req, res) => {
+    app.get("/brands", (res: Response) => {
       const brands = constants.brands;
 
       res.send(brands);
     });
 
-    app.get("/categories", (req, res) => {
+    app.get("/categories", (res: Response) => {
       const categories = constants.genders;
 
       res.send(categories);
@@ -99,7 +99,7 @@ async function startServer() {
       express.raw({ type: "application/json" }),
       async (request, response) => {
         console.log("eiii");
-        const sig = request.headers["stripe-signature"];
+        const sig: any = request.headers["stripe-signature"];
 
         let event;
 
@@ -141,7 +141,7 @@ async function startServer() {
       "/webhook/checkout",
       express.raw({ type: "application/json" }),
       async (request, response) => {
-        const sig = request.headers["stripe-signature"];
+        const sig: any = request.headers["stripe-signature"];
 
         let event;
 
@@ -196,7 +196,7 @@ async function startServer() {
   });
 
   // If the connection throws an error
-  mongoose.connection.on("error", function (err) {
+  mongoose.connection.on("error", function (err: Error) {
     console.error(
       chalk.bgRed.black("Failed to connect to MongoDB on startup "),
       err

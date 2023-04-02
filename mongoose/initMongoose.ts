@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-import chalk from "chalk";
 require("dotenv").config();
 
-let databaseUrl;
+let databaseUrl: string | undefined;
 
 if (process.env.NODE_ENV === "production") {
   databaseUrl = process.env.PROD_DATABASE_URL;

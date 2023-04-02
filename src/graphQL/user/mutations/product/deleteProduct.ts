@@ -1,15 +1,14 @@
+import { MutationDeleteProductArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import deleteFromSpaces from "../../../../controllers/deleteFromSpaces";
 import productById from "../../../../controllers/queries/productById";
 import Product from "../../../../schemas/Product.model";
-import { isBusiness } from "../../queries/business/isBusiness";
 
 export const deleteProduct = async (
-  _,
-  { id },
-  { admin, req, s3Client }: Context
+  _: any,
+  { id }: MutationDeleteProductArgs,
+  { admin, req }: Context
 ) => {
   let token;
   if (process.env.NODE_ENV !== "development") {
@@ -32,9 +31,9 @@ export const deleteProduct = async (
   // if (process.env.NODE_ENV !== "development")
   //token operations
   authenticateToken(
-    token.mongoId,
+    token?.mongoId,
     product.shopInfo.businessId,
-    token.isBusiness
+    token?.isBusiness
   );
 
   await Product.findByIdAndRemove(id);

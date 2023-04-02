@@ -1,3 +1,8 @@
+import {
+  CartProductVariation,
+  Lot,
+  MutationAddToCartArgs,
+} from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
@@ -5,15 +10,15 @@ import Cart from "../../../../schemas/Cart.model";
 import Product from "../../../../schemas/Product.model";
 
 export const addToCart = async (
-  _,
-  { productVariationId, quantity, size },
+  _: any,
+  { productVariationId, quantity, size }: MutationAddToCartArgs,
   { admin, req }: Context
 ) => {
   let token;
   let isVariationDuplicate;
   let searchedVariation;
   let sizeMatches = false;
-  let variationIndex;
+  let variationIndex = 0;
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -48,14 +53,16 @@ export const addToCart = async (
   }
 
   //check if the specified size is contained in the product
-  product.variations.forEach((variation, index) => {
-    if (variation.id === productVariationId) {
-      variationIndex = index;
-      searchedVariation = variation;
+  product.variations.forEach(
+    (variation: CartProductVariation, index: number) => {
+      if (variation.id === productVariationId) {
+        variationIndex = index;
+        searchedVariation = variation;
+      }
     }
-  });
+  );
 
-  product.variations[variationIndex].lots.forEach((lot) => {
+  product.variations[variationIndex].lots.forEach((lot: Lot) => {
     if (lot.size === size) {
       sizeMatches = true;
     }
@@ -70,13 +77,13 @@ export const addToCart = async (
   }
 
   const cart = await Cart.findOne({
-    userId: token.mongoId,
+    userId: token?.mongoId,
     "shopInfo.id": product.shopInfo.id,
   });
 
   if (cart) {
     //vedere se la variation e' gia' presente nel carrello
-    cart.productVariations.forEach(async (variation) => {
+    cart.productVariations.forEach(async (variation: CartProductVariation) => {
       if (
         variation.variationId == productVariationId &&
         variation.size == size
@@ -117,7 +124,7 @@ export const addToCart = async (
 
   if (!cart) {
     await Cart.create({
-      userId: token.mongoId,
+      userId: token?.mongoId,
       status: "active",
       shopInfo: product.shopInfo,
       productVariations: [{ variationId: productVariationId, size, quantity }],

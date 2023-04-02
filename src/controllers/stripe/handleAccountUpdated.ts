@@ -1,11 +1,11 @@
 import Business from "../../schemas/Business.model";
 
-export const handleAccountUpdated = async (object) => {
+export const handleAccountUpdated = async (object: any) => {
   const id = object.id;
   const chargesEnabled = object.charges_enabled;
   const detailsSumbitted = object.details_submitted;
   const payoutsEnabled = object.payouts_enabled;
-  const metadata = object.metedata;
+  // const metadata = object.metedata;
 
   // console.log(`id: ${id}`);
   // console.log(`chargesEnabled: ${chargesEnabled}`);

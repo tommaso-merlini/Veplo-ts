@@ -1,9 +1,10 @@
+import { Lot, User, VariationProductInfo } from "src/graphQL/types/types";
 import Cart from "../../../../schemas/Cart.model";
 import Product from "../../../../schemas/Product.model";
 
-export const carts = async (user, { _ }) => {
-  const variationsIds = [];
-  const variations = [];
+export const carts = async (user: User) => {
+  const variationsIds: string[] = [];
+  const variations: any[] = [];
   const warnings = [];
   //get every carts of the user
   const carts = await Cart.find({
@@ -14,8 +15,8 @@ export const carts = async (user, { _ }) => {
   // console.log(carts.queryPlanner.winningPlan.inputStage);
 
   //get every variationId
-  carts.forEach((cart) => {
-    cart.productVariations.forEach((variation) => {
+  carts.forEach((cart: any) => {
+    cart.productVariations.forEach((variation: any) => {
       variationsIds.push(variation.variationId);
     });
   });
@@ -30,9 +31,9 @@ export const carts = async (user, { _ }) => {
   //check if all products exists or have status: true
   variationsIds.forEach((id, index) => {
     let exists = false;
-    products.forEach((product) => {
-      product.variations.forEach((variation) => {
-        if (variation._id.toString() === id.toString()) {
+    products.forEach((product: any) => {
+      product.variations.forEach((variation: VariationProductInfo) => {
+        if (variation.id.toString() === id.toString()) {
           exists = true;
         }
       });
@@ -42,12 +43,14 @@ export const carts = async (user, { _ }) => {
       variationsIds.splice(index, 1);
 
       //eliminare variation dal cart
-      carts.forEach((cart, cartIndex) => {
-        cart.productVariations.forEach((variation, variationIdex) => {
-          if (variation.variationId.toString() === id.toString()) {
-            carts[cartIndex].productVariations.splice(variationIdex, 1);
+      carts.forEach((cart: any, cartIndex: number) => {
+        cart.productVariations.forEach(
+          (variation: any, variationIdex: number) => {
+            if (variation.variationId.toString() === id.toString()) {
+              carts[cartIndex].productVariations.splice(variationIdex, 1);
+            }
           }
-        });
+        );
       });
 
       console.log(carts);
@@ -64,12 +67,12 @@ export const carts = async (user, { _ }) => {
   });
 
   //get every variation of every product
-  products.forEach((product) => {
+  products.forEach((product: any) => {
     // if (!product) {
     //   console.log("non ce piu");
     // }
 
-    product.variations.forEach((variation) => {
+    product.variations.forEach((variation: any) => {
       variations.push({
         _id: variation._id,
         productId: product._id,
@@ -107,7 +110,7 @@ export const carts = async (user, { _ }) => {
           let isSizeOk = false;
           let lastQuantity;
 
-          variations[variationIndex].lots.forEach((lot, index, array) => {
+          variations[variationIndex].lots.forEach((lot: Lot) => {
             lastQuantity =
               carts[cartIndex].productVariations[cartVariationIndex].quantity;
 
@@ -250,11 +253,11 @@ export const carts = async (user, { _ }) => {
   }
 
   //calculate the total for each cart
-  carts.forEach((cart) => {
+  carts.forEach((cart: any) => {
     let total = 0;
     let subTotal;
 
-    cart.productVariations.forEach((variation) => {
+    cart.productVariations.forEach((variation: any) => {
       if (variation.price.v2 != null) {
         subTotal = variation.price.v2 * variation.quantity;
       } else {

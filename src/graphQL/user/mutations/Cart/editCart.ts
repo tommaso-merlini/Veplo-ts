@@ -1,3 +1,8 @@
+import {
+  EditLotsInput,
+  MutationEditCartArgs,
+  ProductVariation,
+} from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
@@ -5,15 +10,15 @@ import Cart from "../../../../schemas/Cart.model";
 import Product from "../../../../schemas/Product.model";
 
 export const editCart = async (
-  _,
-  { productVariationId, quantity, size },
+  _: any,
+  { productVariationId, quantity, size }: MutationEditCartArgs,
   { admin, req }: Context
 ) => {
   let token;
   let isVariationDuplicate;
-  let searchedVariation;
+  let searchedVariation: ProductVariation;
   let sizeMatches = false;
-  let variationIndex;
+  let variationIndex = 0;
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -48,14 +53,14 @@ export const editCart = async (
   }
 
   //check if the specified size is contained in the product
-  product.variations.forEach((variation, index) => {
+  product.variations.forEach((variation: ProductVariation, index: number) => {
     if (variation.id === productVariationId) {
       variationIndex = index;
       searchedVariation = variation;
     }
   });
 
-  product.variations[variationIndex].lots.forEach((lot) => {
+  product.variations[variationIndex].lots.forEach((lot: EditLotsInput) => {
     if (lot.size === size) {
       sizeMatches = true;
       if (lot.quantity < quantity) {
@@ -77,7 +82,7 @@ export const editCart = async (
   }
 
   const cart = await Cart.findOne({
-    userId: token.mongoId,
+    userId: token?.mongoId,
     "shopInfo.id": product.shopInfo.id,
   });
 
@@ -175,11 +180,12 @@ export const editCart = async (
       });
     }
     await Cart.create({
-      userId: token.mongoId,
+      userId: token?.mongoId,
       status: "active",
       shopInfo: product.shopInfo,
       productVariations: [{ variationId: productVariationId, size, quantity }],
     });
     return true;
   }
+  return true;
 };

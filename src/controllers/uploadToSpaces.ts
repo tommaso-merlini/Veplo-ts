@@ -3,10 +3,10 @@ import streamToBlob from "./streamToBlob";
 import { v4 as uuidv4 } from "uuid";
 import s3Client from "../../spaces/s3Client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { finished } from "stream/promises";
+// import { finished } from "stream/promises";
 require("dotenv").config();
 
-const uploadToSpaces = async (photos, shop?) => {
+const uploadToSpaces = async (photos: any, shop: any) => {
   let imageIds = [];
   let resolutionWidth = 1528;
   let resolutionHeight = 2200;

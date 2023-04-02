@@ -1,10 +1,9 @@
 import getRequestedFields from "../getRequestedFields";
 import checkObjectID from "../checkObjectID";
-import Shop from "../../schemas/Shop.model";
 import customError from "../errors/customError";
 import User from "../../schemas/User.model";
 
-const userById = async (id, info?) => {
+const userById = async (id: string, info?: any) => {
   let requestedFields = {};
   checkObjectID(id);
 

@@ -13,7 +13,7 @@ export interface Context {
   stripe: typeof stripe;
 }
 
-export const context = async ({ req }) => {
+export const context = async ({ req }: any) => {
   return {
     req,
     resolvers,

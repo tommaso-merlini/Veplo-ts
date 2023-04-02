@@ -1,7 +1,7 @@
 /*
  * Recursively merge properties of two objects
  */
-function getDiffs(obj1, obj2) {
+function getDiffs(obj1: any, obj2: any) {
   let diffs = {};
   let merge = obj1;
   let isDifferent = false;

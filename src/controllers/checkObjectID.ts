@@ -1,4 +1,4 @@
-const checkObjectID = (id) => {
+const checkObjectID = (id: string) => {
   id = String(id);
   if (id.match(/^[0-9a-fA-F]{24}$/)) {
   } else {

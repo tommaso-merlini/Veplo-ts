@@ -8,10 +8,9 @@ import Business from "../../schemas/Business.model";
 import customError from "../errors/customError";
 import { deleteCartById } from "../mutations/deleteCartById";
 import { generateCode } from "../generateCode";
-import { getStatus } from "../getStatus";
 import { removeBoughtQuantityFromVariation } from "../removeBoughtQuantityFromVariation";
 
-export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
+export const handleCheckoutAsyncPaymentSuccedeed = async (session: any) => {
   const paymentIntentId = session.payment_intent;
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
   const variationsIds = [];

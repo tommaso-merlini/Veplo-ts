@@ -1,3 +1,9 @@
+import {
+  CartProductVariation,
+  EditLotsInput,
+  MutationRemoveFromCartArgs,
+  ProductVariation,
+} from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
@@ -5,15 +11,15 @@ import Cart from "../../../../schemas/Cart.model";
 import Product from "../../../../schemas/Product.model";
 
 export const removeFromCart = async (
-  _,
-  { productVariationId, quantity, size },
+  _: any,
+  { productVariationId, quantity, size }: MutationRemoveFromCartArgs,
   { admin, req }: Context
 ) => {
   let token;
   let isVariationDuplicate;
   let searchedVariation;
   let sizeMatches = false;
-  let variationIndex;
+  let variationIndex = 0;
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -39,14 +45,14 @@ export const removeFromCart = async (
   }
 
   //check if the specified size is contained in the product
-  product.variations.forEach((variation, index) => {
+  product.variations.forEach((variation: ProductVariation, index: number) => {
     if (variation.id === productVariationId) {
       variationIndex = index;
       searchedVariation = variation;
     }
   });
 
-  product.variations[variationIndex].lots.forEach((lot) => {
+  product.variations[variationIndex].lots.forEach((lot: EditLotsInput) => {
     if (lot.size === size) {
       sizeMatches = true;
     }
@@ -61,13 +67,13 @@ export const removeFromCart = async (
   }
 
   const cart = await Cart.findOne({
-    userId: token.mongoId,
+    userId: token?.mongoId,
     "shopInfo.id": product.shopInfo.id,
   });
 
   if (cart) {
     //vedere se la variation e' gia' presente nel carrello
-    cart.productVariations.forEach(async (variation) => {
+    cart.productVariations.forEach(async (variation: CartProductVariation) => {
       if (
         variation.variationId == productVariationId &&
         variation.size == size

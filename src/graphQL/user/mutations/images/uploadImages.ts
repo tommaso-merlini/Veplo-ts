@@ -4,11 +4,13 @@ import streamToBlob from "../../../../controllers/streamToBlob";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { MutationUploadImagesArgs } from "src/graphQL/types/types";
+import { Context } from "apollo/context";
 
 export const uploadImages = async (
-  _,
-  { images, proportion },
-  { s3Client, admin, req }
+  _: any,
+  { images, proportion }: MutationUploadImagesArgs,
+  { s3Client, admin, req }: Context
 ) => {
   let token: any = {
     user_id: "prova",
@@ -49,7 +51,7 @@ export const uploadImages = async (
   }
   for (let i = 0; i < images.length; i++) {
     promises.push(
-      new Promise(async (resolve, reject) => {
+      new Promise(async (resolve) => {
         const { createReadStream } = await images[i];
         const stream = await createReadStream();
         // stream.pipe(stream);

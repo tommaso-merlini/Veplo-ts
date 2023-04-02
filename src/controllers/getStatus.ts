@@ -1,4 +1,4 @@
-export const getStatus = (status) => {
+export const getStatus = (status: string) => {
   let returnedStatus;
 
   if (status !== "paid") {

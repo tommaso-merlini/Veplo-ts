@@ -1,7 +1,6 @@
-import deleteFromSpaces from "./deleteFromSpaces";
 import customError from "./errors/customError";
 
-const handleUpdatedPhotos = async (photos, updatedPhotos) => {
+const handleUpdatedPhotos = async (updatedPhotos: string[]) => {
   if (updatedPhotos.length < 2) {
     customError({
       code: "400",

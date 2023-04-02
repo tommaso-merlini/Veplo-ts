@@ -5,14 +5,18 @@ import customError from "../../../../controllers/errors/customError";
 import Product from "../../../../schemas/Product.model";
 import lodash from "lodash";
 import { checkLotQuantity } from "../../../../controllers/checkLotQuantity";
+import {
+  MutationEditVariationArgs,
+  ProductVariation,
+} from "src/graphQL/types/types";
 
 export const editVariation = async (
-  _,
-  { id, options },
+  _: any,
+  { id, options }: MutationEditVariationArgs,
   { admin, req }: Context
 ) => {
   let token;
-  let variationIndex;
+  let variationIndex = 0;
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -36,8 +40,8 @@ export const editVariation = async (
   }
 
   //get the variation index
-  product.variations.forEach((variation, index) => {
-    if (variation._id == id) {
+  product.variations.forEach((variation: ProductVariation, index: number) => {
+    if (variation.id == id) {
       variationIndex = index;
     }
   });
@@ -57,9 +61,9 @@ export const editVariation = async (
   if (process.env.NODE_ENV !== "development")
     //token operations
     authenticateToken(
-      token.mongoId,
+      token?.mongoId,
       product.shopInfo.businessId,
-      token.isBusiness
+      token?.isBusiness
     );
 
   await Product.updateOne(

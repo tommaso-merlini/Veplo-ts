@@ -1,11 +1,12 @@
+import { MutationCreateUserArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
 import User from "../../../../schemas/User.model";
 
 export const createUser = async (
-  _,
-  { options },
+  _: any,
+  { options }: MutationCreateUserArgs,
   { req, admin, stripe }: Context
 ) => {
   //token operations
@@ -21,11 +22,12 @@ export const createUser = async (
       user_id: "prova",
       email: "tommaso3.prova@gmail.com",
       mongoId: "63fcea8f60c595a4975d71dc",
+      isBusiness: false,
     };
   }
 
   //check the account belongs to a user
-  if (token.isBusiness && process.env.NODE_ENV !== "development") {
+  if (token?.isBusiness && process.env.NODE_ENV !== "development") {
     throw Object.assign(new Error("Error"), {
       extensions: {
         customCode: "403",
@@ -50,46 +52,46 @@ export const createUser = async (
 
   //check if there are any users with se same email
   const userWithSameEmail = await User.findOne({
-    email: token.email,
+    email: token?.email,
   });
 
   if (userWithSameEmail) {
     customError({
       code: "409",
       path: "user",
-      message: `a user with email ${token.email} already exists`,
+      message: `a user with email ${token?.email} already exists`,
     });
   }
 
   //create user into stripe
   const customer = await stripe.customers.create({
-    email: token.email,
+    email: token?.email,
     name: `${options.name} ${options.surname}`,
     preferred_locales: ["IT"],
     metadata: {
-      firebaseId: token.user_id,
+      firebaseId: token?.user_id,
     },
   });
 
   const newUser = await User.create({
     ...options,
     createdAt: new Date(),
-    firebaseId: token.user_id,
+    firebaseId: token?.user_id,
     stripeId: customer.id,
-    email: token.email,
+    email: token?.email,
   });
 
   await stripe.customers.update(customer.id, {
     metadata: {
-      firebaseId: token.user_id,
+      firebaseId: token?.user_id,
       mongoId: newUser.id,
     },
   });
 
   if (process.env.NODE_ENV !== "development") {
-    await admin.auth().setCustomUserClaims(token.user_id, {
+    await admin.auth().setCustomUserClaims(token?.user_id, {
       isBusiness: false,
-      firebaseId: token.user_id,
+      firebaseId: token?.user_id,
       mongoId: newUser.id,
     });
   }

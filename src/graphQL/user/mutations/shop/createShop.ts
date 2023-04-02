@@ -1,13 +1,17 @@
+import { MutationCreateShopArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkConstants from "../../../../controllers/checkConstants";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import { checkPostCode } from "../../../../controllers/checkPostCode";
 import { createPostCode } from "../../../../controllers/createPostCode";
 import { reverseGeocoding } from "../../../../controllers/reverseGeocoding";
-import uploadToSpaces from "../../../../controllers/uploadToSpaces";
 import Shop from "../../../../schemas/Shop.model";
 
-export const createShop = async (_, { options }, { req, admin }: Context) => {
+export const createShop = async (
+  _: any,
+  { options }: MutationCreateShopArgs,
+  { req, admin }: Context
+) => {
   //token operations
   let token: any = {
     user_id: "prova",

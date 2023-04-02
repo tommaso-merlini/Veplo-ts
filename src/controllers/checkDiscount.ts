@@ -1,4 +1,4 @@
-const checkDiscount = (discount) => {
+const checkDiscount = (discount: number) => {
   if (discount >= 100 || discount <= 0) {
     throw Object.assign(new Error("Error"), {
       extensions: {

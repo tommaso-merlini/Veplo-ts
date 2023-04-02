@@ -1,14 +1,16 @@
+import {
+  MutationCreateVariationArgs,
+  ProductVariationInput,
+} from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import deleteFromSpaces from "../../../../controllers/deleteFromSpaces";
 import customError from "../../../../controllers/errors/customError";
-import productById from "../../../../controllers/queries/productById";
 import Product from "../../../../schemas/Product.model";
 
-export const deleteVariation = async (
-  _,
-  { productId, options },
+export const createVariation = async (
+  _: any,
+  { productId, options }: MutationCreateVariationArgs,
   { admin, req }: Context
 ) => {
   let token;
@@ -30,7 +32,7 @@ export const deleteVariation = async (
     });
   }
 
-  product.variations.forEach((variation) => {
+  product.variations.forEach((variation: ProductVariationInput) => {
     if (variation.color === options.color) {
       customError({
         code: "409",
@@ -43,9 +45,9 @@ export const deleteVariation = async (
   if (process.env.NODE_ENV !== "development")
     //token operations
     authenticateToken(
-      token.mongoId,
+      token?.mongoId,
       product.shopInfo.businessId,
-      token.isBusiness
+      token?.isBusiness
     );
 
   await Product.updateOne(

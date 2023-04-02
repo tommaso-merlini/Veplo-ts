@@ -5,10 +5,11 @@ import orderById from "../../../../controllers/queries/orderById";
 import lodash from "lodash";
 import Order from "../../../../schemas/Order.model";
 import customError from "../../../../controllers/errors/customError";
+import { MutationEditOrderArgs } from "src/graphQL/types/types";
 
 export const editOrder = async (
-  _,
-  { id, options },
+  _: any,
+  { id, options }: MutationEditOrderArgs,
   { admin, req }: Context
 ) => {
   let token;
@@ -28,7 +29,7 @@ export const editOrder = async (
   }
 
   //if the user is not an amdin
-  if (token.isAdmin !== true) {
+  if (token?.isAdmin !== true) {
     if (options.url != null) {
       //can't modify the url
       delete options.url;
@@ -51,7 +52,7 @@ export const editOrder = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token.mongoId, order.shop.businessId, token.isBusiness);
+    authenticateToken(token?.mongoId, order.shop.businessId, token?.isBusiness);
 
   const orderShipping = order.shipping;
 

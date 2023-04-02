@@ -1,10 +1,7 @@
-import getRequestedFields from "../getRequestedFields";
-import checkObjectID from "../checkObjectID";
-import Product from "../../schemas/Product.model";
 import Cap from "../../schemas/Cap.model";
 import customError from "../errors/customError";
 
-const capByCap = async (cap) => {
+const capByCap = async (cap: string) => {
   const searchedCap = await Cap.findOne({
     cap: cap,
   });

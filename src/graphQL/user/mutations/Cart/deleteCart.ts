@@ -1,8 +1,13 @@
+import { MutationDeleteCartArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import Cart from "../../../../schemas/Cart.model";
 
-export const deleteCart = async (_, { shopId }, { admin, req }: Context) => {
+export const deleteCart = async (
+  _: any,
+  { shopId }: MutationDeleteCartArgs,
+  { admin, req }: Context
+) => {
   let token;
   if (process.env.NODE_ENV !== "development") {
     try {
@@ -17,7 +22,7 @@ export const deleteCart = async (_, { shopId }, { admin, req }: Context) => {
   }
 
   await Cart.findOneAndDelete({
-    userId: token.mongoId,
+    userId: token?.mongoId,
     "shopInfo.id": shopId,
   });
 

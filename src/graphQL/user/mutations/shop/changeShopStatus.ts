@@ -1,3 +1,4 @@
+import { MutationChangeShopStatusArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
@@ -6,8 +7,8 @@ import Product from "../../../../schemas/Product.model";
 import Shop from "../../../../schemas/Shop.model";
 
 export const changeShopStatus = async (
-  _,
-  { id, status },
+  _: any,
+  { id, status }: MutationChangeShopStatusArgs,
   { admin, req }: Context
 ) => {
   let token;
@@ -23,12 +24,12 @@ export const changeShopStatus = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token.mongoId, shop.id, token.isBusiness);
+    authenticateToken(token?.mongoId, shop.id, token?.isBusiness);
 
   await Shop.updateOne({ _id: id }, { status: status });
 
   await Product.updateMany(
-    { "shopInfo.id": token.mongoId },
+    { "shopInfo.id": token?.mongoId },
     {
       $set: {
         "shopInfo.status": status,

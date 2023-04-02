@@ -1,11 +1,12 @@
+import { MutationCreateStripeAccountArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import businessById from "../../../../controllers/queries/businessById";
 import Business from "../../../../schemas/Business.model";
 
 export const createStripeAccount = async (
-  _,
-  { businessName, vatNumber, phone },
+  _: any,
+  { businessName, vatNumber, phone }: MutationCreateStripeAccountArgs,
   { admin, req, stripe }: Context
 ) => {
   let token;
@@ -25,7 +26,7 @@ export const createStripeAccount = async (
     };
   }
 
-  if (!token.isBusiness && process.env.NODE_ENV !== "development") {
+  if (!token?.isBusiness && process.env.NODE_ENV !== "development") {
     throw Object.assign(new Error("Error"), {
       extensions: {
         customCode: "403",
@@ -35,7 +36,7 @@ export const createStripeAccount = async (
     });
   }
 
-  const business = await businessById(token.mongoId);
+  const business = await businessById(token?.mongoId);
 
   if (business.stripe.id != null) {
     return business.stripe.id;
@@ -44,7 +45,7 @@ export const createStripeAccount = async (
   const account = await stripe.accounts.create({
     type: "express",
     country: "IT",
-    email: token.email,
+    email: token?.email,
     capabilities: {
       card_payments: { requested: true },
       transfers: { requested: true },
@@ -59,8 +60,8 @@ export const createStripeAccount = async (
     //   tax_id: vatNumber,
     // },
     metadata: {
-      firebaseId: token.user_id,
-      mongoId: token.mongoId,
+      firebaseId: token?.user_id,
+      mongoId: token?.mongoId,
     },
     settings: {
       payouts: {
@@ -74,7 +75,7 @@ export const createStripeAccount = async (
   });
 
   await Business.updateOne(
-    { _id: token.mongoId },
+    { _id: token?.mongoId },
     {
       businessName,
       phone,

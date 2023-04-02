@@ -1,9 +1,14 @@
+import { MutationEditUserArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
 import User from "../../../../schemas/User.model";
 
-export const editUser = async (_, { options }, { admin, req }: Context) => {
+export const editUser = async (
+  _: any,
+  { options }: MutationEditUserArgs,
+  { admin, req }: Context
+) => {
   let token;
 
   if (process.env.NODE_ENV !== "development") {
@@ -31,7 +36,7 @@ export const editUser = async (_, { options }, { admin, req }: Context) => {
     });
   }
 
-  await User.updateOne({ _id: token.mongoId }, { ...options });
+  await User.updateOne({ _id: token?.mongoId }, { ...options });
 
   return true;
 };

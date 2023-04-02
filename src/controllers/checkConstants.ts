@@ -1,6 +1,7 @@
+import { EditLotsInput, ProductVariationInput } from "src/graphQL/types/types";
 import { clothes_sizes, constants } from "../../constants/constants";
 
-const checkConstants = (obj, is: String) => {
+const checkConstants = (obj: any, is: String) => {
   if (is !== "product" && is !== "shop") {
     throw new Error("is can only be 'shop' or 'product");
   }
@@ -8,7 +9,7 @@ const checkConstants = (obj, is: String) => {
   if (is === "product") {
     const product = obj;
 
-    let macroCategoryIndex;
+    let macroCategoryIndex: number = 0;
     let macroCategory;
 
     //---CHECK GENDER
@@ -21,7 +22,7 @@ const checkConstants = (obj, is: String) => {
       for (let i = 0; i < constants.genders.uomo.abbigliamento.length; i++) {
         if (
           product.info.macroCategory ===
-          constants.genders.uomo.abbigliamento[i].name
+          constants.genders.uomo.abbigliamento[i]?.name
         ) {
           macroCategoryIndex = i;
         }
@@ -39,7 +40,7 @@ const checkConstants = (obj, is: String) => {
       for (let i = 0; i < constants.genders.donna.abbigliamento.length; i++) {
         if (
           product.info.macroCategory ===
-          constants.genders.donna.abbigliamento[i].name
+          constants.genders.donna.abbigliamento[i]?.name
         ) {
           macroCategoryIndex = i;
         }
@@ -54,8 +55,9 @@ const checkConstants = (obj, is: String) => {
     }
 
     //---CHECK COLORS
-    const areColorsOk = product.variations.every((variation) =>
-      constants.colors.includes(variation.color)
+    const areColorsOk = product.variations.every(
+      (variation: ProductVariationInput) =>
+        constants.colors.includes(variation.color)
     );
 
     if (!areColorsOk)
@@ -64,8 +66,8 @@ const checkConstants = (obj, is: String) => {
       );
 
     //---CHECK SIZES
-    product.variations.forEach((variation) => {
-      variation.lots.forEach((lot) => {
+    product.variations.forEach((variation: ProductVariationInput) => {
+      variation.lots.forEach((lot: EditLotsInput) => {
         if (!clothes_sizes.includes(lot.size)) {
           throw new Error(
             `la taglia ${lot.size}, del prodotto di colore ${variation.color}, non e' una taglia accettata`
@@ -82,13 +84,13 @@ const checkConstants = (obj, is: String) => {
       );
 
     //---CHECK MICRO-CATEGORY
-    const isMicroCategoryOk = macroCategory.types.includes(
+    const isMicroCategoryOk = macroCategory?.types.includes(
       product.info.microCategory
     );
 
     if (!isMicroCategoryOk) {
       throw new Error(
-        `micro-category ${product.microCategory} non e' accetata per macro-category ${macroCategory.name}, micro-categories accetate per ${macroCategory.name}: ${macroCategory.types}`
+        `micro-category ${product.microCategory} non e' accetata per macro-category ${macroCategory?.name}, micro-categories accetate per ${macroCategory?.name}: ${macroCategory?.types}`
       );
     }
 

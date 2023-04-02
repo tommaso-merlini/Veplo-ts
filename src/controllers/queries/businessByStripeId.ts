@@ -2,7 +2,7 @@ import getRequestedFields from "../getRequestedFields";
 import Shop from "../../schemas/Shop.model";
 import customError from "../errors/customError";
 
-const businessByStripeId = async (stripeId, info?) => {
+const businessByStripeId = async (stripeId: string, info: any) => {
   let requestedFields = {};
 
   if (info) {

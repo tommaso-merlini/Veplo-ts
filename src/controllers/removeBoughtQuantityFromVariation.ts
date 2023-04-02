@@ -1,6 +1,9 @@
+import { ProductVariationsOrder } from "src/graphQL/types/types";
 import Product from "../schemas/Product.model";
 
-export const removeBoughtQuantityFromVariation = async (variations) => {
+export const removeBoughtQuantityFromVariation = async (
+  variations: ProductVariationsOrder[]
+) => {
   console.log(variations);
   for (let variation of variations) {
     const ciao = await Product.updateOne(

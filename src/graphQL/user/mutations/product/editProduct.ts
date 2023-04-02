@@ -1,18 +1,16 @@
+import { MutationEditProductArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkConstants from "../../../../controllers/checkConstants";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import getDiffs from "../../../../controllers/getDiffs";
 import handlePriceEdit from "../../../../controllers/handlePriceEdit";
-import handleUpdatedPhotos from "../../../../controllers/handleUpdatedPhotos";
-import mergeDeep from "../../../../controllers/mergeDeep";
 import productById from "../../../../controllers/queries/productById";
 import Product from "../../../../schemas/Product.model";
 import lodash from "lodash";
 
 export const editProduct = async (
-  _,
-  { id, options },
+  _: any,
+  { id, options }: MutationEditProductArgs,
   { admin, req }: Context
 ) => {
   let token;
@@ -44,16 +42,16 @@ export const editProduct = async (
   //token operations
   if (process.env.NODE_ENV !== "development")
     authenticateToken(
-      token.mongoId,
+      token?.mongoId,
       product.shopInfo.businessId,
-      token.isBusiness
+      token?.isBusiness
     );
 
   const mergedProduct = lodash.merge(product, options);
 
   //if the price is modified
   if (options.price) {
-    mergedProduct.price = handlePriceEdit(options);
+    mergedProduct.price = handlePriceEdit(options.price);
   }
 
   console.log("==================================");
@@ -62,11 +60,6 @@ export const editProduct = async (
 
   //check the validity of the fields based on the constants
   checkConstants(mergedProduct, "product");
-
-  //delete the removed photos
-  if (options.photos) {
-    handleUpdatedPhotos(product.photos, options.photos);
-  }
 
   await Product.updateOne({ _id: id }, mergedProduct);
 

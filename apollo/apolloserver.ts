@@ -1,6 +1,5 @@
 import { ApolloServer } from "apollo-server-express";
 import {
-  ApolloError,
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageDisabled,
 } from "apollo-server-core";

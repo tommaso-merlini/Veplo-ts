@@ -1,8 +1,8 @@
-import { Blob } from "buffer";
+import { Stream } from "stream";
 
-const streamToBlob = (stream) => {
+const streamToBlob = (stream: Stream) => {
   return new Promise((resolve, reject) => {
-    const chunks = [];
+    const chunks: Buffer[] = [];
     stream
       .on("data", (chunk) => chunks.push(chunk))
       .once("end", () => {

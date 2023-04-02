@@ -1,26 +1,43 @@
+import {
+  CartProductVariation,
+  MutationCheckoutArgs,
+} from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
 import businessById from "../../../../controllers/queries/businessById";
 import userById from "../../../../controllers/queries/userById";
-import Business from "../../../../schemas/Business.model";
 import Cart from "../../../../schemas/Cart.model";
 import Product from "../../../../schemas/Product.model";
-import User from "../../../../schemas/User.model";
 require("dotenv").config();
 
 export const checkout = async (
   _,
-  { shopId },
+  { shopId }: MutationCheckoutArgs,
   { admin, req, stripe }: Context
 ) => {
   //TODO calcolare amount
   let token;
   const lineItems = [];
   const variations = [];
-  const variationsIds = [];
+  const variationsIds: string[] = [];
   const variationsInCart = [];
-  const variationsInCartWithSize = [];
+  const veploFee: number | undefined = +process.env.VEPLO_FEE;
+  const transactionFeePercentage: number | undefined =
+    +process.env.TRANSACTION_FEE_PERCENTAGE;
+  const transactionFeeFixed: number | undefined =
+    +process.env.TRANSACTION_FEE_FIXED;
+  if (
+    veploFee == undefined ||
+    transactionFeePercentage == undefined ||
+    transactionFeeFixed == undefined
+  ) {
+    customError({
+      code: "400",
+      path: "checkout",
+      message: "internal server error, contact the assistency",
+    });
+  }
   let successUrl;
   let shippingRate;
   let cancelUrl;
@@ -53,7 +70,7 @@ export const checkout = async (
   }
 
   const cart = await Cart.findOne({
-    userId: token.mongoId,
+    userId: token?.mongoId,
     "shopInfo.id": shopId,
   });
 
@@ -73,11 +90,11 @@ export const checkout = async (
     cancelUrl = `https://www.veplo.it/checkout/${shopId}`;
   }
 
-  const user = await userById(token.mongoId);
+  const user = await userById(token?.mongoId);
   const business = await businessById(cart.shopInfo.businessId);
 
   //get variationsids
-  cart.productVariations.forEach((variation) => {
+  cart.productVariations.forEach((variation: CartProductVariation) => {
     variationsIds.push(variation.variationId);
   });
 
@@ -190,10 +207,6 @@ export const checkout = async (
     }
   }
 
-  const veploFee: number = +process.env.VEPLO_FEE;
-  const transactionFeePercentage: number =
-    +process.env.TRANSACTION_FEE_PERCENTAGE;
-  const transactionFeeFixed: number = +process.env.TRANSACTION_FEE_FIXED;
   if (total < 5) {
     customError({
       code: "400",
@@ -218,14 +231,14 @@ export const checkout = async (
     // automatic_payment_methods: { enabled: true },
 
     payment_intent_data: {
-      description: `checkout ordine di user ${token.mongoId}`,
+      description: `checkout ordine di user ${token?.mongoId}`,
       metadata: {
-        userId: token.mongoId,
+        userId: token?.mongoId,
         shopId: cart.shopInfo.id.toString(),
         businessId: cart.shopInfo.businessId.toString(),
         cartId: cart._id.toString(),
       },
-      receipt_email: token.email,
+      receipt_email: token?.email,
       setup_future_usage: "off_session",
       application_fee_amount: applicationFeeAmount,
       transfer_data: {

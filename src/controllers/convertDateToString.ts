@@ -1,4 +1,4 @@
-const convertDateToString = (date) => {
+const convertDateToString = (date: any) => {
   const string = date.$date;
   return string;
 };

@@ -1,4 +1,3 @@
-import { GraphQLError } from "graphql";
 import { admin } from "../../firebase/firebase";
 require("dotenv").config();
 

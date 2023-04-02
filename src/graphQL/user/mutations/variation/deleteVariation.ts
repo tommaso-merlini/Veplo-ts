@@ -1,12 +1,15 @@
+import { MutationDeleteVariationArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import deleteFromSpaces from "../../../../controllers/deleteFromSpaces";
 import customError from "../../../../controllers/errors/customError";
-import productById from "../../../../controllers/queries/productById";
 import Product from "../../../../schemas/Product.model";
 
-export const deleteVariation = async (_, { id }, { admin, req }: Context) => {
+export const deleteVariation = async (
+  _: any,
+  { id }: MutationDeleteVariationArgs,
+  { admin, req }: Context
+) => {
   let token;
   if (process.env.NODE_ENV !== "development") {
     try {
@@ -42,9 +45,9 @@ export const deleteVariation = async (_, { id }, { admin, req }: Context) => {
   if (process.env.NODE_ENV !== "development")
     //token operations
     authenticateToken(
-      token.mongoId,
+      token?.mongoId,
       product.shopInfo.businessId,
-      token.isBusiness
+      token?.isBusiness
     );
 
   await Product.updateOne(

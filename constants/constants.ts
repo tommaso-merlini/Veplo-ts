@@ -1,4 +1,4 @@
-import { brands } from "../brands.js";
+import { brands } from "../brands";
 
 export const clothes_sizes = [
   "xxs",

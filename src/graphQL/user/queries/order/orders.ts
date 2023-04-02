@@ -1,16 +1,15 @@
+import { ShopOrdersArgs } from "src/graphQL/types/types";
 import { Context } from "../../../../../apollo/context";
 import authenticateToken from "../../../../controllers/authenticateToken";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import shopById from "../../../../controllers/queries/shopById";
-import Cart from "../../../../schemas/Cart.model";
 import Order from "../../../../schemas/Order.model";
-import Product from "../../../../schemas/Product.model";
 
 export const orders = async (
-  account,
-  { statuses },
+  account: any,
+  { statuses }: ShopOrdersArgs,
   { admin, req }: Context,
-  queryInfo
+  queryInfo: any
 ) => {
   let orders;
 
@@ -49,7 +48,7 @@ export const orders = async (
 
     if (process.env.NODE_ENV !== "development")
       //token operations
-      authenticateToken(token.mongoId, [shop.businessId], token.isBusiness);
+      authenticateToken(token?.mongoId, [shop.businessId], token?.isBusiness);
 
     orders = await Order.find({
       "shop.id": account.id,

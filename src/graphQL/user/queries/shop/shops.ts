@@ -1,8 +1,14 @@
+import { QueryShopsArgs } from "src/graphQL/types/types";
 import getRequestedFields from "../../../../controllers/getRequestedFields";
-import capByCap from "../../../../controllers/queries/capByCap";
+// import capByCap from "../../../../controllers/queries/capByCap";
 import Shop from "../../../../schemas/Shop.model";
 
-export const shops = async (_, { range, limit, offset, filters }, __, info) => {
+export const shops = async (
+  _: any,
+  { limit, offset, filters }: QueryShopsArgs,
+  __: any,
+  info: any
+) => {
   // const searchedCap = await capByCap(filters.cap);
 
   // const coordinates = searchedCap.location.coordinates;

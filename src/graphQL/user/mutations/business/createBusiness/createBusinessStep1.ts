@@ -2,7 +2,11 @@ import { Context } from "../../../../../../apollo/context";
 import checkFirebaseErrors from "../../../../../controllers/checkFirebaseErrors";
 import Business from "../../../../../schemas/Business.model";
 
-export const createBusinessStep1 = async (_, {}, { req, admin }: Context) => {
+export const createBusinessStep1 = async (
+  _: any,
+  {},
+  { req, admin }: Context
+) => {
   //token operations
   let token: any = {
     user_id: "prova",

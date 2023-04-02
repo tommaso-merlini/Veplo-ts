@@ -1,6 +1,11 @@
-const handlePriceEdit = (options) => {
-  let price = options.price;
-  if (options.price.v1 <= 0) {
+import { PriceInput } from "src/graphQL/types/types";
+
+interface Price extends PriceInput {
+  discountPercentage?: number;
+}
+
+const handlePriceEdit = (price: Price) => {
+  if (price.v1 <= 0) {
     throw Object.assign(new Error("Error"), {
       extensions: {
         customCode: "400",
@@ -9,8 +14,8 @@ const handlePriceEdit = (options) => {
       },
     });
   }
-  if (options.price.v2) {
-    if (options.price.v2 <= 0) {
+  if (price.v2) {
+    if (price.v2 <= 0) {
       throw Object.assign(new Error("Error"), {
         extensions: {
           customCode: "400",
@@ -19,7 +24,7 @@ const handlePriceEdit = (options) => {
         },
       });
     }
-    if (options.price.v1 < options.price.v2) {
+    if (price.v1 < price.v2) {
       throw Object.assign(new Error("Error"), {
         extensions: {
           customCode: "400",
@@ -28,18 +33,15 @@ const handlePriceEdit = (options) => {
         },
       });
     }
-    let discountPercentage = +(
-      100 -
-      (100 * options.price.v2) / options.price.v1
-    ).toFixed(2);
+    let discountPercentage = +(100 - (100 * price.v2) / price.v1).toFixed(2);
     price = {
-      v1: options.price.v1,
-      v2: options.price.v2,
+      v1: price.v1,
+      v2: price.v2,
       discountPercentage: discountPercentage,
     };
   } else {
     price = {
-      v1: options.price.v1,
+      v1: price.v1,
     };
   }
 

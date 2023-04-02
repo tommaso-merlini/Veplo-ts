@@ -3,19 +3,14 @@ import authenticateToken from "../../../../controllers/authenticateToken";
 import checkConstants from "../../../../controllers/checkConstants";
 import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import shopById from "../../../../controllers/queries/shopById";
-import streamToBlob from "../../../../controllers/streamToBlob";
-import { v4 as uuidv4 } from "uuid";
-import sharp from "sharp";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1";
 import Product from "../../../../schemas/Product.model";
-import { forEach } from "lodash";
-import customError from "../../../../controllers/errors/customError";
 import { checkLotQuantity } from "../../../../controllers/checkLotQuantity";
+import { MutationCreateProductArgs } from "src/graphQL/types/types";
 
 export const createProduct = async (
   _,
-  { shopId, options },
+  { shopId, options }: MutationCreateProductArgs,
   { admin, req }: Context
 ) => {
   let token;
@@ -28,6 +23,8 @@ export const createProduct = async (
   } else {
     token = {
       firebaseId: "prova",
+      mongoId: "",
+      isBusiness: true,
     };
   }
 
@@ -43,10 +40,10 @@ export const createProduct = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token.mongoId, shop.businessId, token.isBusiness);
+    authenticateToken(token?.mongoId, shop.businessId, token?.isBusiness);
 
   //calculate discount
-  let discountPercentage = +(
+  let discountPercentage: number | null = +(
     100 -
     (100 * options.price.v2) / options.price.v1
   ).toFixed(2);
