@@ -75,6 +75,8 @@ export const checkout = async (
 
   const user = await userById(token.mongoId);
   const business = await businessById(cart.shopInfo.businessId);
+  console.log(token.mongoId);
+  console.log(cart.shopInfo.businessId);
 
   //get variationsids
   cart.productVariations.forEach((variation) => {
