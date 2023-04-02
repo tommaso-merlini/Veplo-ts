@@ -77,17 +77,17 @@ async function startServer() {
 
     // app.use(limiter);
 
-    app.get("/", (res: Response) => {
+    app.get("/", (req, res: Response) => {
       res.send({ status: "ok" });
     });
 
-    app.get("/brands", (res: Response) => {
+    app.get("/brands", (req, res: Response) => {
       const brands = constants.brands;
 
       res.send(brands);
     });
 
-    app.get("/categories", (res: Response) => {
+    app.get("/categories", (req, res: Response) => {
       const categories = constants.genders;
 
       res.send(categories);
