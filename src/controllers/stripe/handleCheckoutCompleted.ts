@@ -93,7 +93,7 @@ export const handleCheckoutCompleted = async (session) => {
     }
   }
 
-  Order.create({
+  await Order.create({
     code,
     status,
     createdAt: new Date(),
@@ -137,7 +137,7 @@ export const handleCheckoutCompleted = async (session) => {
     productVariations: variationsInCartWithSize,
   });
 
-  deleteCartById(cart._id);
+  await deleteCartById(cart._id);
 
-  removeBoughtQuantityFromVariation(variationsInCartWithSize);
+  await removeBoughtQuantityFromVariation(variationsInCartWithSize);
 };

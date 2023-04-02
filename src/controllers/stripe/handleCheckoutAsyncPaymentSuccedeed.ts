@@ -93,7 +93,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     }
   }
 
-  Order.create({
+  await Order.create({
     code,
     status,
     createdAt: new Date(),
@@ -106,7 +106,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     },
     recipient: {
       name: session.shipping_details.name,
-      phone: session.shipping_details.phone,
+      phone: session.customer_details.phone,
       address: {
         city: session.shipping_details.address.city,
         country: session.shipping_details.address.country,
@@ -137,7 +137,7 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session) => {
     productVariations: variationsInCartWithSize,
   });
 
-  deleteCartById(cart._id);
+  await deleteCartById(cart._id);
 
-  removeBoughtQuantityFromVariation(variationsInCartWithSize);
+  await removeBoughtQuantityFromVariation(variationsInCartWithSize);
 };

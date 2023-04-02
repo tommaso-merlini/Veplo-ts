@@ -175,6 +175,7 @@ async function startServer() {
               }
           }
         } catch (e) {
+          console.log("ciao");
           console.log(err.message);
           response.status(400).send(`Error: ${e.message}`);
           return;
