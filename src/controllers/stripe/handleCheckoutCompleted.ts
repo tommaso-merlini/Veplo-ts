@@ -106,7 +106,7 @@ export const handleCheckoutCompleted = async (session) => {
     },
     recipient: {
       name: session.shipping_details.name,
-      phone: session.shipping_details.phone,
+      phone: session.customer_details.phone,
       address: {
         city: session.shipping_details.address.city,
         country: session.shipping_details.address.country,

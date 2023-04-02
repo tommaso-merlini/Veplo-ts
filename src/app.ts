@@ -127,7 +127,7 @@ async function startServer() {
               }
           }
         } catch (e) {
-          // console.log(err.message);
+          console.log(e.message);
           response.status(400).send(`Error: ${e.message}`);
           return;
         }
@@ -176,7 +176,7 @@ async function startServer() {
           }
         } catch (e) {
           console.log("ciao");
-          console.log(err.message);
+          console.log(e.message);
           response.status(400).send(`Error: ${e.message}`);
           return;
         }
