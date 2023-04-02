@@ -193,6 +193,7 @@ const typeDefs = gql`
     status: String
     code: String
     createdAt: String
+    user: UserOrder
     recipient: RecipientOrder
     totalDetails: TotalDetailsOrder
     shop: ShopOrder
