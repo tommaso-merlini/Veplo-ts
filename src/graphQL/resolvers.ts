@@ -41,6 +41,8 @@ import { createInformation } from "./user/mutations/Information/createInformatio
 import { order } from "./user/queries/order/order";
 import { createVariation } from "./user/mutations/variation/createVariation";
 import { ShopProductsArgs } from "./types/types";
+import { refund } from "./user/mutations/stripe/refund";
+import { productsNotAvailableRefund } from "./user/mutations/stripe/productsNotAvailableRefund";
 require("dotenv").config();
 
 const resolvers = {
@@ -87,6 +89,8 @@ const resolvers = {
     checkout,
     editOrder,
     createInformation,
+    refund,
+    productsNotAvailableRefund,
   },
 
   Shop: {

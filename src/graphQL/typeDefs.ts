@@ -409,6 +409,13 @@ const typeDefs = gql`
     phone: String!
   }
 
+  input productsNotAvailableInput {
+    productId: ID!
+    variationId: ID!
+    size: String!
+    reason: String
+  }
+
   #=============QUERIES=================
 
   type Query {
@@ -480,6 +487,11 @@ const typeDefs = gql`
       phone: String!
     ): String
     checkout(shopId: ID!): String
+    refund(checkoutSessionId: String): Boolean
+    productsNotAvailableRefund(
+      orderId: ID!
+      productsNotAvailable: [productsNotAvailableInput!]
+    ): Boolean
 
     #cart
     addToCart(productVariationId: ID!, size: String!, quantity: Int!): Boolean

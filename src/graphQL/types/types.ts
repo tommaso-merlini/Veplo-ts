@@ -186,6 +186,8 @@ export type Mutation = {
   editProduct: Scalars['ID'];
   editUser?: Maybe<Scalars['Boolean']>;
   editVariation?: Maybe<Scalars['Boolean']>;
+  productsNotAvailableRefund?: Maybe<Scalars['Boolean']>;
+  refund?: Maybe<Scalars['Boolean']>;
   removeFromCart?: Maybe<Scalars['Boolean']>;
   setIsBusiness: Scalars['Boolean'];
   uploadImages: Array<Scalars['String']>;
@@ -312,6 +314,17 @@ export type MutationEditVariationArgs = {
 };
 
 
+export type MutationProductsNotAvailableRefundArgs = {
+  orderId: Scalars['ID'];
+  productsNotAvailable: Array<ProductsNotAvailableInput>;
+};
+
+
+export type MutationRefundArgs = {
+  checkoutSessionId?: InputMaybe<Scalars['String']>;
+};
+
+
 export type MutationRemoveFromCartArgs = {
   productVariationId: Scalars['ID'];
   quantity: Scalars['Int'];
@@ -343,6 +356,7 @@ export type OpeningInput = {
 export type Order = {
   __typename?: 'Order';
   cartId?: Maybe<Scalars['ID']>;
+  checkoutSessionId?: Maybe<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
@@ -693,4 +707,11 @@ export type VariationProductInfoInfo = {
   gender?: Maybe<Scalars['String']>;
   macroCategory?: Maybe<Scalars['String']>;
   microCategory?: Maybe<Scalars['String']>;
+};
+
+export type ProductsNotAvailableInput = {
+  productId: Scalars['ID'];
+  reason?: InputMaybe<Scalars['String']>;
+  size: Scalars['String'];
+  variationId: Scalars['ID'];
 };
