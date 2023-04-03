@@ -223,12 +223,11 @@ export const products = async (
         },
       },
     },
-    // {
-    //   $match: {
-    //     status: "active",
-    //     //! "shopInfo.status": "active",
-    //   },
-    // },
+    {
+      $match: {
+        "shopInfo.status": "active",
+      },
+    },
 
     {
       $match: {
