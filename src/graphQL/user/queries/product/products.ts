@@ -50,7 +50,7 @@ export const products = async (
         text: {
           query: filters?.name,
           path: "name",
-          score: { boost: { value: 1 } },
+          score: { boost: { value: 10 } },
           fuzzy: {
             maxEdits: 2,
             prefixLength: 4,
