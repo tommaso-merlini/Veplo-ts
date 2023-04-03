@@ -13,6 +13,10 @@ const OrderSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  checkoutSessionId: {
+    type: String,
+    required: true,
+  },
   user: {
     id: { type: mongoose.Types.ObjectId, required: true },
     email: {
