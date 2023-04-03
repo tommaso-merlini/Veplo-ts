@@ -107,14 +107,14 @@ export const products = async (
   const checkMaxPrice = () => {
     if (filters?.maxPrice != null) {
       return {
-        // $or: [
-        //   { "price.v2": { $lte: filters.maxPrice } },
-        //   { "price.v1": { $lte: filters.maxPrice } },
-        // ],
-        $ifNull: [
-          { "price.v2": { $lte: filters?.maxPrice } },
-          { "price.v1": { $lte: filters?.maxPrice } },
-        ],
+        $expr: {
+          $lte: [
+            {
+              $ifNull: ["$price.v2", "$price.v1"],
+            },
+            filters.maxPrice,
+          ],
+        },
       };
     } else {
       return {};
@@ -124,11 +124,14 @@ export const products = async (
   const checkMinPrice = () => {
     if (filters?.minPrice != null) {
       return {
-        // $ifNull: [
-        //   { "price.v2": { $gte: filters.minPrice } },
-        //   { "price.v1": { $gte: filters.minPrice } },
-        // ],
-        gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters?.minPrice],
+        $expr: {
+          $gte: [
+            {
+              $ifNull: ["$price.v2", "$price.v1"],
+            },
+            filters.minPrice,
+          ],
+        },
       };
     } else {
       return {};
