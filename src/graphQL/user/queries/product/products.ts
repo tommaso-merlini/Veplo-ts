@@ -181,7 +181,7 @@ export const products = async (
           ],
 
           should: [
-            //!get the best ranked name on the top of the list
+            //get the best ranked name on the top of the list
             checkName(),
             //boost score based on how young the product is
             {
