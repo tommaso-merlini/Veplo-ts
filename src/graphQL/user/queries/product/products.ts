@@ -183,6 +183,7 @@ export const products = async (
           should: [
             //!get the best ranked name on the top of the list
             checkName(),
+            //boost score based on how young the product is
             {
               near: {
                 path: "updatedAt",
@@ -190,11 +191,12 @@ export const products = async (
                 pivot: 7776000000,
                 score: {
                   boost: {
-                    value: 1,
+                    value: 3,
                   },
                 },
               },
             },
+            //boost products with higher discount percentage
             {
               near: {
                 path: "price.discountPercentage",
@@ -207,10 +209,11 @@ export const products = async (
                 },
               },
             },
+            //boost products based on how many times it has been bought
             {
               near: {
                 path: "orderCounter",
-                origin: 1000,
+                origin: 100,
                 pivot: 1,
                 score: {
                   boost: {

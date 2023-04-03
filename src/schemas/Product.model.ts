@@ -96,6 +96,9 @@ ProductSchema.index({
       updatedAt: {
         type: "date",
       },
+      orderCounter: {
+        type: "number",
+      },
       status: {
         type: "string",
       },
