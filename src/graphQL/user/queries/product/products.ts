@@ -21,6 +21,8 @@ export const products = async (
   const brand = filters?.brand;
   const sizes = filters?.sizes;
   const colors = filters?.colors;
+  const daysPivot = 90;
+  const datePivot = daysPivot * 24 * 60 * 60 * 1000;
   let checkSort: any = { score: -1 };
   console.log(filters?.minPrice);
   if (sort != null) {
@@ -188,7 +190,7 @@ export const products = async (
               near: {
                 path: "updatedAt",
                 origin: new Date(),
-                pivot: 7776000000,
+                pivot: datePivot * 24 * 60 * 60 * 1000, //the first number is the days
                 score: {
                   boost: {
                     value: 3,
