@@ -41,7 +41,7 @@ export const productsNotAvailableRefund = async (
 
   if (process.env.NODE_ENV !== "development")
     //token operations
-    authenticateToken(token?.mongoId, shop.businessId, token?.isBusiness);
+    authenticateToken(token?.mongoId, [shop.businessId], token?.isBusiness);
 
   const session = await stripe.checkout.sessions.retrieve(
     order.checkoutSessionId

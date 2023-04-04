@@ -43,7 +43,7 @@ export const editProduct = async (
   if (process.env.NODE_ENV !== "development")
     authenticateToken(
       token?.mongoId,
-      product.shopInfo.businessId,
+      [product.shopInfo.businessId],
       token?.isBusiness
     );
 
