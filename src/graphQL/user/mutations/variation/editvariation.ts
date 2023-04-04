@@ -62,7 +62,7 @@ export const editVariation = async (
     //token operations
     authenticateToken(
       token?.mongoId,
-      product.shopInfo.businessId,
+      [product.shopInfo.businessId],
       token?.isBusiness
     );
 

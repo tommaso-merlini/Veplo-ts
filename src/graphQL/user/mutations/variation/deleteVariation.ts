@@ -46,7 +46,7 @@ export const deleteVariation = async (
     //token operations
     authenticateToken(
       token?.mongoId,
-      product.shopInfo.businessId,
+      [product.shopInfo.businessId],
       token?.isBusiness
     );
 

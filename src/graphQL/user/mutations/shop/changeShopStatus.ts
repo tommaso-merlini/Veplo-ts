@@ -24,7 +24,7 @@ export const changeShopStatus = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token?.mongoId, shop.id, token?.isBusiness);
+    authenticateToken(token?.mongoId, [shop.id], token?.isBusiness);
 
   await Shop.updateOne({ _id: id }, { status: status });
 

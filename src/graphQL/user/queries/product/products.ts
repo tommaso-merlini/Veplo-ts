@@ -24,7 +24,6 @@ export const products = async (
   const daysPivot = 90;
   const datePivot = daysPivot * 24 * 60 * 60 * 1000;
   let checkSort: any = { score: -1 };
-  console.log(filters?.minPrice);
   if (sort != null) {
     switch (sort.for) {
       case "price":
@@ -162,18 +161,6 @@ export const products = async (
         index: "ProductSearchIndex",
         compound: {
           must: [
-            // {
-            //   geoWithin: {
-            //     path: "location",
-            //     circle: {
-            //       center: {
-            //         type: "Point",
-            //         coordinates: [latitude, longitude],
-            //       },
-            //       radius: range,
-            //     },
-            //   },
-            // },
             {
               text: {
                 path: "status",
@@ -253,23 +240,11 @@ export const products = async (
               },
             },
           },
-          // {
-          //   variations: {
-          //     lots: {
-          //       $elemMatch: {
-          //         $and: [checkQuantity()],
-          //       },
-          //     },
-          //   },
-          // },
           checkGender(),
           checkMacroCategory(),
           checkMicroCategory(),
           checkBrands(),
           checkMinPrice(),
-          // {
-          //   gte: [{ $ifNull: ["price.v2", "price.v1"] }, filters.minPrice],
-          // },
           checkMaxPrice(),
         ],
       },

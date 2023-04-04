@@ -52,7 +52,11 @@ export const editOrder = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token?.mongoId, order.shop.businessId, token?.isBusiness);
+    authenticateToken(
+      token?.mongoId,
+      [order.shop.businessId],
+      token?.isBusiness
+    );
 
   const orderShipping = order.shipping;
 
