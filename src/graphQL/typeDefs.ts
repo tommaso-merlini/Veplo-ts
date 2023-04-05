@@ -16,6 +16,7 @@ const typeDefs = gql`
     name: String
     city: String
     status: String
+    businessStatus: String
   }
 
   type Opening {
@@ -128,6 +129,7 @@ const typeDefs = gql`
   type Shop {
     id: ID
     businessId: ID
+    businessStatus: String
     name: String
     createdAt: String
     status: String

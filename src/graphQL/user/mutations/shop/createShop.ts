@@ -6,6 +6,7 @@ import { checkPostCode } from "../../../../controllers/checkPostCode.js";
 import { createPostCode } from "../../../../controllers/createPostCode.js";
 import { reverseGeocoding } from "../../../../controllers/reverseGeocoding.js";
 import Shop from "../../../../schemas/Shop.model.js";
+import businessById from "../../../../../src/controllers/queries/businessById.js";
 
 export const createShop = async (
   _: any,
@@ -49,10 +50,13 @@ export const createShop = async (
     createPostCode(postCode, city, center);
   }
 
+  const business = await businessById(token.mongoId);
+
   (options.address as any).postcode = postCode;
   const newShop = await Shop.create({
     ...options,
     status: "not_active",
+    businessStatus: business.status,
     createdAt: new Date(),
     businessId: token.mongoId,
   });

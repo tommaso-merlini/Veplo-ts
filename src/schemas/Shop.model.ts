@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 
-// mongoose.set("useCreateIndex", true);
-
 const ShopSchema = new mongoose.Schema({
   businessId: { type: mongoose.Types.ObjectId, required: true },
+  businessStatus: { type: String, required: true },
   name: {
     type: String,
     required: true,

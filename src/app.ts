@@ -111,7 +111,6 @@ async function startServer() {
       "/webhook/account",
       express.raw({ type: "application/json" }),
       async (request, response) => {
-        console.log("eiii");
         const sig: any = request.headers["stripe-signature"];
 
         let event;

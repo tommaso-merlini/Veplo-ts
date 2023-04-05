@@ -64,6 +64,7 @@ const ProductSchema = new mongoose.Schema({
       required: true,
     },
     status: { type: String, required: true },
+    businessStatus: { type: String, required: true },
   },
   variations: [
     {
