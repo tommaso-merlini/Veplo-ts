@@ -6,14 +6,10 @@
 // require("firebase/analytics");
 
 // Add the Firebase products that you want to use
-import "firebase/auth";
-import "firebase/firestore";
-import "@firebase/messaging";
 import dotenv from "dotenv";
 dotenv.config();
 
 import admin from "firebase-admin";
-const FieldValue = admin.firestore.FieldValue;
 
 // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
 const dev_firebaseConfig = {
@@ -36,10 +32,6 @@ const prod_firebaseconfig = {
 };
 
 let serviceAccount;
-
-// console.log("===============================");
-// console.log(JSON.parse(JSON.stringify(process.env.PROD_FIREBASE_SERVICE_ACCOUNT)));
-// console.log("===============================");
 
 if (process.env.NODE_ENV === "production") {
   serviceAccount = {
@@ -73,8 +65,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as any),
 });
 
-const db = admin.firestore();
-
 let firebaseConfig;
 
 if (process.env.NODE_ENV === "production") {
@@ -83,6 +73,4 @@ if (process.env.NODE_ENV === "production") {
   firebaseConfig = dev_firebaseConfig;
 }
 
-// const app = initializeApp(firebaseConfig);
-
-export { admin, db, FieldValue };
+export { admin };
