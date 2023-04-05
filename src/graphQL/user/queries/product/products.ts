@@ -10,11 +10,6 @@ export const products = async (
   __: any,
   info: any
 ) => {
-  // const searchedCap = await capByCap(filters.cap);
-
-  // const coordinates = searchedCap.location.coordinates;
-  // const latitude = coordinates[0];
-  // const longitude = coordinates[1];
   const gender = filters?.gender;
   const macroCategory = filters?.macroCategory;
   const microCategory = filters?.microCategory;
