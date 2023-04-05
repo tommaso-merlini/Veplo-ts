@@ -4,7 +4,7 @@ import checkFirebaseErrors from "../../controllers/checkFirebaseErrors";
 import shopById from "../../controllers/queries/shopById";
 import streamToBlob from "../../controllers/streamToBlob";
 import sharp from "sharp";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import Product from "../../schemas/Product.model";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import customError from "../../controllers/errors/customError";
@@ -80,7 +80,7 @@ export const adminCreateProduct = async (
 
         const newBlob = await streamToBlob(blob);
 
-        const id = uuidv4();
+        const id = crypto.randomUUID();
 
         const params: any = {
           Bucket: process.env.BUCKET_NAME, // The path to the directory you want to upload the object to, starting with your Space name.

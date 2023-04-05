@@ -2,7 +2,7 @@ import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
 import customError from "../../../../controllers/errors/customError";
 import streamToBlob from "../../../../controllers/streamToBlob";
 import sharp from "sharp";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { MutationUploadImagesArgs } from "src/graphQL/types/types";
 import { Context } from "apollo/context";
@@ -62,7 +62,7 @@ export const uploadImages = async (
 
         const newBlob = await streamToBlob(blob);
 
-        const id = uuidv4();
+        const id = crypto.randomUUID();
 
         const params: any = {
           Bucket: "veplo-images", // The path to the directory you want to upload the object to, starting with your Space name.

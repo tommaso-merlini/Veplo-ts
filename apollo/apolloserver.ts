@@ -8,7 +8,7 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "../src/graphQL/typeDefs";
 import resolvers from "../src/graphQL/resolvers";
 import { context } from "./context";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -36,7 +36,7 @@ const apolloserver = new ApolloServer({
       path = "graphql fields";
     }
 
-    const errorId = uuidv4();
+    const errorId = crypto.randomUUID();
     console.log("================================================");
     console.log(`errorId: ${errorId}`);
     console.log(`path: ${path}`);
@@ -62,8 +62,8 @@ const apolloserver = new ApolloServer({
           name: err.extensions.customMessage,
           code: err.extensions.customCode,
           path: err.extensions.customPath,
-          message: "Internal Server Error",
           id: errorId,
+          message: "Internal Server Error",
         };
       }
     }

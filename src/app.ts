@@ -14,7 +14,7 @@ require("events").EventEmitter.defaultMaxListeners = 100;
 import { graphqlUploadExpress } from "graphql-upload";
 // import cluster from "cluster";
 // import os from "os";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import stripe from "../stripe/stripe";
 import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated";
 import { constants } from "../constants/constants";
@@ -23,7 +23,7 @@ import { handleCheckoutAsyncPaymentSuccedeed } from "./controllers/stripe/handle
 // import Stripe from "stripe";
 
 process.on("uncaughtException", function (err) {
-  const errorId = uuidv4();
+  const errorId = crypto.randomUUID();
   console.log("================================================");
   console.log(`message: ${err.message}`);
   console.log(`errorId: ${errorId}`);

@@ -1,6 +1,6 @@
 import sharp from "sharp";
 import streamToBlob from "./streamToBlob";
-import { v4 as uuidv4 } from "uuid";
+import crypto from "crypto";
 import s3Client from "../../spaces/s3Client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 // import { finished } from "stream/promises";
@@ -26,7 +26,7 @@ const uploadToSpaces = async (photos: any, shop: any) => {
 
     const newBlob = await streamToBlob(blob);
 
-    const id = uuidv4();
+    const id = crypto.randomUUID();
 
     imageIds.push(id);
 
