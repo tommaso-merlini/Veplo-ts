@@ -418,6 +418,10 @@ const typeDefs = gql`
     reason: String
   }
 
+  input AdminSeeAllOrdersFilters {
+    status: String
+  }
+
   #=============QUERIES=================
 
   type Query {
@@ -459,6 +463,9 @@ const typeDefs = gql`
 
     #constants
     brands: [String!]
+
+    #admin
+    adminSeeAllOrders(filters: AdminSeeAllOrdersFilters!): [Order!]
   }
 
   #===================MUTATIONS===================

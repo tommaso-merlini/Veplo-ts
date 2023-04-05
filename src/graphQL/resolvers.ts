@@ -41,6 +41,7 @@ import { createVariation } from "./user/mutations/variation/createVariation.js";
 import { ShopProductsArgs } from "./types/types.js";
 import { refund } from "./user/mutations/stripe/refund.js";
 import { productsNotAvailableRefund } from "./user/mutations/stripe/productsNotAvailableRefund.js";
+import { adminSeeAllOrders } from "./admin/adminSeeAllOrders.js";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -59,6 +60,7 @@ const resolvers = {
     cart,
     brands,
     order,
+    adminSeeAllOrders,
   },
 
   Mutation: {

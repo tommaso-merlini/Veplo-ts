@@ -27,6 +27,10 @@ export type AddressShopInput = {
   street: Scalars['String'];
 };
 
+export type AdminSeeAllOrdersFilters = {
+  status?: InputMaybe<Scalars['String']>;
+};
+
 export type Business = {
   __typename?: 'Business';
   businessName?: Maybe<Scalars['String']>;
@@ -316,7 +320,7 @@ export type MutationEditVariationArgs = {
 
 export type MutationProductsNotAvailableRefundArgs = {
   orderId: Scalars['ID'];
-  productsNotAvailable: Array<ProductsNotAvailableInput>;
+  productsNotAvailable?: InputMaybe<Array<ProductsNotAvailableInput>>;
 };
 
 
@@ -475,6 +479,7 @@ export type ProductVariationsOrder = {
 
 export type Query = {
   __typename?: 'Query';
+  AdminSeeAllOrders?: Maybe<Array<Order>>;
   brands?: Maybe<Array<Scalars['String']>>;
   business?: Maybe<Business>;
   cart: Cart;
@@ -488,6 +493,11 @@ export type Query = {
   shopByFirebaseId?: Maybe<Shop>;
   shops: Array<Shop>;
   user?: Maybe<User>;
+};
+
+
+export type QueryAdminSeeAllOrdersArgs = {
+  filters: AdminSeeAllOrdersFilters;
 };
 
 
@@ -558,6 +568,7 @@ export type Shop = {
   __typename?: 'Shop';
   address?: Maybe<AddressShop>;
   businessId?: Maybe<Scalars['ID']>;
+  businessStatus?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   info?: Maybe<ShopInformations>;
@@ -589,6 +600,7 @@ export type ShopFilters = {
 export type ShopInfo = {
   __typename?: 'ShopInfo';
   businessId?: Maybe<Scalars['ID']>;
+  businessStatus?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
