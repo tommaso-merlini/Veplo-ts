@@ -29,8 +29,35 @@ export const adminSeeAllOrders = async (
       message: "you must be an admin to access this function",
     });
   }
+
+  const userEmail = () => {
+    try {
+      if (
+        filters != null &&
+        filters.user != null &&
+        filters.user.email != null
+      ) {
+        return filters?.user?.email;
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      console.log("eii");
+      return { $exists: true };
+    }
+  };
   const orders = await Order.find({
-    status: filters.status,
+    status: filters?.status || { $exists: true },
+    code: filters?.code || { $exists: true },
+    _id: filters?.id || { $exists: true },
+    "user.email": filters?.user?.email || { $exists: true },
+    "user.id": filters?.user?.id || { $exists: true },
+    "user.firebaseID": filters?.user?.firebaseId || { $exists: true },
+    "shop.id": filters?.shop?.id || { $exists: true },
+    "shop.businessId": filters?.business?.id || { $exists: true },
+    "shop.businessFirebaseId": filters?.business?.firebaseId || {
+      $exists: true,
+    },
   });
   return orders;
 };

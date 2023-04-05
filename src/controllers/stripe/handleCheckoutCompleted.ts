@@ -104,6 +104,7 @@ export const handleCheckoutCompleted = async (session) => {
       surname: user.surname,
       email: user.email,
       stripeId: user.stripeId,
+      firebaseId: user.firebaseId,
     },
     recipient: {
       name: session.shipping_details.name,
@@ -129,6 +130,7 @@ export const handleCheckoutCompleted = async (session) => {
       name: shop.name,
       stripeId: business.stripe.id,
       businessId: business.id,
+      businessFirebaseId: business.firebaseId,
     },
     shipping: {
       url: null,

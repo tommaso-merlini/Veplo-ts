@@ -28,7 +28,27 @@ export type AddressShopInput = {
 };
 
 export type AdminSeeAllOrdersFilters = {
+  business?: InputMaybe<AdminSeeAllOrdersFiltersBusiness>;
+  code?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  shop?: InputMaybe<AdminSeeAllOrdersFiltersShop>;
   status?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<AdminSeeAllOrdersFiltersUser>;
+};
+
+export type AdminSeeAllOrdersFiltersBusiness = {
+  firebaseId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type AdminSeeAllOrdersFiltersShop = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+export type AdminSeeAllOrdersFiltersUser = {
+  email?: InputMaybe<Scalars['String']>;
+  firebaseId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
 };
 
 export type Business = {
@@ -479,7 +499,7 @@ export type ProductVariationsOrder = {
 
 export type Query = {
   __typename?: 'Query';
-  AdminSeeAllOrders?: Maybe<Array<Order>>;
+  adminSeeAllOrders?: Maybe<Array<Order>>;
   brands?: Maybe<Array<Scalars['String']>>;
   business?: Maybe<Business>;
   cart: Cart;
@@ -497,7 +517,7 @@ export type Query = {
 
 
 export type QueryAdminSeeAllOrdersArgs = {
-  filters: AdminSeeAllOrdersFilters;
+  filters?: InputMaybe<AdminSeeAllOrdersFilters>;
 };
 
 
@@ -689,6 +709,7 @@ export type UserInput = {
 export type UserOrder = {
   __typename?: 'UserOrder';
   email?: Maybe<Scalars['String']>;
+  firebaseId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
   stripeId?: Maybe<Scalars['String']>;

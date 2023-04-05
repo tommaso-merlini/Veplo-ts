@@ -35,6 +35,10 @@ const OrderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    firebaseId: {
+      type: String,
+      required: true,
+    },
   },
   recipient: {
     name: {
@@ -119,6 +123,10 @@ const OrderSchema = new mongoose.Schema({
       required: true,
     },
     businessId: { type: mongoose.Types.ObjectId, required: true },
+    businessFirebaseId: {
+      type: String,
+      required: true,
+    },
   },
   productVariations: [
     {

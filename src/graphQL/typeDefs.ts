@@ -214,6 +214,7 @@ const typeDefs = gql`
     id: ID
     email: String
     stripeId: String
+    firebaseId: String
     name: String
     surname: String
   }
@@ -420,6 +421,26 @@ const typeDefs = gql`
 
   input AdminSeeAllOrdersFilters {
     status: String
+    code: String
+    id: ID
+    user: AdminSeeAllOrdersFiltersUser
+    shop: AdminSeeAllOrdersFiltersShop
+    business: AdminSeeAllOrdersFiltersBusiness
+  }
+
+  input AdminSeeAllOrdersFiltersUser {
+    email: String
+    id: ID
+    firebaseId: String
+  }
+
+  input AdminSeeAllOrdersFiltersShop {
+    id: ID
+  }
+
+  input AdminSeeAllOrdersFiltersBusiness {
+    id: ID
+    firebaseId: String
   }
 
   #=============QUERIES=================
@@ -465,7 +486,7 @@ const typeDefs = gql`
     brands: [String!]
 
     #admin
-    adminSeeAllOrders(filters: AdminSeeAllOrdersFilters!): [Order!]
+    adminSeeAllOrders(filters: AdminSeeAllOrdersFilters): [Order!]
   }
 
   #===================MUTATIONS===================
