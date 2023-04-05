@@ -19,7 +19,7 @@ export const handleAccountUpdated = async (object: any) => {
   });
 
   if (detailsSumbitted === false) {
-    if (business.status === "true") {
+    if (business.status === "active") {
       //check if the business was alreay created
       status = "onboarding_KYC_requested"; //! punto 4
       await Business.updateOne(
@@ -29,7 +29,7 @@ export const handleAccountUpdated = async (object: any) => {
         }
       );
     } else {
-      status = "onboarding_KYC_requested"; //! punto 2
+      status = "onboarding_KYC_requested_first_time"; //! punto 2
       await Business.updateOne(
         { "stripe.id": stripeId },
         {
@@ -45,7 +45,7 @@ export const handleAccountUpdated = async (object: any) => {
   ) {
     if (business.status === "active") {
       //check if the business was alreay created
-      status = "onboarding_KYC_requested"; //! punto 5
+      status = "pending"; //! punto 5
       await Business.updateOne(
         { "stripe.id": stripeId },
         {
@@ -53,7 +53,7 @@ export const handleAccountUpdated = async (object: any) => {
         }
       );
     } else {
-      status = "onboarding_KYC_requested"; //! punto 3
+      status = "pending_first_time"; //! punto 3
       await Business.updateOne(
         { "stripe.id": stripeId },
         {
