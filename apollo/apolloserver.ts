@@ -1,35 +1,26 @@
-import { ApolloServer } from "apollo-server-express";
-import {
-  ApolloServerPluginLandingPageGraphQLPlayground,
-  ApolloServerPluginLandingPageDisabled,
-} from "apollo-server-core";
-
+import { ApolloServer } from "@apollo/server";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "@apollo/server-plugin-landing-page-graphql-playground";
+import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/disabled";
 import depthLimit from "graphql-depth-limit";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import typeDefs from "../src/graphQL/typeDefs.js";
 import resolvers from "../src/graphQL/resolvers.js";
-import { context } from "./context.js";
 import crypto from "crypto";
 
-const schema = makeExecutableSchema({
+const apolloserver = new ApolloServer({
   typeDefs,
   resolvers,
-});
-
-const apolloserver = new ApolloServer({
-  schema,
   cache: "bounded",
-  context: context,
   csrfPrevention: process.env.NODE_ENV !== "development",
   // introspection: process.env.NODE_ENV !== "production",
   introspection: true,
-  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()], //!disables apollo studio
+
   //TODO uncomment below when in production
-  // plugins: [
-  //   process.env.NODE_ENV === "production"
-  //     ? ApolloServerPluginLandingPageDisabled()
-  //     : ApolloServerPluginLandingPageGraphQLPlayground(),
-  // ],
+  plugins: [
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageDisabled()
+      : ApolloServerPluginLandingPageGraphQLPlayground(),
+  ],
   validationRules: [depthLimit(7)],
   formatError: (err: any) => {
     let path = err.path;

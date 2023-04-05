@@ -3,7 +3,13 @@ import chalk from "chalk";
 // import { GraphQLError } from "graphql";
 import initMongoose from "../mongoose/initMongoose.js";
 import apolloserver from "../apollo/apolloserver.js";
+import { expressMiddleware } from "@apollo/server/express4";
+
+import { context } from "../apollo/context.js";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import cors from "cors";
+import http from "http";
 // import bodyParser from "body-parser";
 // import { PutObjectCommand } from "@aws-sdk/client-s3";
 // import fs from "fs";
@@ -17,6 +23,8 @@ import { handleCheckoutCompleted } from "./controllers/stripe/handleCheckoutComp
 import { handleCheckoutAsyncPaymentSuccedeed } from "./controllers/stripe/handleCheckoutAsyncPaymentSuccedeed.js";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
 import dotenv from "dotenv";
+import typeDefs from "./graphQL/typeDefs.js";
+import resolvers from "./graphQL/resolvers.js";
 dotenv.config();
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
@@ -69,7 +77,15 @@ async function startServer() {
     app.use(graphqlUploadExpress());
 
     await apolloserver.start();
-    await apolloserver.applyMiddleware({ app });
+    app.use(
+      "/graphql",
+      cors<cors.CorsRequest>(),
+      bodyParser.json(),
+      expressMiddleware(apolloserver, {
+        context,
+      })
+    );
+    // await apolloserver.applyMiddleware({ app });
 
     // app.use(limiter);
 
