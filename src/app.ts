@@ -3,6 +3,7 @@ import chalk from "chalk";
 // import { GraphQLError } from "graphql";
 import initMongoose from "../mongoose/initMongoose.js";
 import apolloserver from "../apollo/apolloserver.js";
+//@ts-ignore
 import { expressMiddleware } from "@apollo/server/express4";
 
 import { context } from "../apollo/context.js";
