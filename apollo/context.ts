@@ -1,7 +1,7 @@
-import resolvers from "../src/graphQL/resolvers";
-import { admin, db, FieldValue } from "../firebase/firebase";
-import s3Client from "../spaces/s3Client";
-import stripe from "../stripe/stripe";
+import resolvers from "../src/graphQL/resolvers.js";
+import { admin, db, FieldValue } from "../firebase/firebase.js";
+import s3Client from "../spaces/s3Client.js";
+import stripe from "../stripe/stripe.js";
 
 export interface Context {
   req: any;

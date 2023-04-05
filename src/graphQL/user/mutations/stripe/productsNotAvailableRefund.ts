@@ -1,11 +1,11 @@
-import { Context } from "apollo/context";
-import orderById from "../../../../controllers/queries/orderById";
-import { MutationProductsNotAvailableRefundArgs } from "src/graphQL/types/types";
-import Order from "../../../../../src/schemas/Order.model";
-import customError from "../../../../../src/controllers/errors/customError";
-import checkFirebaseErrors from "../../../../../src/controllers/checkFirebaseErrors";
-import authenticateToken from "../../../../../src/controllers/authenticateToken";
-import shopById from "../../../../../src/controllers/queries/shopById";
+import { Context } from "apollo/context.js";
+import orderById from "../../../../controllers/queries/orderById.js";
+import { MutationProductsNotAvailableRefundArgs } from "src/graphQL/types/types.js";
+import Order from "../../../../../src/schemas/Order.model.js";
+import customError from "../../../../../src/controllers/errors/customError.js";
+import checkFirebaseErrors from "../../../../../src/controllers/checkFirebaseErrors.js";
+import authenticateToken from "../../../../../src/controllers/authenticateToken.js";
+import shopById from "../../../../../src/controllers/queries/shopById.js";
 
 export const productsNotAvailableRefund = async (
   _,
@@ -37,11 +37,15 @@ export const productsNotAvailableRefund = async (
     };
   }
 
-  const shop = await shopById(order.shopInfo.id);
+  const shop = await shopById(String(order.shop.id));
 
   if (process.env.NODE_ENV !== "development")
     //token operations
-    authenticateToken(token?.mongoId, [shop.businessId], token?.isBusiness);
+    authenticateToken(
+      token?.mongoId,
+      [String(shop.businessId)],
+      token?.isBusiness
+    );
 
   const session = await stripe.checkout.sessions.retrieve(
     order.checkoutSessionId

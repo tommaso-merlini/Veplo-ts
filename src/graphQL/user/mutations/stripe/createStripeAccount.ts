@@ -1,8 +1,8 @@
-import { MutationCreateStripeAccountArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import businessById from "../../../../controllers/queries/businessById";
-import Business from "../../../../schemas/Business.model";
+import { MutationCreateStripeAccountArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import businessById from "../../../../controllers/queries/businessById.js";
+import Business from "../../../../schemas/Business.model.js";
 
 export const createStripeAccount = async (
   _: any,

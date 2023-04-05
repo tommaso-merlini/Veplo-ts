@@ -1,4 +1,4 @@
-import customError from "./errors/customError";
+import customError from "./errors/customError.js";
 
 export const checkLotQuantity = (variations: any) => {
   for (let variation of variations) {

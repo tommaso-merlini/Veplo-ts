@@ -1,8 +1,8 @@
-import { QueryOrderArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import orderById from "../../../../controllers/queries/orderById";
+import { QueryOrderArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import orderById from "../../../../controllers/queries/orderById.js";
 
 export const order = async (
   _: any,
@@ -29,7 +29,7 @@ export const order = async (
   if (process.env.NODE_ENV !== "development")
     authenticateToken(
       token?.mongoId,
-      [order.shop.id, order.user.id],
+      [String(order.shop.id), String(order.user.id)],
       token?.isBusiness
     );
 

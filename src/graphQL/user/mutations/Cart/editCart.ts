@@ -2,12 +2,12 @@ import {
   EditLotsInput,
   MutationEditCartArgs,
   ProductVariation,
-} from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import customError from "../../../../controllers/errors/customError";
-import Cart from "../../../../schemas/Cart.model";
-import Product from "../../../../schemas/Product.model";
+} from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import customError from "../../../../controllers/errors/customError.js";
+import Cart from "../../../../schemas/Cart.model.js";
+import Product from "../../../../schemas/Product.model.js";
 
 export const editCart = async (
   _: any,

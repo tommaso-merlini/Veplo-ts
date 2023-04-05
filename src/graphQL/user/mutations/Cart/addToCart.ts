@@ -2,12 +2,12 @@ import {
   CartProductVariation,
   Lot,
   MutationAddToCartArgs,
-} from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import customError from "../../../../controllers/errors/customError";
-import Cart from "../../../../schemas/Cart.model";
-import Product from "../../../../schemas/Product.model";
+} from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import customError from "../../../../controllers/errors/customError.js";
+import Cart from "../../../../schemas/Cart.model.js";
+import Product from "../../../../schemas/Product.model.js";
 
 export const addToCart = async (
   _: any,
@@ -83,7 +83,7 @@ export const addToCart = async (
 
   if (cart) {
     //vedere se la variation e' gia' presente nel carrello
-    cart.productVariations.forEach(async (variation: CartProductVariation) => {
+    cart.productVariations.forEach(async (variation: any) => {
       if (
         variation.variationId == productVariationId &&
         variation.size == size

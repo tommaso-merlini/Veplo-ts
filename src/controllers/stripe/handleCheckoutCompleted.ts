@@ -1,15 +1,15 @@
-import stripe from "../../../stripe/stripe";
-import Cart from "../../schemas/Cart.model";
-import Order from "../../schemas/Order.model";
-import User from "../../schemas/User.model";
-import Shop from "../../schemas/Shop.model";
-import Product from "../../schemas/Product.model";
-import Business from "../../schemas/Business.model";
-import customError from "../errors/customError";
-import { deleteCartById } from "../mutations/deleteCartById";
-import { generateCode } from "../generateCode";
-import { getStatus } from "../getStatus";
-import { removeBoughtQuantityFromVariation } from "../removeBoughtQuantityFromVariation";
+import stripe from "../../../stripe/stripe.js";
+import Cart from "../../schemas/Cart.model.js";
+import Order from "../../schemas/Order.model.js";
+import User from "../../schemas/User.model.js";
+import Shop from "../../schemas/Shop.model.js";
+import Product from "../../schemas/Product.model.js";
+import Business from "../../schemas/Business.model.js";
+import customError from "../errors/customError.js";
+import { deleteCartById } from "../mutations/deleteCartById.js";
+import { generateCode } from "../generateCode.js";
+import { getStatus } from "../getStatus.js";
+import { removeBoughtQuantityFromVariation } from "../removeBoughtQuantityFromVariation.js";
 
 export const handleCheckoutCompleted = async (session) => {
   const paymentIntentId = session.payment_intent;
@@ -50,7 +50,7 @@ export const handleCheckoutCompleted = async (session) => {
       { _id: product._id },
       { $inc: { orderCounter: 1 } }
     );
-    for (let variation of product.variations) {
+    for (let variation of product.variations as any[]) {
       variations.push({
         _id: variation._id,
         photos: variation.photos,
@@ -138,7 +138,7 @@ export const handleCheckoutCompleted = async (session) => {
     productVariations: variationsInCartWithSize,
   });
 
-  await deleteCartById(cart._id);
+  await deleteCartById(cart.id);
 
   await removeBoughtQuantityFromVariation(variationsInCartWithSize);
 };

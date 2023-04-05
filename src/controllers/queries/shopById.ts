@@ -1,7 +1,7 @@
-import getRequestedFields from "../getRequestedFields";
-import checkObjectID from "../checkObjectID";
-import Shop from "../../schemas/Shop.model";
-import customError from "../errors/customError";
+import getRequestedFields from "../getRequestedFields.js";
+import checkObjectID from "../checkObjectID.js";
+import Shop from "../../schemas/Shop.model.js";
+import customError from "../errors/customError.js";
 
 const shopById = async (id: string, info?: any) => {
   let requestedFields = {};

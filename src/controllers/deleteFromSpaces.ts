@@ -1,6 +1,7 @@
-import s3Client from "../../spaces/s3Client";
+import s3Client from "../../spaces/s3Client.js";
 import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 const deleteFromSpaces = (photos) => {
   const objects = [];

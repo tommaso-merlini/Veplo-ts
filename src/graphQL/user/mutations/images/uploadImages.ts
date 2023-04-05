@@ -1,11 +1,11 @@
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import customError from "../../../../controllers/errors/customError";
-import streamToBlob from "../../../../controllers/streamToBlob";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import customError from "../../../../controllers/errors/customError.js";
+import streamToBlob from "../../../../controllers/streamToBlob.js";
 import sharp from "sharp";
 import crypto from "crypto";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { MutationUploadImagesArgs } from "src/graphQL/types/types";
-import { Context } from "apollo/context";
+import { MutationUploadImagesArgs } from "src/graphQL/types/types.js";
+import { Context } from "apollo/context.js";
 
 export const uploadImages = async (
   _: any,

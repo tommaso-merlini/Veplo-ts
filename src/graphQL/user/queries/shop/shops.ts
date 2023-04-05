@@ -1,7 +1,7 @@
-import { QueryShopsArgs } from "src/graphQL/types/types";
-import getRequestedFields from "../../../../controllers/getRequestedFields";
+import { QueryShopsArgs } from "src/graphQL/types/types.js";
+import getRequestedFields from "../../../../controllers/getRequestedFields.js";
 // import capByCap from "../../../../controllers/queries/capByCap";
-import Shop from "../../../../schemas/Shop.model";
+import Shop from "../../../../schemas/Shop.model.js";
 
 export const shops = async (
   _: any,

@@ -1,5 +1,5 @@
-import Cap from "../../schemas/Cap.model";
-import customError from "../errors/customError";
+import Cap from "../../schemas/Cap.model.js";
+import customError from "../errors/customError.js";
 
 const capByCap = async (cap: string) => {
   const searchedCap = await Cap.findOne({

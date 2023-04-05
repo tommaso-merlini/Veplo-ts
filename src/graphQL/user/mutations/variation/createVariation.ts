@@ -1,12 +1,12 @@
 import {
   MutationCreateVariationArgs,
   ProductVariationInput,
-} from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import customError from "../../../../controllers/errors/customError";
-import Product from "../../../../schemas/Product.model";
+} from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import customError from "../../../../controllers/errors/customError.js";
+import Product from "../../../../schemas/Product.model.js";
 
 export const createVariation = async (
   _: any,
@@ -46,7 +46,7 @@ export const createVariation = async (
     //token operations
     authenticateToken(
       token?.mongoId,
-      [product.shopInfo.businessId],
+      [String(product.shopInfo.businessId)],
       token?.isBusiness
     );
 

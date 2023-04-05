@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // mongoose.set("useCreateIndex", true);
 
@@ -80,44 +80,44 @@ const ProductSchema = new mongoose.Schema({
   ],
 });
 
-ProductSchema.index({
-  name: "ProductSearchIndex",
+// ProductSchema.index({
+//   name: "ProductSearchIndex",
 
-  mappings: {
-    dynamic: false,
-    fields: {
-      location: {
-        type: "geo",
-      },
-      name: {
-        type: "string",
-        analyzer: "lucene.italian",
-      },
-      updatedAt: {
-        type: "date",
-      },
-      orderCounter: {
-        type: "number",
-      },
-      status: {
-        type: "string",
-      },
-      variations: {
-        type: "embeddedDocuments",
-        dynamic: true,
-      },
-      price: {
-        fields: {
-          discountPercentage: {
-            type: "number",
-          },
-        },
-        type: "document",
-        dynamic: false,
-      },
-    },
-  },
-});
+//   mappings: {
+//     dynamic: false,
+//     fields: {
+//       location: {
+//         type: "geo",
+//       },
+//       name: {
+//         type: "string",
+//         analyzer: "lucene.italian",
+//       },
+//       updatedAt: {
+//         type: "date",
+//       },
+//       orderCounter: {
+//         type: "number",
+//       },
+//       status: {
+//         type: "string",
+//       },
+//       variations: {
+//         type: "embeddedDocuments",
+//         dynamic: true,
+//       },
+//       price: {
+//         fields: {
+//           discountPercentage: {
+//             type: "number",
+//           },
+//         },
+//         type: "document",
+//         dynamic: false,
+//       },
+//     },
+//   },
+// });
 
 const Product = mongoose.model("product", ProductSchema);
 export default Product;

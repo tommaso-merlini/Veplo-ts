@@ -1,4 +1,4 @@
-import { ProductInput } from "src/graphQL/types/types";
+import { ProductInput } from "src/graphQL/types/types.js";
 
 export const checkPriceV2BelowV1 = (product: ProductInput) => {
   if (product.price.v2 != null && product.price.v2 > product.price.v1) {

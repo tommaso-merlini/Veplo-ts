@@ -1,4 +1,4 @@
-import { PriceInput } from "src/graphQL/types/types";
+import { PriceInput } from "src/graphQL/types/types.js";
 
 interface Price extends PriceInput {
   discountPercentage?: number;

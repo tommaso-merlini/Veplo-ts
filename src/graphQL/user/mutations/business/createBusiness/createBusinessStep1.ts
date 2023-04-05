@@ -1,6 +1,6 @@
-import { Context } from "../../../../../../apollo/context";
-import checkFirebaseErrors from "../../../../../controllers/checkFirebaseErrors";
-import Business from "../../../../../schemas/Business.model";
+import { Context } from "../../../../../../apollo/context.js";
+import checkFirebaseErrors from "../../../../../controllers/checkFirebaseErrors.js";
+import Business from "../../../../../schemas/Business.model.js";
 
 export const createBusinessStep1 = async (
   _: any,

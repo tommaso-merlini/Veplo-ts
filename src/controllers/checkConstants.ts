@@ -1,5 +1,8 @@
-import { EditLotsInput, ProductVariationInput } from "src/graphQL/types/types";
-import { clothes_sizes, constants } from "../../constants/constants";
+import {
+  EditLotsInput,
+  ProductVariationInput,
+} from "src/graphQL/types/types.js";
+import { clothes_sizes, constants } from "../../constants/constants.js";
 
 const checkConstants = (obj: any, is: String) => {
   if (is !== "product" && is !== "shop") {

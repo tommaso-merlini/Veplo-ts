@@ -1,8 +1,8 @@
-import { MutationCreateUserArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import customError from "../../../../controllers/errors/customError";
-import User from "../../../../schemas/User.model";
+import { MutationCreateUserArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import customError from "../../../../controllers/errors/customError.js";
+import User from "../../../../schemas/User.model.js";
 
 export const createUser = async (
   _: any,

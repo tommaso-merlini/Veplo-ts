@@ -1,27 +1,23 @@
 import express, { Response } from "express";
-import apolloserver from "../apollo/apolloserver";
 import chalk from "chalk";
-// import rateLimit from "express-rate-limit";
 // import { GraphQLError } from "graphql";
-import initMongoose from "../mongoose/initMongoose";
-var mongoose = require("mongoose");
+import initMongoose from "../mongoose/initMongoose.js";
+import apolloserver from "../apollo/apolloserver.js";
+import mongoose from "mongoose";
 // import bodyParser from "body-parser";
 // import { PutObjectCommand } from "@aws-sdk/client-s3";
 // import fs from "fs";
-require("dotenv").config();
-require("events").EventEmitter.defaultMaxListeners = 100;
-// @ts-ignore
-import { graphqlUploadExpress } from "graphql-upload";
 // import cluster from "cluster";
 // import os from "os";
 import crypto from "crypto";
-import stripe from "../stripe/stripe";
-import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated";
-import { constants } from "../constants/constants";
-import { handleCheckoutCompleted } from "./controllers/stripe/handleCheckoutCompleted";
-import { handleCheckoutAsyncPaymentSuccedeed } from "./controllers/stripe/handleCheckoutAsyncPaymentSuccedeed";
-// import Stripe from "stripe";
-
+import stripe from "../stripe/stripe.js";
+import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated.js";
+import { constants } from "../constants/constants.js";
+import { handleCheckoutCompleted } from "./controllers/stripe/handleCheckoutCompleted.js";
+import { handleCheckoutAsyncPaymentSuccedeed } from "./controllers/stripe/handleCheckoutAsyncPaymentSuccedeed.js";
+import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
+import dotenv from "dotenv";
+dotenv.config();
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
   console.log("================================================");

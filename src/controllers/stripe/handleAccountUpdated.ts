@@ -1,4 +1,4 @@
-import Business from "../../schemas/Business.model";
+import Business from "../../schemas/Business.model.js";
 
 export const handleAccountUpdated = async (object: any) => {
   const id = object.id;

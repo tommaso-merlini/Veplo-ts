@@ -1,5 +1,5 @@
-import { QueryShopArgs } from "src/graphQL/types/types";
-import shopById from "../../../../controllers/queries/shopById";
+import { QueryShopArgs } from "src/graphQL/types/types.js";
+import shopById from "../../../../controllers/queries/shopById.js";
 
 export const shop = async (
   _: any,

@@ -1,5 +1,5 @@
-import { QueryShopByFirebaseIdArgs } from "src/graphQL/types/types";
-import helperShopByFirebaseId from "../../../../controllers/queries/helperShopByFirebaseId";
+import { QueryShopByFirebaseIdArgs } from "src/graphQL/types/types.js";
+import helperShopByFirebaseId from "../../../../controllers/queries/helperShopByFirebaseId.js";
 
 export const shopByFirebaseId = async (
   _: any,

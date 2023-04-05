@@ -1,5 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3";
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 const buckectSecret = process.env.BUCKET_SECRET || "";
 

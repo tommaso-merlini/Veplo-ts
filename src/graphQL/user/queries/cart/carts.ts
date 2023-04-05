@@ -1,13 +1,13 @@
-import { Lot, User, VariationProductInfo } from "src/graphQL/types/types";
-import Cart from "../../../../schemas/Cart.model";
-import Product from "../../../../schemas/Product.model";
+import { Lot, User, VariationProductInfo } from "src/graphQL/types/types.js";
+import Cart from "../../../../schemas/Cart.model.js";
+import Product from "../../../../schemas/Product.model.js";
 
 export const carts = async (user: User) => {
   const variationsIds: string[] = [];
   const variations: any[] = [];
   const warnings = [];
   //get every carts of the user
-  const carts = await Cart.find({
+  const carts: any[] = await Cart.find({
     userId: user.id,
   });
   // .explain("executionStats");

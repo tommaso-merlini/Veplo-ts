@@ -1,10 +1,11 @@
 import sharp from "sharp";
-import streamToBlob from "./streamToBlob";
+import streamToBlob from "./streamToBlob.js";
 import crypto from "crypto";
-import s3Client from "../../spaces/s3Client";
+import s3Client from "../../spaces/s3Client.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 // import { finished } from "stream/promises";
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 const uploadToSpaces = async (photos: any, shop: any) => {
   let imageIds = [];

@@ -3,13 +3,14 @@
 // import * as firebase from "firebase/app"
 
 // If you enabled Analytics in your project, add the Firebase SDK for Analytics
-require("firebase/analytics");
+// require("firebase/analytics");
 
 // Add the Firebase products that you want to use
 import "firebase/auth";
 import "firebase/firestore";
 import "@firebase/messaging";
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 import admin from "firebase-admin";
 const FieldValue = admin.firestore.FieldValue;

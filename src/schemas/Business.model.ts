@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const BusinessSchema = new mongoose.Schema({
   firebaseId: { type: String, required: true },

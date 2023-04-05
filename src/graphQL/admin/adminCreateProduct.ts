@@ -1,14 +1,14 @@
-import { Context } from "../../../apollo/context";
-import checkConstants from "../../controllers/checkConstants";
-import checkFirebaseErrors from "../../controllers/checkFirebaseErrors";
-import shopById from "../../controllers/queries/shopById";
-import streamToBlob from "../../controllers/streamToBlob";
+import { Context } from "../../../apollo/context.js";
+import checkConstants from "../../controllers/checkConstants.js";
+import checkFirebaseErrors from "../../controllers/checkFirebaseErrors.js";
+import shopById from "../../controllers/queries/shopById.js";
+import streamToBlob from "../../controllers/streamToBlob.js";
 import sharp from "sharp";
 import crypto from "crypto";
-import Product from "../../schemas/Product.model";
+import Product from "../../schemas/Product.model.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import customError from "../../controllers/errors/customError";
-import { MutationAdminCreateProductArgs } from "../types/types";
+import customError from "../../controllers/errors/customError.js";
+import { MutationAdminCreateProductArgs } from "../types/types.js";
 
 export const adminCreateProduct = async (
   _: any,
@@ -102,10 +102,10 @@ export const adminCreateProduct = async (
     ...options,
     location: {
       type: "Point",
-      coordinates: shop.address.location.coordinates,
+      // coordinates: shop.address.location.coordinates,
     },
     shopId: shopId,
-    firebaseShopId: shop.firebaseId,
+    // firebaseShopId: shop.firebaseId,
     shopOptions: {
       city: shop.address.city,
       name: shop.name,

@@ -1,11 +1,11 @@
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import orderById from "../../../../controllers/queries/orderById";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import orderById from "../../../../controllers/queries/orderById.js";
 import lodash from "lodash";
-import Order from "../../../../schemas/Order.model";
-import customError from "../../../../controllers/errors/customError";
-import { MutationEditOrderArgs } from "src/graphQL/types/types";
+import Order from "../../../../schemas/Order.model.js";
+import customError from "../../../../controllers/errors/customError.js";
+import { MutationEditOrderArgs } from "src/graphQL/types/types.js";
 
 export const editOrder = async (
   _: any,
@@ -54,7 +54,7 @@ export const editOrder = async (
   if (process.env.NODE_ENV !== "development")
     authenticateToken(
       token?.mongoId,
-      [order.shop.businessId],
+      [String(order.shop.businessId)],
       token?.isBusiness
     );
 

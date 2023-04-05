@@ -1,4 +1,4 @@
-import customError from "./errors/customError";
+import customError from "./errors/customError.js";
 
 const handleUpdatedPhotos = async (updatedPhotos: string[]) => {
   if (updatedPhotos.length < 2) {

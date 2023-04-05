@@ -1,6 +1,6 @@
-import { Context } from "apollo/context";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import userById from "../../../../controllers/queries/userById";
+import { Context } from "apollo/context.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import userById from "../../../../controllers/queries/userById.js";
 
 export const user = async (
   _: any,

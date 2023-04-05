@@ -1,10 +1,10 @@
-import { MutationChangeShopStatusArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import shopById from "../../../../controllers/queries/shopById";
-import Product from "../../../../schemas/Product.model";
-import Shop from "../../../../schemas/Shop.model";
+import { MutationChangeShopStatusArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import shopById from "../../../../controllers/queries/shopById.js";
+import Product from "../../../../schemas/Product.model.js";
+import Shop from "../../../../schemas/Shop.model.js";
 
 export const changeShopStatus = async (
   _: any,

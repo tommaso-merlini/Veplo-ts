@@ -1,13 +1,13 @@
-import { Context } from "../../../apollo/context";
-import authenticateToken from "../../controllers/authenticateToken";
-import checkConstants from "../../controllers/checkConstants";
-import checkFirebaseErrors from "../../controllers/checkFirebaseErrors";
-import customError from "../../controllers/errors/customError";
-import getDiffs from "../../controllers/getDiffs";
-import handlePriceEdit from "../../controllers/handlePriceEdit";
-import handleUpdatedPhotos from "../../controllers/handleUpdatedPhotos";
-import productById from "../../controllers/queries/productById";
-import Product from "../../schemas/Product.model";
+import { Context } from "../../../apollo/context.js";
+import authenticateToken from "../../controllers/authenticateToken.js";
+import checkConstants from "../../controllers/checkConstants.js";
+import checkFirebaseErrors from "../../controllers/checkFirebaseErrors.js";
+import customError from "../../controllers/errors/customError.js";
+import getDiffs from "../../controllers/getDiffs.js";
+import handlePriceEdit from "../../controllers/handlePriceEdit.js";
+import handleUpdatedPhotos from "../../controllers/handleUpdatedPhotos.js";
+import productById from "../../controllers/queries/productById.js";
+import Product from "../../schemas/Product.model.js";
 
 const adminEditProduct = async (
   _,

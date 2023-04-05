@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const CartSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, required: true },

@@ -1,7 +1,7 @@
-import getRequestedFields from "../getRequestedFields";
-import checkObjectID from "../checkObjectID";
-import customError from "../errors/customError";
-import Order from "../../schemas/Order.model";
+import getRequestedFields from "../getRequestedFields.js";
+import checkObjectID from "../checkObjectID.js";
+import customError from "../errors/customError.js";
+import Order from "../../schemas/Order.model.js";
 
 const orderById = async (id: string, info?: any) => {
   let requestedFields = {};

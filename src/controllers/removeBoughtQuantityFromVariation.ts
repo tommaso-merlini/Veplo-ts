@@ -1,5 +1,5 @@
-import { ProductVariationsOrder } from "src/graphQL/types/types";
-import Product from "../schemas/Product.model";
+import { ProductVariationsOrder } from "src/graphQL/types/types.js";
+import Product from "../schemas/Product.model.js";
 
 export const removeBoughtQuantityFromVariation = async (
   variations: ProductVariationsOrder[]

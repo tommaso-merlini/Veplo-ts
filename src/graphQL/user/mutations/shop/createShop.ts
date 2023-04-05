@@ -1,11 +1,11 @@
-import { MutationCreateShopArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import checkConstants from "../../../../controllers/checkConstants";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import { checkPostCode } from "../../../../controllers/checkPostCode";
-import { createPostCode } from "../../../../controllers/createPostCode";
-import { reverseGeocoding } from "../../../../controllers/reverseGeocoding";
-import Shop from "../../../../schemas/Shop.model";
+import { MutationCreateShopArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import checkConstants from "../../../../controllers/checkConstants.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import { checkPostCode } from "../../../../controllers/checkPostCode.js";
+import { createPostCode } from "../../../../controllers/createPostCode.js";
+import { reverseGeocoding } from "../../../../controllers/reverseGeocoding.js";
+import Shop from "../../../../schemas/Shop.model.js";
 
 export const createShop = async (
   _: any,
@@ -41,6 +41,8 @@ export const createShop = async (
     (options.address.location as any).coordinates[0],
     (options.address.location as any).coordinates[1]
   );
+
+  throw new Error("ok");
 
   const postCodeExists = await checkPostCode(postCode);
   if (!postCodeExists) {

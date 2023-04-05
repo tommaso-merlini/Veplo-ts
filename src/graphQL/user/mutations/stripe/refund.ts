@@ -1,5 +1,5 @@
-import { Context } from "apollo/context";
-import { MutationRefundArgs } from "src/graphQL/types/types";
+import { Context } from "apollo/context.js";
+import { MutationRefundArgs } from "src/graphQL/types/types.js";
 
 export const refund = async (
   _,

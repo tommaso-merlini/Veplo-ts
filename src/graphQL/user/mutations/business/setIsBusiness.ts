@@ -1,4 +1,4 @@
-import { Context } from "../../../../../apollo/context";
+import { Context } from "../../../../../apollo/context.js";
 
 export const setIsBusiness = async (
   _: any,

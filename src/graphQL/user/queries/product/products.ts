@@ -1,8 +1,8 @@
-import { QueryProductsArgs } from "src/graphQL/types/types";
-import customError from "../../../../controllers/errors/customError";
-import getRequestedFields from "../../../../controllers/getRequestedFields";
+import { QueryProductsArgs } from "src/graphQL/types/types.js";
+import customError from "../../../../controllers/errors/customError.js";
+import getRequestedFields from "../../../../controllers/getRequestedFields.js";
 // import capByCap from "../../../../controllers/queries/capByCap";
-import Product from "../../../../schemas/Product.model";
+import Product from "../../../../schemas/Product.model.js";
 
 export const products = async (
   _: any,

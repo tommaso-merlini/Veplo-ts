@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 let databaseUrl: string | undefined;
 
@@ -12,8 +13,8 @@ if (process.env.NODE_ENV === "production") {
 const initMongoose = () => {
   mongoose.set("strictQuery", false);
   mongoose.connect(databaseUrl, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
+    // useUnifiedTopology: true,
+    // useNewUrlParser: true,
     //!not supported anymore useFindAndModify: false,
   });
 

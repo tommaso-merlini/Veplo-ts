@@ -1,4 +1,4 @@
-import Product from "../src/schemas/Product.model";
+import Product from "../src/schemas/Product.model.js";
 
 //MIGRATION 1 | 29/01/2022
 //CHANGES

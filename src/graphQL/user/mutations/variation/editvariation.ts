@@ -1,14 +1,14 @@
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import customError from "../../../../controllers/errors/customError";
-import Product from "../../../../schemas/Product.model";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import customError from "../../../../controllers/errors/customError.js";
+import Product from "../../../../schemas/Product.model.js";
 import lodash from "lodash";
-import { checkLotQuantity } from "../../../../controllers/checkLotQuantity";
+import { checkLotQuantity } from "../../../../controllers/checkLotQuantity.js";
 import {
   MutationEditVariationArgs,
   ProductVariation,
-} from "src/graphQL/types/types";
+} from "src/graphQL/types/types.js";
 
 export const editVariation = async (
   _: any,
@@ -62,7 +62,7 @@ export const editVariation = async (
     //token operations
     authenticateToken(
       token?.mongoId,
-      [product.shopInfo.businessId],
+      [String(product.shopInfo.businessId)],
       token?.isBusiness
     );
 

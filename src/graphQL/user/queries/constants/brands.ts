@@ -1,4 +1,4 @@
-import { constants } from "../../../../../constants/constants";
+import { constants } from "../../../../../constants/constants.js";
 
 export const brands = () => {
   const brands = constants.brands;

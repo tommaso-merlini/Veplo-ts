@@ -1,15 +1,16 @@
 import {
   CartProductVariation,
   MutationCheckoutArgs,
-} from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import customError from "../../../../controllers/errors/customError";
-import businessById from "../../../../controllers/queries/businessById";
-import userById from "../../../../controllers/queries/userById";
-import Cart from "../../../../schemas/Cart.model";
-import Product from "../../../../schemas/Product.model";
-require("dotenv").config();
+} from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import customError from "../../../../controllers/errors/customError.js";
+import businessById from "../../../../controllers/queries/businessById.js";
+import userById from "../../../../controllers/queries/userById.js";
+import Cart from "../../../../schemas/Cart.model.js";
+import Product from "../../../../schemas/Product.model.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const checkout = async (
   _,
@@ -91,10 +92,10 @@ export const checkout = async (
   }
 
   const user = await userById(token?.mongoId);
-  const business = await businessById(cart.shopInfo.businessId);
+  const business = await businessById(String(cart.shopInfo.businessId));
 
   //get variationsids
-  cart.productVariations.forEach((variation: CartProductVariation) => {
+  cart.productVariations.forEach((variation: any) => {
     variationsIds.push(variation.variationId);
   });
 
@@ -141,7 +142,7 @@ export const checkout = async (
   for (let product of products) {
     for (let variation of product.variations) {
       variations.push({
-        _id: variation._id,
+        _id: (variation as any)._id,
         name: product.name,
         color: variation.color,
         photos: variation.photos,

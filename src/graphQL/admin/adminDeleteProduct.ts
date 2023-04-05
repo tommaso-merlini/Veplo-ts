@@ -1,9 +1,9 @@
-import { Context } from "../../../apollo/context";
-import checkFirebaseErrors from "../../controllers/checkFirebaseErrors";
-import deleteFromSpaces from "../../controllers/deleteFromSpaces";
-import productById from "../../controllers/queries/productById";
-import customError from "../../controllers/errors/customError";
-import Product from "../../schemas/Product.model";
+import { Context } from "../../../apollo/context.js";
+import checkFirebaseErrors from "../../controllers/checkFirebaseErrors.js";
+import deleteFromSpaces from "../../controllers/deleteFromSpaces.js";
+import productById from "../../controllers/queries/productById.js";
+import customError from "../../controllers/errors/customError.js";
+import Product from "../../schemas/Product.model.js";
 
 export const adminDeleteProduct = async (
   _,
@@ -28,7 +28,7 @@ export const adminDeleteProduct = async (
 
   const product = await productById(id);
 
-  deleteFromSpaces(product.photos);
+  deleteFromSpaces((product as any).photos);
 
   await Product.findByIdAndRemove(id);
 

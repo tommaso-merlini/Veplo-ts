@@ -1,6 +1,6 @@
-import getRequestedFields from "../getRequestedFields";
-import Shop from "../../schemas/Shop.model";
-import customError from "../errors/customError";
+import getRequestedFields from "../getRequestedFields.js";
+import Shop from "../../schemas/Shop.model.js";
+import customError from "../errors/customError.js";
 
 const businessByStripeId = async (stripeId: string, info: any) => {
   let requestedFields = {};

@@ -1,5 +1,6 @@
-import { admin } from "../../firebase/firebase";
-require("dotenv").config();
+import { admin } from "../../firebase/firebase.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const canSee = async (creator: string, token: string) => {
   //if (process.env.NODE_ENV = environment) {

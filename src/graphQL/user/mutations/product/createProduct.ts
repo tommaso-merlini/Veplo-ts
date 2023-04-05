@@ -1,12 +1,12 @@
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkConstants from "../../../../controllers/checkConstants";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import shopById from "../../../../controllers/queries/shopById";
-import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1";
-import Product from "../../../../schemas/Product.model";
-import { checkLotQuantity } from "../../../../controllers/checkLotQuantity";
-import { MutationCreateProductArgs } from "src/graphQL/types/types";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkConstants from "../../../../controllers/checkConstants.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import shopById from "../../../../controllers/queries/shopById.js";
+import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1.js";
+import Product from "../../../../schemas/Product.model.js";
+import { checkLotQuantity } from "../../../../controllers/checkLotQuantity.js";
+import { MutationCreateProductArgs } from "src/graphQL/types/types.js";
 
 export const createProduct = async (
   _,
@@ -40,7 +40,11 @@ export const createProduct = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(token?.mongoId, [shop.businessId], token?.isBusiness);
+    authenticateToken(
+      token?.mongoId,
+      [String(shop.businessId)],
+      token?.isBusiness
+    );
 
   //calculate discount
   let discountPercentage: number | null = +(
@@ -58,7 +62,7 @@ export const createProduct = async (
     ...options,
     location: {
       type: "Point",
-      coordinates: shop.address.location.coordinates,
+      coordinates: (shop as any).address.location.coordinates,
     },
     shopInfo: {
       id: shop.id,

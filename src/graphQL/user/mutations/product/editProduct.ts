@@ -1,11 +1,11 @@
-import { MutationEditProductArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkConstants from "../../../../controllers/checkConstants";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import handlePriceEdit from "../../../../controllers/handlePriceEdit";
-import productById from "../../../../controllers/queries/productById";
-import Product from "../../../../schemas/Product.model";
+import { MutationEditProductArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkConstants from "../../../../controllers/checkConstants.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import handlePriceEdit from "../../../../controllers/handlePriceEdit.js";
+import productById from "../../../../controllers/queries/productById.js";
+import Product from "../../../../schemas/Product.model.js";
 import lodash from "lodash";
 
 export const editProduct = async (
@@ -43,7 +43,7 @@ export const editProduct = async (
   if (process.env.NODE_ENV !== "development")
     authenticateToken(
       token?.mongoId,
-      [product.shopInfo.businessId],
+      [(product as any).shopInfo.businessId],
       token?.isBusiness
     );
 

@@ -1,5 +1,5 @@
-import { QueryCartArgs } from "src/graphQL/types/types";
-import cartById from "../../../../controllers/queries/cartById";
+import { QueryCartArgs } from "src/graphQL/types/types.js";
+import cartById from "../../../../controllers/queries/cartById.js";
 
 export const cart = async (
   _: any,

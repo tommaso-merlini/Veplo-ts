@@ -1,7 +1,7 @@
-import { MutationDeleteCartArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import Cart from "../../../../schemas/Cart.model";
+import { MutationDeleteCartArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import Cart from "../../../../schemas/Cart.model.js";
 
 export const deleteCart = async (
   _: any,

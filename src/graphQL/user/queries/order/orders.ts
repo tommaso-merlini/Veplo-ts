@@ -1,9 +1,9 @@
-import { ShopOrdersArgs } from "src/graphQL/types/types";
-import { Context } from "../../../../../apollo/context";
-import authenticateToken from "../../../../controllers/authenticateToken";
-import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors";
-import shopById from "../../../../controllers/queries/shopById";
-import Order from "../../../../schemas/Order.model";
+import { ShopOrdersArgs } from "src/graphQL/types/types.js";
+import { Context } from "../../../../../apollo/context.js";
+import authenticateToken from "../../../../controllers/authenticateToken.js";
+import checkFirebaseErrors from "../../../../controllers/checkFirebaseErrors.js";
+import shopById from "../../../../controllers/queries/shopById.js";
+import Order from "../../../../schemas/Order.model.js";
 
 export const orders = async (
   account: any,
@@ -48,7 +48,11 @@ export const orders = async (
 
     if (process.env.NODE_ENV !== "development")
       //token operations
-      authenticateToken(token?.mongoId, [shop.businessId], token?.isBusiness);
+      authenticateToken(
+        token?.mongoId,
+        [String(shop.businessId)],
+        token?.isBusiness
+      );
 
     orders = await Order.find({
       "shop.id": account.id,

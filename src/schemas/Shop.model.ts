@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // mongoose.set("useCreateIndex", true);
 
@@ -59,30 +59,30 @@ const ShopSchema = new mongoose.Schema({
 //   "address.location": "2dsphere",
 // });
 
-ShopSchema.index({
-  name: "ShopSearchIndex",
+// ShopSchema.index({
+//   name: "ShopSearchIndex",
 
-  mappings: {
-    dynamic: false,
-    fields: {
-      address: {
-        fields: {
-          location: {
-            type: "geo",
-          },
-        },
-        type: "document",
-      },
-      name: {
-        type: "string",
-        analyzer: "lucene.italian",
-      },
-      createdAt: {
-        type: "date",
-      },
-    },
-  },
-});
+//   mappings: {
+//     dynamic: false,
+//     fields: {
+//       address: {
+//         fields: {
+//           location: {
+//             type: "geo",
+//           },
+//         },
+//         type: "document",
+//       },
+//       name: {
+//         type: "string",
+//         analyzer: "lucene.italian",
+//       },
+//       createdAt: {
+//         type: "date",
+//       },
+//     },
+//   },
+// });
 
 // {
 //   "mappings": {

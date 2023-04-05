@@ -3,11 +3,12 @@ import {
   ApolloServerPluginLandingPageGraphQLPlayground,
   ApolloServerPluginLandingPageDisabled,
 } from "apollo-server-core";
+
 import depthLimit from "graphql-depth-limit";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import typeDefs from "../src/graphQL/typeDefs";
-import resolvers from "../src/graphQL/resolvers";
-import { context } from "./context";
+import typeDefs from "../src/graphQL/typeDefs.js";
+import resolvers from "../src/graphQL/resolvers.js";
+import { context } from "./context.js";
 import crypto from "crypto";
 
 const schema = makeExecutableSchema({

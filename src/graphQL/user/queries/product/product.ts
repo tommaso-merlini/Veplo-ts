@@ -1,5 +1,5 @@
-import { QueryProductArgs } from "src/graphQL/types/types";
-import productById from "../../../../controllers/queries/productById";
+import { QueryProductArgs } from "src/graphQL/types/types.js";
+import productById from "../../../../controllers/queries/productById.js";
 
 export const product = async (
   _: any,
