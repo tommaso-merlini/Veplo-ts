@@ -42,6 +42,7 @@ import { ShopProductsArgs } from "./types/types.js";
 import { refund } from "./user/mutations/stripe/refund.js";
 import { productsNotAvailableRefund } from "./user/mutations/stripe/productsNotAvailableRefund.js";
 import { adminSeeAllOrders } from "./admin/adminSeeAllOrders.js";
+import { adminCreateAdmin } from "./admin/adminCreateAdmin.js";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -90,6 +91,7 @@ const resolvers = {
     createInformation,
     refund,
     productsNotAvailableRefund,
+    adminCreateAdmin,
   },
 
   Shop: {
