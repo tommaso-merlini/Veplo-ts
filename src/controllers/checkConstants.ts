@@ -2,7 +2,11 @@ import {
   EditLotsInput,
   ProductVariationInput,
 } from "src/graphQL/types/types.js";
-import { clothes_sizes, constants } from "../../constants/constants.js";
+import {
+  clothes_sizes,
+  constants,
+  shoes_sizes,
+} from "../../constants/constants.js";
 
 const checkConstants = (obj: any, is: String) => {
   if (is !== "product" && is !== "shop") {
@@ -71,7 +75,10 @@ const checkConstants = (obj: any, is: String) => {
     //---CHECK SIZES
     product.variations.forEach((variation: ProductVariationInput) => {
       variation.lots.forEach((lot: EditLotsInput) => {
-        if (!clothes_sizes.includes(lot.size)) {
+        if (
+          !clothes_sizes.includes(lot.size) &&
+          !shoes_sizes.includes(lot.size)
+        ) {
           throw new Error(
             `la taglia ${lot.size}, del prodotto di colore ${variation.color}, non e' una taglia accettata`
           );

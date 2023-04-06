@@ -356,7 +356,7 @@ export const constants = {
             "Scarpe per outdoor",
             "Stivaletti/Stivali",
             "Pantofole",
-            "Accessori per le scarpe",
+            // "Accessori per le scarpe",
           ],
           sizes: shoes_sizes,
         },

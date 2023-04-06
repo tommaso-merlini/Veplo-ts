@@ -70,7 +70,7 @@ export const createProduct = async (
       name: shop.name,
       city: shop.address.city,
       status: shop.status,
-      businessSTatus: shop.businessStatus,
+      businessStatus: shop.businessStatus,
     },
     createdAt: new Date(),
     updatedAt: new Date(),
