@@ -518,6 +518,8 @@ export type Query = {
 
 export type QueryAdminSeeAllOrdersArgs = {
   filters?: InputMaybe<AdminSeeAllOrdersFilters>;
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 };
 
 

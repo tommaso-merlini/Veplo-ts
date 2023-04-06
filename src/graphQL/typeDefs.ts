@@ -486,7 +486,11 @@ const typeDefs = gql`
     brands: [String!]
 
     #admin
-    adminSeeAllOrders(filters: AdminSeeAllOrdersFilters): [Order!]
+    adminSeeAllOrders(
+      offset: Int!
+      limit: Int!
+      filters: AdminSeeAllOrdersFilters
+    ): [Order!]
   }
 
   #===================MUTATIONS===================
@@ -549,6 +553,7 @@ const typeDefs = gql`
     createInformation(options: InformationInput!): Boolean
 
     #ADMIN
+    createAdmin: Boolean
     adminCreateProduct(
       shopId: ID!
       options: ProductInput!
