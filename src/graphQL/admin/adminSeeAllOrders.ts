@@ -32,22 +32,6 @@ export const adminSeeAllOrders = async (
     });
   }
 
-  const userEmail = () => {
-    try {
-      if (
-        filters != null &&
-        filters.user != null &&
-        filters.user.email != null
-      ) {
-        return filters?.user?.email;
-      } else {
-        throw new Error();
-      }
-    } catch (e) {
-      console.log("eii");
-      return { $exists: true };
-    }
-  };
   // const orders = await Order.find({
   //   status: filters?.status || { $exists: true },
   //   code: filters?.code || { $exists: true },
@@ -66,7 +50,7 @@ export const adminSeeAllOrders = async (
       $match: {
         $and: [
           {
-            status: filters?.status || {},
+            status: filters?.status || { $exists: true },
           },
           // { code: filters?.code || {} },
           // {
@@ -84,6 +68,7 @@ export const adminSeeAllOrders = async (
         ],
       },
     },
+    { $sort: { createdAt: -1 } },
     {
       $project: {
         ...getRequestedFields(info),
