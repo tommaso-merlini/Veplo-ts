@@ -553,7 +553,7 @@ const typeDefs = gql`
     createInformation(options: InformationInput!): Boolean
 
     #ADMIN
-    createAdmin: Boolean
+    adminCreateAdmin: Boolean
     adminCreateProduct(
       shopId: ID!
       options: ProductInput!
