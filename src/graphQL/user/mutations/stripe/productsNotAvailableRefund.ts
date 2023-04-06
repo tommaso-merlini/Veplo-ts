@@ -12,6 +12,7 @@ export const productsNotAvailableRefund = async (
   { orderId, productsNotAvailable }: MutationProductsNotAvailableRefundArgs,
   { stripe, admin, req }: Context
 ) => {
+  const status = "REF01";
   const order = await orderById(orderId);
   if (order.status !== "CANC01") {
     customError({
@@ -59,7 +60,13 @@ export const productsNotAvailableRefund = async (
       _id: orderId,
     },
     {
-      status: "REF01",
+      status,
+      $push: {
+        history: {
+          status,
+          date: Date.now(),
+        },
+      },
     }
   );
   return true;
