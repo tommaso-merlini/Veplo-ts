@@ -25,6 +25,7 @@ import { handleCheckoutAsyncPaymentSuccedeed } from "./controllers/stripe/handle
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
 import dotenv from "dotenv";
 import { handleChargeRefunded } from "./controllers/stripe/handleChargeRefunded.js";
+import { handleCheckoutAsyncPaymentFailed } from "./controllers/stripe/handleCheckoutAsyncPaymentFailed.js";
 dotenv.config();
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
@@ -178,7 +179,8 @@ async function startServer() {
               await handleCheckoutAsyncPaymentSuccedeed(event.data.object);
               break;
             case "checkout.session.async_payment_failed":
-              console.log("bisogna mandare la mail");
+              handleCheckoutAsyncPaymentFailed(event.data.object);
+              break;
             case "charge.refunded":
               handleChargeRefunded(event.data.object);
               break;
