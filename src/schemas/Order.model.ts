@@ -17,6 +17,10 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  chargeId: {
+    type: String,
+    required: false,
+  },
   history: [
     {
       status: {

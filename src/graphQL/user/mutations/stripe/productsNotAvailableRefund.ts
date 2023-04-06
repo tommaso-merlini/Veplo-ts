@@ -12,15 +12,8 @@ export const productsNotAvailableRefund = async (
   { orderId, productsNotAvailable }: MutationProductsNotAvailableRefundArgs,
   { stripe, admin, req }: Context
 ) => {
-  const status = "REF01";
+  const status = "CANC01";
   const order = await orderById(orderId);
-  if (order.status !== "CANC01") {
-    customError({
-      code: "400",
-      path: "order status",
-      message: "in order to refund a checkout, the order status must be CANC01",
-    });
-  }
   let token;
 
   if (process.env.NODE_ENV !== "development") {
@@ -52,15 +45,18 @@ export const productsNotAvailableRefund = async (
     order.checkoutSessionId
   );
   const paymentIntent = session.payment_intent;
-  await stripe.refunds.create({
+  const refund = await stripe.refunds.create({
     payment_intent: paymentIntent.toString(),
   });
+
+  console.log(refund);
   await Order.updateOne(
     {
       _id: orderId,
     },
     {
       status,
+      chargeId: refund.charge,
       $push: {
         history: {
           status,
