@@ -49,7 +49,6 @@ export const productsNotAvailableRefund = async (
     payment_intent: paymentIntent.toString(),
   });
 
-  console.log(refund);
   await Order.updateOne(
     {
       _id: orderId,
