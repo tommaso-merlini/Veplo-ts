@@ -17,6 +17,18 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  history: [
+    {
+      status: {
+        type: String,
+        required: true,
+      },
+      date: {
+        type: Date,
+        required: true,
+      },
+    },
+  ],
   user: {
     id: { type: mongoose.Types.ObjectId, required: true },
     email: {

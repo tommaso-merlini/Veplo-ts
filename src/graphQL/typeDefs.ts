@@ -196,12 +196,18 @@ const typeDefs = gql`
     code: String
     createdAt: String
     checkoutSessionId: String
+    history: [HistoryOrder!]
     user: UserOrder
     recipient: RecipientOrder
     totalDetails: TotalDetailsOrder
     shop: ShopOrder
     shipping: ShippingOrder
     productVariations: [ProductVariationsOrder!]
+  }
+
+  type HistoryOrder {
+    status: String
+    date: String
   }
 
   type RecipientOrder {

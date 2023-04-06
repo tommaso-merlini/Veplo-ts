@@ -98,6 +98,12 @@ export const handleCheckoutCompleted = async (session) => {
     status,
     createdAt: new Date(),
     checkoutSessionId: session.id,
+    history: [
+      {
+        status,
+        date: Date.now(),
+      },
+    ],
     user: {
       id: user._id,
       name: user.name,
