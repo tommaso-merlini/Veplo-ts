@@ -223,6 +223,7 @@ export type Mutation = {
   refund?: Maybe<Scalars['Boolean']>;
   removeFromCart?: Maybe<Scalars['Boolean']>;
   returnOrder?: Maybe<Scalars['Boolean']>;
+  returnedOrderHasArrived?: Maybe<Scalars['Boolean']>;
   setIsBusiness: Scalars['Boolean'];
   uploadImages: Array<Scalars['String']>;
 };
@@ -379,6 +380,11 @@ export type MutationRemoveFromCartArgs = {
 export type MutationReturnOrderArgs = {
   id: Scalars['ID'];
   why?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationReturnedOrderHasArrivedArgs = {
+  id: Scalars['ID'];
 };
 
 
