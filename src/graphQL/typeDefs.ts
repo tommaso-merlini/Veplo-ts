@@ -570,6 +570,7 @@ const typeDefs = gql`
     adminEditProduct(id: ID!, options: EditProductInput!): ID!
     adminDeleteProduct(id: ID!): ID!
     adminLostPackage(orderId: ID!): Boolean
+    adminOrderHasArrived(id: ID!): Boolean
   }
 `;
 
