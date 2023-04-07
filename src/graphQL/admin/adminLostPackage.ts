@@ -8,7 +8,7 @@ import checkFirebaseErrors from "../../controllers/checkFirebaseErrors.js";
 export const adminLostPackage = async (
   _,
   { orderId }: MutationAdminLostPackageArgs,
-  { admin, req }: Context
+  { admin, req, stripe }: Context
 ) => {
   const status = "CANC02";
 
@@ -29,6 +29,15 @@ export const adminLostPackage = async (
   }
 
   const order = await orderById(orderId);
+
+  const session = await stripe.checkout.sessions.retrieve(
+    order.checkoutSessionId
+  );
+  const paymentIntent = session.payment_intent;
+  const refund = await stripe.refunds.create({
+    payment_intent: paymentIntent.toString(),
+  });
+
   if (order.status != "SHIP02") {
     customError({
       code: "400",
@@ -42,6 +51,7 @@ export const adminLostPackage = async (
     },
     {
       status,
+      chargeId: refund.charge,
       $push: {
         history: {
           status,

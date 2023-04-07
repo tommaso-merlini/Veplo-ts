@@ -200,6 +200,7 @@ export type Mutation = {
   adminDeleteProduct: Scalars['ID'];
   adminEditProduct: Scalars['ID'];
   adminLostPackage?: Maybe<Scalars['Boolean']>;
+  adminRefundUser?: Maybe<Scalars['Boolean']>;
   changeProductStatus?: Maybe<Scalars['Boolean']>;
   changeShopStatus?: Maybe<Scalars['Boolean']>;
   checkout?: Maybe<Scalars['String']>;
@@ -251,6 +252,11 @@ export type MutationAdminEditProductArgs = {
 
 
 export type MutationAdminLostPackageArgs = {
+  orderId: Scalars['ID'];
+};
+
+
+export type MutationAdminRefundUserArgs = {
   orderId: Scalars['ID'];
 };
 
