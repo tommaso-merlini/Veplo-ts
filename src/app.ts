@@ -26,6 +26,7 @@ import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
 import dotenv from "dotenv";
 import { handleChargeRefunded } from "./controllers/stripe/handleChargeRefunded.js";
 import { handleCheckoutAsyncPaymentFailed } from "./controllers/stripe/handleCheckoutAsyncPaymentFailed.js";
+import { generateProducts } from "../mongoose/scripts/generateProducts.js";
 dotenv.config();
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
@@ -202,12 +203,13 @@ async function startServer() {
       }
     );
 
-    app.listen(port, () => {
+    app.listen(port, async () => {
       console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
       console.log(
         chalk.bgGreen.black(`Express is listening at http://localhost:${port}`)
       );
       console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
+      // await generateProducts();
     });
   });
 

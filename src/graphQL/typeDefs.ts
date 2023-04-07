@@ -108,6 +108,7 @@ const typeDefs = gql`
 
   type Product {
     id: ID
+    score: Float
     name: String
     status: String
     canBuy: Boolean
@@ -117,6 +118,7 @@ const typeDefs = gql`
     location: Location
     shopInfo: ShopInfo
     price: Price
+    orderCounter: Int
     variations: [ProductVariation!]
   }
 

@@ -182,26 +182,74 @@ export const products = async (
             },
             //boost products with higher discount percentage
             {
-              near: {
+              range: {
                 path: "price.discountPercentage",
-                origin: 100,
-                pivot: 1,
+                gte: 10,
+                lt: 30,
                 score: {
                   boost: {
-                    value: 5,
+                    value: 1,
                   },
                 },
               },
             },
-            //boost products based on how many times it has been bought
             {
-              near: {
-                path: "orderCounter",
-                origin: 100,
-                pivot: 1,
+              range: {
+                path: "price.discountPercentage",
+                gte: 30,
+                lt: 50,
                 score: {
                   boost: {
-                    value: 10,
+                    value: 2,
+                  },
+                },
+              },
+            },
+            {
+              range: {
+                path: "price.discountPercentage",
+                gte: 50,
+                lte: 100,
+                score: {
+                  boost: {
+                    value: 3,
+                  },
+                },
+              },
+            },
+
+            //boost products based on how many times it has been bought
+            {
+              range: {
+                path: "orderCounter",
+                gt: 0,
+                lt: 20,
+                score: {
+                  boost: {
+                    value: 1,
+                  },
+                },
+              },
+            },
+            {
+              range: {
+                path: "orderCounter",
+                gte: 20,
+                lt: 80,
+                score: {
+                  boost: {
+                    value: 2,
+                  },
+                },
+              },
+            },
+            {
+              range: {
+                path: "orderCounter",
+                gte: 80,
+                score: {
+                  boost: {
+                    value: 3,
                   },
                 },
               },
@@ -258,9 +306,9 @@ export const products = async (
     .skip(offset)
     .limit(limit);
 
-  console.log("==================");
-  console.log(products);
-  console.log("==================");
+  // console.log("==================");
+  // console.log(products);
+  // console.log("==================");
 
   return products;
 };
