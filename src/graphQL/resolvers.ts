@@ -45,6 +45,7 @@ import { adminSeeAllOrders } from "./admin/adminSeeAllOrders.js";
 import { adminCreateAdmin } from "./admin/adminCreateAdmin.js";
 import { adminLostPackage } from "./admin/adminLostPackage.js";
 import { adminOrderHasArrived } from "./admin/adminOrderHasArrived.js";
+import { returnOrder } from "./user/mutations/order/returnOrder.js";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -96,6 +97,7 @@ const resolvers = {
     adminCreateAdmin,
     adminLostPackage,
     adminOrderHasArrived,
+    returnOrder,
   },
 
   Shop: {

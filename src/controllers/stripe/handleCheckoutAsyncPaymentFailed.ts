@@ -15,7 +15,7 @@ export const handleCheckoutAsyncPaymentFailed = async (session: any) => {
       $push: {
         history: {
           status,
-          date: Date.now(),
+          date: new Date(),
         },
       },
     }

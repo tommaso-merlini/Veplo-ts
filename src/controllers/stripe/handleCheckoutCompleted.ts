@@ -101,7 +101,7 @@ export const handleCheckoutCompleted = async (session) => {
     history: [
       {
         status,
-        date: Date.now(),
+        date: new Date(),
       },
     ],
     user: {

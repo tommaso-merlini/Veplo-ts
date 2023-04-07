@@ -55,7 +55,7 @@ export const adminLostPackage = async (
       $push: {
         history: {
           status,
-          date: Date.now(),
+          date: new Date(),
         },
       },
     }

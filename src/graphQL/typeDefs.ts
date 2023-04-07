@@ -557,6 +557,7 @@ const typeDefs = gql`
 
     #order
     editOrder(id: ID!, options: EditOrderInput!): Boolean
+    returnOrder(id: ID!, why: String): Boolean
 
     #Information
     createInformation(options: InformationInput!): Boolean

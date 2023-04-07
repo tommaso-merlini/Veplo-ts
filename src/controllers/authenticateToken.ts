@@ -1,14 +1,15 @@
 const authenticateToken = (
   tokenId: string,
   ids: string[],
-  isBusiness: Boolean
+  isBusiness: Boolean,
+  checkIsBusiness?: Boolean
 ) => {
   // console.log(tokenId);
   // console.log(id);
   let match = false;
   let needToCheckIsBusiness = true;
 
-  if (ids.length > 1) {
+  if (checkIsBusiness === false) {
     needToCheckIsBusiness = false;
   }
 

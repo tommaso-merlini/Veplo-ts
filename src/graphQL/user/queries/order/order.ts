@@ -30,7 +30,8 @@ export const order = async (
     authenticateToken(
       token?.mongoId,
       [String(order.shop.id), String(order.user.id)],
-      token?.isBusiness
+      token?.isBusiness,
+      false
     );
 
   return order;

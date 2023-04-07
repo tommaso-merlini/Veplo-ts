@@ -59,7 +59,7 @@ export const productsNotAvailableRefund = async (
       $push: {
         history: {
           status,
-          date: Date.now(),
+          date: new Date(),
         },
       },
     }

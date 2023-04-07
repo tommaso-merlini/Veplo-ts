@@ -52,7 +52,7 @@ export const createVariation = async (
 
   await Product.updateOne(
     { _id: productId },
-    { $pull: { variations: options } }
+    { $push: { variations: options } }
   );
 
   return true;

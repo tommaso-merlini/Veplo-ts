@@ -47,7 +47,7 @@ export const adminOrderHasArrived = async (
       $push: {
         history: {
           status,
-          date: Date.now(),
+          date: new Date(),
         },
       },
     }
