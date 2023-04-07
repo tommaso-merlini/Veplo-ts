@@ -162,6 +162,12 @@ export type EditVariationInput = {
   status?: InputMaybe<Scalars['String']>;
 };
 
+export type HistoryOrder = {
+  __typename?: 'HistoryOrder';
+  date?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
 export type InformationInput = {
   businessName: Scalars['String'];
   email: Scalars['String'];
@@ -189,9 +195,11 @@ export type Lot = {
 export type Mutation = {
   __typename?: 'Mutation';
   addToCart?: Maybe<Scalars['Boolean']>;
+  adminCreateAdmin?: Maybe<Scalars['Boolean']>;
   adminCreateProduct?: Maybe<CreateProductResponse>;
   adminDeleteProduct: Scalars['ID'];
   adminEditProduct: Scalars['ID'];
+  adminLostPackage?: Maybe<Scalars['Boolean']>;
   changeProductStatus?: Maybe<Scalars['Boolean']>;
   changeShopStatus?: Maybe<Scalars['Boolean']>;
   checkout?: Maybe<Scalars['String']>;
@@ -239,6 +247,11 @@ export type MutationAdminDeleteProductArgs = {
 export type MutationAdminEditProductArgs = {
   id: Scalars['ID'];
   options: EditProductInput;
+};
+
+
+export type MutationAdminLostPackageArgs = {
+  orderId: Scalars['ID'];
 };
 
 
@@ -380,9 +393,11 @@ export type OpeningInput = {
 export type Order = {
   __typename?: 'Order';
   cartId?: Maybe<Scalars['ID']>;
+  chargeId?: Maybe<Scalars['String']>;
   checkoutSessionId?: Maybe<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
+  history?: Maybe<Array<HistoryOrder>>;
   id?: Maybe<Scalars['ID']>;
   productVariations?: Maybe<Array<ProductVariationsOrder>>;
   recipient?: Maybe<RecipientOrder>;
@@ -413,7 +428,9 @@ export type Product = {
   info?: Maybe<ProductInfo>;
   location?: Maybe<Location>;
   name?: Maybe<Scalars['String']>;
+  orderCounter?: Maybe<Scalars['Int']>;
   price?: Maybe<Price>;
+  score?: Maybe<Scalars['Float']>;
   shopInfo?: Maybe<ShopInfo>;
   status?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
