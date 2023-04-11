@@ -9,6 +9,7 @@ generator client {
 }
 
 model Product {
-  id              Int       @default(autoincrement()) @id
-  name            String    @db.VarChar(255)
+  id              String        @default(uuid()) @id
+  name            String        @db.VarChar(255)
+  photos          Json          @default("[]")
 }

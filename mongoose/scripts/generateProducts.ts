@@ -13,7 +13,7 @@ function randomDate(start, end) {
   );
 }
 
-const HOW_MANY_PRODUCTS = 200;
+const HOW_MANY_PRODUCTS = 60000;
 
 export const generateProducts = async () => {
   const products = [];
@@ -103,8 +103,7 @@ export const generateProducts = async () => {
         macroCategory: macroCategory.name,
         microCategory,
         fit: constants.fits[Math.floor(Math.random() * constants.fits.length)],
-        brand:
-          constants.brands[Math.floor(Math.random() * constants.brands.length)],
+        brand: "Nike",
       }),
         (product.location = {
           type: "Point",

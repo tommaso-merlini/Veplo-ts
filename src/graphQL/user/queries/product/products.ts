@@ -40,6 +40,7 @@ export const products = async (
         break;
     }
   }
+
   const checkName = () => {
     if (filters?.name != null) {
       return {
@@ -155,17 +156,8 @@ export const products = async (
       $search: {
         index: "ProductSearchIndex",
         compound: {
-          must: [
-            {
-              text: {
-                path: "status",
-                query: "active",
-              },
-            },
-          ],
-
           should: [
-            //get the best ranked name on the top of the list
+            // get the best ranked name on the top of the list
             checkName(),
             //boost score based on how young the product is
             {
@@ -217,7 +209,6 @@ export const products = async (
                 },
               },
             },
-
             //boost products based on how many times it has been bought
             {
               range: {
@@ -258,11 +249,12 @@ export const products = async (
         },
       },
     },
-    {
-      $match: {
-        "shopInfo.status": "active",
-      },
-    },
+    //!!
+    // {
+    //   $match: {
+    //     "shopInfo.status": "active",
+    //   },
+    // },
 
     {
       $match: {
@@ -292,6 +284,13 @@ export const products = async (
         ],
       },
     },
+    {
+      $skip: offset,
+    },
+
+    {
+      $limit: limit,
+    },
 
     {
       $project: {
@@ -301,10 +300,9 @@ export const products = async (
         id: "$_id",
       },
     },
+
     { $sort: checkSort },
-  ])
-    .skip(offset)
-    .limit(limit);
+  ]);
 
   // console.log("==================");
   // console.log(products);
