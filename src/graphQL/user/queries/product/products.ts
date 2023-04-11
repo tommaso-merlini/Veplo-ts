@@ -158,7 +158,7 @@ export const products = async (
         compound: {
           should: [
             // get the best ranked name on the top of the list
-            checkName(),
+            // checkName(),
             //boost score based on how young the product is
             {
               near: {
@@ -259,28 +259,28 @@ export const products = async (
     {
       $match: {
         $and: [
-          {
-            variations: {
-              $elemMatch: {
-                $and: [
-                  checkColors(),
-                  {
-                    lots: {
-                      $elemMatch: {
-                        $and: [checkSizes(), checkQuantity()],
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-          },
+          // {
+          //   variations: {
+          //     $elemMatch: {
+          //       $and: [
+          //         checkColors(),
+          //         {
+          //           lots: {
+          //             $elemMatch: {
+          //               $and: [checkSizes(), checkQuantity()],
+          //             },
+          //           },
+          //         },
+          //       ],
+          //     },
+          //   },
+          // },
           checkGender(),
-          checkMacroCategory(),
-          checkMicroCategory(),
-          checkBrands(),
-          checkMinPrice(),
-          checkMaxPrice(),
+          // checkMacroCategory(),
+          // checkMicroCategory(),
+          // checkBrands(),
+          // checkMinPrice(),
+          // checkMaxPrice(),
         ],
       },
     },
