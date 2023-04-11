@@ -18,6 +18,7 @@ export const products = async (
   const colors = filters?.colors;
   const daysPivot = 90;
   const datePivot = daysPivot * 24 * 60 * 60 * 1000;
+  const datePivotMs = datePivot * 24 * 60 * 60 * 1000;
   let checkSort: any = { score: -1 };
   if (sort != null) {
     switch (sort.for) {
@@ -151,6 +152,7 @@ export const products = async (
     }
   };
 
+  const today = new Date();
   let products: any = await Product.aggregate([
     {
       $search: {
@@ -158,13 +160,13 @@ export const products = async (
         compound: {
           should: [
             // get the best ranked name on the top of the list
-            // checkName(),
+            checkName(),
             //boost score based on how young the product is
             {
               near: {
                 path: "updatedAt",
-                origin: new Date(),
-                pivot: datePivot * 24 * 60 * 60 * 1000, //the first number is the days
+                origin: today,
+                pivot: datePivotMs, //the first number is the days
                 score: {
                   boost: {
                     value: 3,
@@ -259,28 +261,28 @@ export const products = async (
     {
       $match: {
         $and: [
-          // {
-          //   variations: {
-          //     $elemMatch: {
-          //       $and: [
-          //         checkColors(),
-          //         {
-          //           lots: {
-          //             $elemMatch: {
-          //               $and: [checkSizes(), checkQuantity()],
-          //             },
-          //           },
-          //         },
-          //       ],
-          //     },
-          //   },
-          // },
           checkGender(),
-          // checkMacroCategory(),
-          // checkMicroCategory(),
-          // checkBrands(),
-          // checkMinPrice(),
-          // checkMaxPrice(),
+          checkMacroCategory(),
+          checkMicroCategory(),
+          checkBrands(),
+          checkMinPrice(),
+          checkMaxPrice(),
+          {
+            variations: {
+              $elemMatch: {
+                $and: [
+                  checkColors(),
+                  {
+                    lots: {
+                      $elemMatch: {
+                        $and: [checkSizes(), checkQuantity()],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
         ],
       },
     },
