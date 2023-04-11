@@ -13,7 +13,7 @@ import cors from "cors";
 import http from "http";
 // import bodyParser from "body-parser";
 // import { PutObjectCommand } from "@aws-sdk/client-s3";
-// import fs from "fs";
+import fs from "fs";
 // import cluster from "cluster";
 // import os from "os";
 import crypto from "crypto";
@@ -27,6 +27,7 @@ import dotenv from "dotenv";
 import { handleChargeRefunded } from "./controllers/stripe/handleChargeRefunded.js";
 import { handleCheckoutAsyncPaymentFailed } from "./controllers/stripe/handleCheckoutAsyncPaymentFailed.js";
 import { generateProducts } from "../mongoose/scripts/generateProducts.js";
+import path from "path";
 dotenv.config();
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
@@ -105,6 +106,14 @@ async function startServer() {
       const categories = constants.genders;
 
       res.send(categories);
+    });
+
+    app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
+      res.sendFile(
+        path.resolve(
+          "../project1_server/loaderio-04cbc2e6e8994582817d57faa8742ee5.html"
+        )
+      );
     });
 
     // app.use(express.json());
