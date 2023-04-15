@@ -16,11 +16,11 @@ const apolloserver = new ApolloServer({
   introspection: true,
 
   //TODO uncomment below when in production
-  // plugins: [
-  //   process.env.NODE_ENV === "production"
-  //     ? ApolloServerPluginLandingPageDisabled()
-  //     : ApolloServerPluginLandingPageGraphQLPlayground(),
-  // ],
+  plugins: [
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageDisabled()
+      : ApolloServerPluginLandingPageGraphQLPlayground(),
+  ],
   validationRules: [depthLimit(7)],
   formatError: (err: any) => {
     let path = err.path;
