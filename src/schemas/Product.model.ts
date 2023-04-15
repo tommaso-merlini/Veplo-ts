@@ -81,44 +81,71 @@ const ProductSchema = new mongoose.Schema({
   ],
 });
 
-// ProductSchema.index({
-//   name: "ProductSearchIndex",
-
-//   mappings: {
-//     dynamic: false,
-//     fields: {
-//       location: {
-//         type: "geo",
-//       },
-//       name: {
-//         type: "string",
-//         analyzer: "lucene.italian",
-//       },
-//       updatedAt: {
-//         type: "date",
-//       },
-//       orderCounter: {
-//         type: "number",
-//       },
-//       status: {
-//         type: "string",
-//       },
-//       variations: {
-//         type: "embeddedDocuments",
-//         dynamic: true,
-//       },
-//       price: {
-//         fields: {
-//           discountPercentage: {
-//             type: "number",
+// {
+//   "mappings": {
+//     "dynamic": false,
+//     "fields": {
+//       "info": {
+//         "dynamic": false,
+//         "fields": {
+//           "brand": {
+//             "type": "string"
 //           },
+//           "gender": {
+//             "type": "string"
+//           },
+//           "macroCategory": {
+//             "type": "string"
+//           },
+//           "microCategory": {
+//             "type": "string"
+//           }
 //         },
-//         type: "document",
-//         dynamic: false,
+//         "type": "document"
 //       },
-//     },
-//   },
-// });
+//       "location": {
+//         "type": "geo"
+//       },
+//       "name": {
+//         "analyzer": "lucene.italian",
+//         "type": "string"
+//       },
+//       "orderCounter": {
+//         "type": "number"
+//       },
+//       "price": {
+//         "dynamic": false,
+//         "fields": {
+//           "discountPercentage": {
+//             "type": "number"
+//           }
+//         },
+//         "type": "document"
+//       },
+//       "updatedAt": {
+//         "type": "date"
+//       },
+//       "variations": {
+//         "dynamic": false,
+//         "fields": {
+//           "color": {
+//             "type": "string"
+//           },
+//           "lots": {
+//             "dynamic": false,
+//             "fields": {
+//               "size": {
+//                 "type": "string"
+//               }
+//             },
+//             "type": "embeddedDocuments"
+//           }
+//         },
+//         "type": "embeddedDocuments"
+//       }
+//     }
+//   }
+// }
 
 const Product = mongoose.model("product", ProductSchema);
 export default Product;

@@ -65,57 +65,164 @@ export const products = async (
   };
   const checkGender = () => {
     if (gender != null) {
-      return { "info.gender": gender };
+      return {
+        text: {
+          query: gender,
+          path: "info.gender",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "info.gender",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
   const checkBrands = () => {
     if (brand != null) {
-      return { "info.brand": brand };
+      return {
+        text: {
+          query: microCategory,
+          path: "info.microCategory",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "info.brand",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
   const checkSizes = () => {
     if (sizes != null) {
       return {
-        size: { $in: sizes },
+        text: {
+          query: sizes,
+          path: "variations.lots.size",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
       };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "variations.lots.size",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
   const checkMacroCategory = () => {
     if (filters?.macroCategory != null && filters?.macroCategory != "") {
-      return { "info.macroCategory": macroCategory };
+      return {
+        text: {
+          query: macroCategory,
+          path: "info.macroCategory",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "info.macroCategory",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
 
   const checkMicroCategory = () => {
     if (filters?.microCategory != null && filters?.microCategory != "") {
-      return { "info.microCategory": microCategory };
+      return {
+        text: {
+          query: microCategory,
+          path: "info.microCategory",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "info.microCategory",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
 
   const checkMaxPrice = () => {
     if (filters?.maxPrice != null) {
       return {
-        $expr: {
-          $lte: [
-            {
+        range: {
+          path: {
+            value: {
               $ifNull: ["$price.v2", "$price.v1"],
             },
-            filters.maxPrice,
-          ],
+          },
+          lte: filters.maxPrice,
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "price",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
 
@@ -132,15 +239,43 @@ export const products = async (
         },
       };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "price",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
 
   const checkColors = () => {
     if (colors != null) {
-      return { color: { $in: colors } };
+      return {
+        text: {
+          query: colors,
+          path: "variations.color",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     } else {
-      return {};
+      return {
+        exists: {
+          path: "variations.color",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
     }
   };
 
@@ -158,8 +293,37 @@ export const products = async (
       $search: {
         index: "ProductSearchIndex",
         compound: {
+          must: [
+            checkMacroCategory(),
+            checkMicroCategory(),
+            checkBrands(),
+            // checkMaxPrice(),
+            // checkMinPrice(),
+            {
+              embeddedDocument: {
+                path: "variations",
+                operator: {
+                  compound: {
+                    must: [
+                      checkColors(),
+                      {
+                        embeddedDocument: {
+                          path: "variations.lots",
+                          operator: {
+                            compound: {
+                              must: [checkSizes()],
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          ],
           should: [
-            // get the best ranked name on the top of the list
+            //get the best ranked name on the top of the list
             checkName(),
             //boost score based on how young the product is
             {
@@ -258,34 +422,30 @@ export const products = async (
     //   },
     // },
 
-    {
-      $match: {
-        $and: [
-          checkGender(),
-          checkMacroCategory(),
-          checkMicroCategory(),
-          checkBrands(),
-          checkMinPrice(),
-          checkMaxPrice(),
-          {
-            variations: {
-              $elemMatch: {
-                $and: [
-                  checkColors(),
-                  {
-                    lots: {
-                      $elemMatch: {
-                        $and: [checkSizes(), checkQuantity()],
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-          },
-        ],
-      },
-    },
+    // {
+    //   $match: {
+    //     $and: [
+    //       checkMinPrice(),
+    //       checkMaxPrice(),
+    //       {
+    //         variations: {
+    //           $elemMatch: {
+    //             $and: [
+    //               checkColors(),
+    //               {
+    //                 lots: {
+    //                   $elemMatch: {
+    //                     $and: [checkSizes(), checkQuantity()],
+    //                   },
+    //                 },
+    //               },
+    //             ],
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   },
+    // },
     {
       $skip: offset,
     },
@@ -297,6 +457,7 @@ export const products = async (
     {
       $project: {
         score: { $meta: "searchScore" },
+
         ...getRequestedFields(info),
         _id: 0,
         id: "$_id",
@@ -306,9 +467,9 @@ export const products = async (
     { $sort: checkSort },
   ]);
 
-  // console.log("==================");
-  // console.log(products);
-  // console.log("==================");
+  console.log("==================");
+  console.log(products);
+  console.log("==================");
 
   return products;
 };
