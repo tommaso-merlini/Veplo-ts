@@ -4,10 +4,11 @@ import deleteFromSpaces from "../../controllers/deleteFromSpaces.js";
 import productById from "../../controllers/queries/productById.js";
 import customError from "../../controllers/errors/customError.js";
 import Product from "../../schemas/Product.model.js";
+import { MutationAdminDeleteProductArgs } from "../types/types.js";
 
 export const adminDeleteProduct = async (
-  _,
-  { id },
+  _: any,
+  { id }: MutationAdminDeleteProductArgs,
   { admin, req, s3Client }: Context
 ) => {
   let token;

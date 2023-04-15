@@ -1,8 +1,6 @@
 import stripe from "../../../stripe/stripe.js";
 import Cart from "../../schemas/Cart.model.js";
 import Order from "../../schemas/Order.model.js";
-import User from "../../schemas/User.model.js";
-import Shop from "../../schemas/Shop.model.js";
 import Product from "../../schemas/Product.model.js";
 import Business from "../../schemas/Business.model.js";
 import customError from "../errors/customError.js";
@@ -10,8 +8,11 @@ import { deleteCartById } from "../mutations/deleteCartById.js";
 import { generateCode } from "../generateCode.js";
 import { getStatus } from "../getStatus.js";
 import { removeBoughtQuantityFromVariation } from "../removeBoughtQuantityFromVariation.js";
+import userById from "../queries/userById.js";
+import shopById from "../queries/shopById.js";
+import businessById from "../queries/businessById.js";
 
-export const handleCheckoutCompleted = async (session) => {
+export const handleCheckoutCompleted = async (session: any) => {
   const paymentIntentId = session.payment_intent;
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
   const variationsIds = [];
@@ -29,9 +30,9 @@ export const handleCheckoutCompleted = async (session) => {
       message: "cart not found",
     });
   }
-  const user = await User.findById(paymentIntent.metadata.userId);
-  const shop = await Shop.findById(paymentIntent.metadata.shopId);
-  const business = await Business.findById(paymentIntent.metadata.businessId);
+  const user = await userById(paymentIntent.metadata.userId);
+  const shop = await shopById(paymentIntent.metadata.shopId);
+  const business = await businessById(paymentIntent.metadata.businessId);
   //get variationsIds
   for (let variation of cart.productVariations) {
     variationsIds.push(variation.variationId);
@@ -78,7 +79,7 @@ export const handleCheckoutCompleted = async (session) => {
     for (let variation of variationsInCart) {
       if (cartVariation.variationId.toString() === variation._id.toString()) {
         variationsInCartWithSize.push({
-          productId: variation.productId,
+          productId: String(variation.productId),
           variationId: variation._id,
           photo: variation.photos[0],
           name: variation.name,

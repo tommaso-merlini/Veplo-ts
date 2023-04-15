@@ -3,8 +3,8 @@ import { DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
 dotenv.config();
 
-const deleteFromSpaces = (photos) => {
-  const objects = [];
+const deleteFromSpaces = (photos: string[]) => {
+  const objects: any = [];
 
   photos.map((photo) => {
     objects.push({ Key: photo });

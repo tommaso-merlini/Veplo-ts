@@ -6,7 +6,7 @@ import orderById from "../../controllers/queries/orderById.js";
 import Order from "../../schemas/Order.model.js";
 
 export const adminOrderHasArrived = async (
-  _,
+  _: any,
   { id }: MutationAdminOrderHasArrivedArgs,
   { admin, req }: Context
 ) => {

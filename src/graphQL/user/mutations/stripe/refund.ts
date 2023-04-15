@@ -2,7 +2,7 @@ import { Context } from "apollo/context.js";
 import { MutationRefundArgs } from "src/graphQL/types/types.js";
 
 export const refund = async (
-  _,
+  _: any,
   { checkoutSessionId }: MutationRefundArgs,
   { stripe }: Context
 ) => {

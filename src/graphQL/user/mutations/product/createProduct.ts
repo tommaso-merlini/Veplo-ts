@@ -9,7 +9,7 @@ import { checkLotQuantity } from "../../../../controllers/checkLotQuantity.js";
 import { MutationCreateProductArgs } from "src/graphQL/types/types.js";
 
 export const createProduct = async (
-  _,
+  _: any,
   { shopId, options }: MutationCreateProductArgs,
   { admin, req }: Context
 ) => {
@@ -40,11 +40,11 @@ export const createProduct = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(
-      token?.mongoId,
-      [String(shop.businessId)],
-      token?.isBusiness
-    );
+    authenticateToken({
+      tokenId: token?.mongoId,
+      ids: [String(shop.businessId)],
+      isBusiness: token?.isBusiness,
+    });
 
   //calculate discount
   let discountPercentage: number | null = +(

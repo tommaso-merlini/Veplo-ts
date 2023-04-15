@@ -1,11 +1,23 @@
-const authenticateToken = (
-  tokenId: string,
-  ids: string[],
-  isBusiness: Boolean,
-  checkIsBusiness?: Boolean
-) => {
+type Args = {
+  tokenId: string;
+  ids: string[];
+  isBusiness: Boolean;
+  isAdmin?: Boolean;
+  checkIsBusiness?: Boolean;
+};
+
+const authenticateToken = ({
+  tokenId,
+  ids,
+  isBusiness,
+  isAdmin,
+  checkIsBusiness,
+}: Args) => {
   // console.log(tokenId);
   // console.log(id);
+
+  if (isAdmin) return; //skip the authorization
+
   let match = false;
   let needToCheckIsBusiness = true;
 

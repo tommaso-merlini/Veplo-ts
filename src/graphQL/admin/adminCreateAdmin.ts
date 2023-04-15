@@ -2,7 +2,11 @@ import checkFirebaseErrors from "../../controllers/checkFirebaseErrors.js";
 import { Context } from "../../../apollo/context.js";
 import customError from "../../controllers/errors/customError.js";
 
-export const adminCreateAdmin = async (_, __, { admin, req }: Context) => {
+export const adminCreateAdmin = async (
+  _: any,
+  __: any,
+  { admin, req }: Context
+) => {
   let token;
   try {
     token = await admin.auth().verifyIdToken(req.headers.authorization);

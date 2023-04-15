@@ -6,10 +6,10 @@ import customError from "../../controllers/errors/customError.js";
 import getRequestedFields from "../../controllers/getRequestedFields.js";
 
 export const adminSeeAllOrders = async (
-  _,
+  _: any,
   { offset, limit, filters }: QueryAdminSeeAllOrdersArgs,
   { admin, req }: Context,
-  info
+  info: any
 ) => {
   let token;
   if (process.env.NODE_ENV !== "development") {

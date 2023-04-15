@@ -60,11 +60,11 @@ export const editVariation = async (
 
   if (process.env.NODE_ENV !== "development")
     //token operations
-    authenticateToken(
-      token?.mongoId,
-      [String(product.shopInfo.businessId)],
-      token?.isBusiness
-    );
+    authenticateToken({
+      tokenId: token?.mongoId,
+      ids: [String(product.shopInfo.businessId)],
+      isBusiness: token?.isBusiness,
+    });
 
   await Product.updateOne(
     { "variations._id": id },

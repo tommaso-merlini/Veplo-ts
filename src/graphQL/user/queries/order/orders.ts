@@ -48,11 +48,11 @@ export const orders = async (
 
     if (process.env.NODE_ENV !== "development")
       //token operations
-      authenticateToken(
-        token?.mongoId,
-        [String(shop.businessId)],
-        token?.isBusiness
-      );
+      authenticateToken({
+        tokenId: token?.mongoId,
+        ids: [String(shop.businessId)],
+        isBusiness: token?.isBusiness,
+      });
 
     orders = await Order.find({
       "shop.id": account.id,

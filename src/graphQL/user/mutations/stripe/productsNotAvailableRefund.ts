@@ -8,7 +8,7 @@ import authenticateToken from "../../../../../src/controllers/authenticateToken.
 import shopById from "../../../../../src/controllers/queries/shopById.js";
 
 export const productsNotAvailableRefund = async (
-  _,
+  _: any,
   { orderId, productsNotAvailable }: MutationProductsNotAvailableRefundArgs,
   { stripe, admin, req }: Context
 ) => {
@@ -35,11 +35,11 @@ export const productsNotAvailableRefund = async (
 
   if (process.env.NODE_ENV !== "development")
     //token operations
-    authenticateToken(
-      token?.mongoId,
-      [String(shop.businessId)],
-      token?.isBusiness
-    );
+    authenticateToken({
+      tokenId: token?.mongoId,
+      ids: [String(shop.businessId)],
+      isBusiness: token?.isBusiness,
+    });
 
   const session = await stripe.checkout.sessions.retrieve(
     order.checkoutSessionId

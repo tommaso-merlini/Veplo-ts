@@ -41,11 +41,11 @@ export const editProduct = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(
-      token?.mongoId,
-      [(product as any).shopInfo.businessId],
-      token?.isBusiness
-    );
+    authenticateToken({
+      tokenId: token?.mongoId,
+      ids: [(product as any).shopInfo.businessId],
+      isBusiness: token?.isBusiness,
+    });
 
   const mergedProduct = lodash.merge(product, options);
 

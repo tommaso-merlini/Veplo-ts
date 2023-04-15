@@ -5,7 +5,8 @@ import orderById from "../../../../controllers/queries/orderById.js";
 import lodash from "lodash";
 import Order from "../../../../schemas/Order.model.js";
 import customError from "../../../../controllers/errors/customError.js";
-import { MutationEditOrderArgs } from "src/graphQL/types/types.js";
+import { MutationEditOrderArgs } from "../../../../graphQL/types/types.js";
+import { DecodedIdToken } from "firebase-admin/auth";
 
 export const editOrder = async (
   _: any,
@@ -22,8 +23,8 @@ export const editOrder = async (
     }
   } else {
     token = {
-      mongoId: "6410a5686c8721c863f3d1d9",
-      isBusiness: "true",
+      mongoId: "641f209eca22d34c3ca1ec1s",
+      isBusiness: true,
       isAdmin: false,
     };
   }
@@ -52,13 +53,14 @@ export const editOrder = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(
-      token?.mongoId,
-      [String(order.shop.businessId)],
-      token?.isBusiness
-    );
+    authenticateToken({
+      tokenId: token.mongoId,
+      isBusiness: token.isBusiness,
+      isAdmin: token.isAdmin,
+      ids: [String(order?.shop?.businessId)],
+    });
 
-  const orderShipping = order.shipping;
+  const orderShipping = order?.shipping;
 
   const mergedShipping = lodash.merge(orderShipping, options);
 

@@ -13,7 +13,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const checkout = async (
-  _,
+  _: any,
   { shopId }: MutationCheckoutArgs,
   { admin, req, stripe }: Context
 ) => {

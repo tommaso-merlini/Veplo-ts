@@ -6,7 +6,7 @@ import { Context } from "../../../apollo/context.js";
 import checkFirebaseErrors from "../../controllers/checkFirebaseErrors.js";
 
 export const adminLostPackage = async (
-  _,
+  _: any,
   { orderId }: MutationAdminLostPackageArgs,
   { admin, req, stripe }: Context
 ) => {

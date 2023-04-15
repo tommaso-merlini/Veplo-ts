@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-let databaseUrl: string | undefined;
+let databaseUrl: string;
 
 if (process.env.NODE_ENV === "production") {
-  databaseUrl = process.env.PROD_DATABASE_URL;
+  databaseUrl = process.env.PROD_DATABASE_URL || "";
 } else {
-  databaseUrl = process.env.DEV_DATABASE_URL;
+  databaseUrl = process.env.DEV_DATABASE_URL || "";
 }
 
 const initMongoose = () => {

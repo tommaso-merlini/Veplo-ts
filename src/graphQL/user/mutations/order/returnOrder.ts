@@ -8,7 +8,7 @@ import authenticateToken from "../../../../controllers/authenticateToken.js";
 import Order from "../../../../schemas/Order.model.js";
 
 export const returnOrder = async (
-  _,
+  _: any,
   { id, why }: MutationReturnOrderArgs,
   { admin, req }: Context
 ) => {
@@ -48,12 +48,12 @@ export const returnOrder = async (
 
   //token operations
   if (process.env.NODE_ENV !== "development")
-    authenticateToken(
-      token?.mongoId,
-      [String(order.user.id)],
-      token?.isBusiness,
-      false
-    );
+    authenticateToken({
+      tokenId: token.mongoId,
+      ids: [String(order.user.id)],
+      isBusiness: false,
+      checkIsBusiness: false,
+    });
 
   const diffDays = dateDiffInDays(order.createdAt, new Date());
 

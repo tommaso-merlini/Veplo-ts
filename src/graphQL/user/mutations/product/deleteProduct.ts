@@ -30,11 +30,11 @@ export const deleteProduct = async (
 
   // if (process.env.NODE_ENV !== "development")
   //token operations
-  authenticateToken(
-    token?.mongoId,
-    [(product as any).shopInfo.businessId],
-    token?.isBusiness
-  );
+  authenticateToken({
+    tokenId: token?.mongoId,
+    ids: [(product as any).shopInfo.businessId],
+    isBusiness: token?.isBusiness,
+  });
 
   await Product.findByIdAndRemove(id);
 

@@ -1,6 +1,7 @@
 import Product from "../../../src/schemas/Product.model.js";
 import Shop from "../../../src/schemas/Shop.model.js";
 import Business from "../../schemas/Business.model.js";
+import businessByStripeId from "../queries/businessByStripeId.js";
 
 export const handleAccountUpdated = async (object: any) => {
   const stripeId = object.id;
@@ -14,12 +15,10 @@ export const handleAccountUpdated = async (object: any) => {
   // console.log(`detailsSumbitted: ${detailsSumbitted}`);
   // console.log(`payoutsEnabled: ${payoutsEnabled}`);
 
-  const business = await Business.findOne({
-    "stripe.id": stripeId,
-  });
+  const business = await businessByStripeId(stripeId);
 
   if (detailsSumbitted === false) {
-    if (business.status === "active") {
+    if (business?.status === "active") {
       //check if the business was alreay created
       status = "onboarding_KYC_requested"; //! punto 4
       await Business.updateOne(
@@ -43,7 +42,7 @@ export const handleAccountUpdated = async (object: any) => {
     detailsSumbitted === true &&
     (payoutsEnabled === false || chargesEnabled === false)
   ) {
-    if (business.status === "active") {
+    if (business?.status === "active") {
       //check if the business was alreay created
       status = "pending"; //! punto 5
       await Business.updateOne(
@@ -83,7 +82,7 @@ export const handleAccountUpdated = async (object: any) => {
   await Promise.all([
     Shop.updateMany(
       {
-        businessId: business.id,
+        businessId: business?.id,
       },
       {
         businessStatus: status,
@@ -91,7 +90,7 @@ export const handleAccountUpdated = async (object: any) => {
     ),
     Product.updateMany(
       {
-        "shopInfo.businessId": business.id,
+        "shopInfo.businessId": business?.id,
       },
       {
         "shopInfo.businessStatus": status,
