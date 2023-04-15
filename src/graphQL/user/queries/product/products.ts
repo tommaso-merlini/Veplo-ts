@@ -467,9 +467,9 @@ export const products = async (
     { $sort: checkSort },
   ]);
 
-  console.log("==================");
-  console.log(products);
-  console.log("==================");
+  // console.log("==================");
+  // console.log(products);
+  // console.log("==================");
 
   return products;
 };
