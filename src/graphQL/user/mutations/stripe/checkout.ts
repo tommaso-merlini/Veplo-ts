@@ -65,7 +65,7 @@ export const checkout = async (
     }
   } else {
     token = {
-      mongoId: "6410ace3850a8aeb92bcbc9e",
+      mongoId: "64283d8372f835e8c8d5cd0a",
       email: "test10@gmail.it",
     };
   }
@@ -84,12 +84,14 @@ export const checkout = async (
   }
 
   if (process.env.NODE_ENV !== "production") {
-    successUrl = `http://localhost:3000/orders?shop=${cart.shopInfo.name}`;
+    successUrl = `http://localhost:3000/orders`;
     cancelUrl = `http://localhost:3000/checkout/${shopId}`;
   } else {
-    successUrl = `https://www.veplo.it/orders?shop=${cart.shopInfo.name}`;
+    successUrl = `https://www.veplo.it/orders`;
     cancelUrl = `https://www.veplo.it/checkout/${shopId}`;
   }
+
+  console.log(cart.shopInfo.name);
 
   const user = await userById(token?.mongoId);
   const business = await businessById(String(cart.shopInfo.businessId));
