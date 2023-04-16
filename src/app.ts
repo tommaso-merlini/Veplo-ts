@@ -112,9 +112,7 @@ async function startServer() {
 
     app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
       res.sendFile(
-        path.resolve(
-          "../project1_server/loaderio-04cbc2e6e8994582817d57faa8742ee5.html"
-        )
+        path.resolve("./loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
       );
     });
 
