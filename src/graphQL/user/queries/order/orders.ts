@@ -58,7 +58,7 @@ export const orders = async (
       "shop.id": account.id,
       status: checkStatuses,
     })
-      .sort({ updatedAt: -1 })
+      .sort({ createdAt: -1 })
       .limit(limit)
       .skip(offset);
   }
