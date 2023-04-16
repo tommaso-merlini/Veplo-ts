@@ -8,9 +8,10 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
-      #- "27017:27017" linked to mongodb?
     depends_on:
       - api
+    # env_file:
+    #   - ./.env
   api:
     restart: always
     build: .
