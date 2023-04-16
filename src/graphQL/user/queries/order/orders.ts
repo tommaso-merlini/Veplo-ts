@@ -7,7 +7,7 @@ import Order from "../../../../schemas/Order.model.js";
 
 export const orders = async (
   account: any,
-  { statuses }: ShopOrdersArgs,
+  { statuses, limit, offset }: ShopOrdersArgs,
   { admin, req }: Context,
   queryInfo: any
 ) => {
@@ -57,7 +57,9 @@ export const orders = async (
     orders = await Order.find({
       "shop.id": account.id,
       status: checkStatuses,
-    });
+    })
+      .limit(limit)
+      .skip(offset);
   }
 
   const reversedOrders = orders.reverse();

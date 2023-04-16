@@ -640,6 +640,8 @@ export type Shop = {
 
 
 export type ShopOrdersArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
   statuses?: InputMaybe<Array<Scalars['String']>>;
 };
 
@@ -727,6 +729,8 @@ export type User = {
 
 
 export type UserOrdersArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
   statuses?: InputMaybe<Array<Scalars['String']>>;
 };
 
