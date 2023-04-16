@@ -7,7 +7,7 @@ import authenticateToken from "../../../../controllers/authenticateToken.js";
 import Order from "../../../../schemas/Order.model.js";
 
 export const returnedOrderHasArrived = async (
-  _,
+  _: any,
   { id }: MutationReturnedOrderHasArrivedArgs,
   { admin, req, stripe }: Context
 ) => {
@@ -34,11 +34,11 @@ export const returnedOrderHasArrived = async (
 
   if (process.env.NODE_ENV !== "development")
     //token operations
-    authenticateToken(
-      token?.mongoId,
-      [String(shop.businessId)],
-      token?.isBusiness
-    );
+    authenticateToken({
+      tokenId: token?.mongoId,
+      ids: [String(shop.businessId)],
+      isBusiness: token?.isBusiness,
+    });
 
   const session = await stripe.checkout.sessions.retrieve(
     order.checkoutSessionId

@@ -2,7 +2,7 @@
  * Recursively merge properties of two objects
  */
 function getDiffs(obj1: any, obj2: any) {
-  let diffs = {};
+  let diffs: any = {};
   let merge = obj1;
   let isDifferent = false;
   for (let p in obj2) {

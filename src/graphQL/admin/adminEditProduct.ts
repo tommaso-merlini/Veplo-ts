@@ -8,10 +8,11 @@ import handlePriceEdit from "../../controllers/handlePriceEdit.js";
 import handleUpdatedPhotos from "../../controllers/handleUpdatedPhotos.js";
 import productById from "../../controllers/queries/productById.js";
 import Product from "../../schemas/Product.model.js";
+import { MutationAdminEditProductArgs } from "../types/types.js";
 
 const adminEditProduct = async (
-  _,
-  { id, options },
+  _: any,
+  { id, options }: any,
   { admin, req }: Context
 ) => {
   let token;

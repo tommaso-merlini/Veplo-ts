@@ -7,7 +7,7 @@ import {
 import Shop from "../../src/schemas/Shop.model.js";
 import Product from "../../src/schemas/Product.model.js";
 
-function randomDate(start, end) {
+function randomDate(start: Date, end: Date) {
   return new Date(
     start.getTime() + Math.random() * (end.getTime() - start.getTime())
   );

@@ -28,6 +28,7 @@ import { handleChargeRefunded } from "./controllers/stripe/handleChargeRefunded.
 import { handleCheckoutAsyncPaymentFailed } from "./controllers/stripe/handleCheckoutAsyncPaymentFailed.js";
 import { generateProducts } from "../mongoose/scripts/generateProducts.js";
 import path from "path";
+import { generateCode } from "./controllers/generateCode.js";
 dotenv.config();
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
@@ -47,6 +48,7 @@ process.on("uncaughtException", function (err) {
 
 const app = express();
 const port = process.env.PORT || 3000;
+const appId = generateCode();
 // const numCpus = os.cpus().length;
 let endpointSecretCheckout: string;
 let endpointSecretAccount: string;
@@ -93,7 +95,7 @@ async function startServer() {
     // app.use(limiter);
 
     app.get("/", (req, res: Response) => {
-      res.send({ status: "ok" });
+      res.send({ status: "ok", process_id: appId });
     });
 
     app.get("/brands", (req, res: Response) => {
