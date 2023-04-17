@@ -92,6 +92,9 @@ const ProductSchema = new mongoose.Schema({
 //           "brand": {
 //             "type": "string"
 //           },
+//           "fit": {
+//             "type": "string"
+//           },
 //           "gender": {
 //             "type": "string"
 //           },
@@ -99,6 +102,11 @@ const ProductSchema = new mongoose.Schema({
 //             "type": "string"
 //           },
 //           "microCategory": {
+//             "type": "string"
+//           },
+//           "traits": {
+//             "analyzer": "lucene.keyword",
+//             "searchAnalyzer": "lucene.keyword",
 //             "type": "string"
 //           }
 //         },
@@ -137,6 +145,9 @@ const ProductSchema = new mongoose.Schema({
 //             "fields": {
 //               "size": {
 //                 "type": "string"
+//               },
+//               "quantity": {
+//                 "type": "number"
 //               }
 //             },
 //             "type": "embeddedDocuments"

@@ -16,6 +16,8 @@ export const products = async (
   const brand = filters?.brand;
   const sizes = filters?.sizes;
   const colors = filters?.colors;
+  const fit = filters?.fit;
+  const traits = filters?.traits;
   const daysPivot = 90;
   const datePivot = daysPivot * 24 * 60 * 60 * 1000;
   const datePivotMs = datePivot * 24 * 60 * 60 * 1000;
@@ -115,6 +117,60 @@ export const products = async (
       };
     }
   };
+  const checkFit = () => {
+    if (fit != null) {
+      return {
+        text: {
+          query: fit,
+          path: "info.fit",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
+    } else {
+      return {
+        exists: {
+          path: "info.fit",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
+    }
+  };
+
+  const checkTraits = () => {
+    //per fare una cosa in cui ogni trait ce debba essere si potrebbe usare "minimumShouldMatch"
+    if (traits != null) {
+      return {
+        phrase: {
+          query: traits,
+          path: "info.traits",
+          score: {
+            boost: {
+              value: 2,
+            },
+          },
+        },
+      };
+    } else {
+      return {
+        exists: {
+          path: "info.traits",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
+    }
+  };
   const checkSizes = () => {
     if (sizes != null) {
       return {
@@ -141,6 +197,34 @@ export const products = async (
       };
     }
   };
+
+  const checkQuantity = () => {
+    if (sizes != null) {
+      return {
+        range: {
+          path: "variations.lots.quantity",
+          gt: 0,
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
+    } else {
+      return {
+        exists: {
+          path: "variations.lots.quantity",
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
+        },
+      };
+    }
+  };
+
   const checkMacroCategory = () => {
     if (filters?.macroCategory != null && filters?.macroCategory != "") {
       return {
@@ -279,24 +363,19 @@ export const products = async (
     }
   };
 
-  const checkQuantity = () => {
-    if (sizes !== null) {
-      return { $or: [{ quantity: null }, { quantity: { $gt: 0 } }] };
-    } else {
-      return {};
-    }
-  };
-
   const today = new Date();
   let products: any = await Product.aggregate([
     {
       $search: {
         index: "ProductSearchIndex",
         compound: {
-          must: [
+          filter: [
             checkMacroCategory(),
             checkMicroCategory(),
+            checkGender(),
             checkBrands(),
+            checkFit(),
+            checkTraits(),
             // checkMaxPrice(),
             // checkMinPrice(),
             {
@@ -304,14 +383,28 @@ export const products = async (
                 path: "variations",
                 operator: {
                   compound: {
-                    must: [
+                    filter: [
                       checkColors(),
                       {
                         embeddedDocument: {
                           path: "variations.lots",
                           operator: {
                             compound: {
-                              must: [checkSizes()],
+                              must: [checkSizes(), checkQuantity()],
+                              should: [
+                                {
+                                  range: {
+                                    path: "variations.lots.quantity",
+                                    gt: 0,
+                                    score: {
+                                      constant: {
+                                        value: 0,
+                                      },
+                                    },
+                                  },
+                                },
+                              ],
+                              minimumShouldMatch: 1, //se cerchi un prodotto deve avere almeno un lotto con quantity > 0
                             },
                           },
                         },
@@ -322,6 +415,7 @@ export const products = async (
               },
             },
           ],
+
           should: [
             //get the best ranked name on the top of the list
             checkName(),
@@ -333,7 +427,7 @@ export const products = async (
                 pivot: datePivotMs, //the first number is the days
                 score: {
                   boost: {
-                    value: 3,
+                    value: 1,
                   },
                 },
               },
@@ -415,37 +509,11 @@ export const products = async (
         },
       },
     },
-    //!!
-    // {
-    //   $match: {
-    //     "shopInfo.status": "active",
-    //   },
-    // },
-
-    // {
-    //   $match: {
-    //     $and: [
-    //       checkMinPrice(),
-    //       checkMaxPrice(),
-    //       {
-    //         variations: {
-    //           $elemMatch: {
-    //             $and: [
-    //               checkColors(),
-    //               {
-    //                 lots: {
-    //                   $elemMatch: {
-    //                     $and: [checkSizes(), checkQuantity()],
-    //                   },
-    //                 },
-    //               },
-    //             ],
-    //           },
-    //         },
-    //       },
-    //     ],
-    //   },
-    // },
+    {
+      $match: {
+        "shopInfo.status": "active",
+      },
+    },
     {
       $skip: offset,
     },

@@ -460,6 +460,7 @@ export type Product = {
 export type ProductFilters = {
   brand?: InputMaybe<Scalars['String']>;
   colors?: InputMaybe<Array<Scalars['String']>>;
+  fit?: InputMaybe<Scalars['String']>;
   gender?: InputMaybe<Scalars['String']>;
   macroCategory?: InputMaybe<Scalars['String']>;
   maxPrice?: InputMaybe<Scalars['Int']>;
@@ -467,6 +468,7 @@ export type ProductFilters = {
   minPrice?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
   sizes?: InputMaybe<Array<Scalars['String']>>;
+  traits?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ProductInfo = {

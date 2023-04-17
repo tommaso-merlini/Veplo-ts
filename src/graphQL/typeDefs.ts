@@ -284,6 +284,8 @@ const typeDefs = gql`
     gender: String
     macroCategory: String
     microCategory: String
+    fit: String
+    traits: [String!]
   }
 
   input ProductSort {
