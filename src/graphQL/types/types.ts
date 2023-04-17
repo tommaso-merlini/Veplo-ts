@@ -137,6 +137,7 @@ export type EditProductInfo = {
   gender?: InputMaybe<Scalars['String']>;
   macroCategory?: InputMaybe<Scalars['String']>;
   microCategory?: InputMaybe<Scalars['String']>;
+  traits: Array<Scalars['String']>;
 };
 
 export type EditProductInput = {
@@ -475,6 +476,7 @@ export type ProductInfo = {
   gender?: Maybe<Scalars['String']>;
   macroCategory?: Maybe<Scalars['String']>;
   microCategory?: Maybe<Scalars['String']>;
+  traits?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type ProductInfoInput = {
@@ -483,6 +485,7 @@ export type ProductInfoInput = {
   gender: Scalars['String'];
   macroCategory: Scalars['String'];
   microCategory: Scalars['String'];
+  traits: Array<InputMaybe<Scalars['String']>>;
 };
 
 export type ProductInput = {

@@ -7,6 +7,19 @@ import typeDefs from "../src/graphQL/typeDefs.js";
 import resolvers from "../src/graphQL/resolvers.js";
 import crypto from "crypto";
 
+const plugins: any[] = [];
+
+if (process.env.NODE_ENV === "development") {
+  plugins.push(ApolloServerPluginLandingPageGraphQLPlayground());
+}
+
+if (process.env.NODE_ENV === "testing") {
+}
+
+if (process.env.NODE_ENV === "production") {
+  plugins.push(ApolloServerPluginLandingPageDisabled());
+}
+
 const apolloserver = new ApolloServer({
   typeDefs,
   resolvers,
@@ -16,11 +29,7 @@ const apolloserver = new ApolloServer({
   introspection: true,
 
   //TODO uncomment below when in production
-  // plugins: [
-  //   process.env.NODE_ENV === "production"
-  //     ? ApolloServerPluginLandingPageDisabled()
-  //     : ApolloServerPluginLandingPageGraphQLPlayground(),
-  // ],
+  plugins: plugins,
   validationRules: [depthLimit(7)],
   formatError: (err: any) => {
     let path = err.path;

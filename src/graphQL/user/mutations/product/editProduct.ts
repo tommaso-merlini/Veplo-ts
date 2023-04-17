@@ -7,6 +7,7 @@ import handlePriceEdit from "../../../../controllers/handlePriceEdit.js";
 import productById from "../../../../controllers/queries/productById.js";
 import Product from "../../../../schemas/Product.model.js";
 import lodash from "lodash";
+import { removeDuplicates } from "../../../../controllers/removeDuplicates.js";
 
 export const editProduct = async (
   _: any,
@@ -52,6 +53,11 @@ export const editProduct = async (
   //if the price is modified
   if (options.price) {
     mergedProduct.price = handlePriceEdit(options.price);
+  }
+
+  //if the traits are modified
+  if (options.info.traits) {
+    mergedProduct.info.traits = removeDuplicates(options.info.traits);
   }
 
   console.log("==================================");

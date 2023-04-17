@@ -44,6 +44,7 @@ const ProductSchema = new mongoose.Schema({
     },
     brand: { type: String, required: true },
     fit: { type: String, required: true },
+    traits: [{ type: String, required: true }],
   },
   location: {
     type: {

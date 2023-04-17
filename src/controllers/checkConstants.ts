@@ -100,13 +100,23 @@ const checkConstants = (obj: any, is: String) => {
 
     if (!isMicroCategoryOk) {
       throw new Error(
-        `micro-category ${product.microCategory} non e' accetata per macro-category ${macroCategory?.name}, micro-categories accetate per ${macroCategory?.name}: ${macroCategory?.types}`
+        `micro-category ${product.info.microCategory} non e' accetata per macro-category ${macroCategory?.name}, micro-categories accetate per ${macroCategory?.name}: ${macroCategory?.types}`
       );
     }
 
     //---CHECK Fit
     const isFitOk = constants.fits.includes(product.info.fit);
     if (!isFitOk) throw new Error(`il fit che hai scelto non e' supportato`);
+
+    //---CHECK Traits
+    const areTraitsOk = product.info.traits.every((trait: string) =>
+      constants.traits.includes(trait)
+    );
+
+    if (!areTraitsOk)
+      throw new Error(
+        `I tratti distintivi che hai scelto non vanno bene, lista di tratti accettati: ${constants.traits}`
+      );
   } else {
     //   const shop = obj;
     //   //---CHECK GENDER
