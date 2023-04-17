@@ -205,8 +205,15 @@ async function startServer() {
             }
         }
       } catch (e) {
-        console.log(e.message);
-        response.status(400).send(`Error: ${e.message}`);
+        console.log(e);
+        response.status(400).send(`{
+          defaultError: ${e.message},
+          customError: {
+            code: ${e.extensions.customCode},
+            path: ${e.extensions.customPath},
+            message: ${e.extensions.customMessage},
+          }
+        }`);
         return;
       }
 
@@ -256,8 +263,15 @@ async function startServer() {
             }
         }
       } catch (e) {
-        console.log(e.message);
-        response.status(400).send(`Error: ${e.message}`);
+        console.log(e);
+        response.status(400).send(`{
+          defaultError: ${e.message},
+          customError: {
+            code: ${e.extensions.customCode},
+            path: ${e.extensions.customPath},
+            message: ${e.extensions.customMessage},
+          }
+        }`);
         return;
       }
 
