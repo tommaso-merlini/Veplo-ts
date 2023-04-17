@@ -3,7 +3,7 @@ import checkObjectID from "../checkObjectID.js";
 import customError from "../errors/customError.js";
 import Cart from "../../schemas/Cart.model.js";
 
-const cartById = async (id: string, info: any) => {
+const cartById = async (id: string, info?: any) => {
   let requestedFields = {};
   checkObjectID(id);
 

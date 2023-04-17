@@ -11,6 +11,7 @@ import { removeBoughtQuantityFromVariation } from "../removeBoughtQuantityFromVa
 import userById from "../queries/userById.js";
 import shopById from "../queries/shopById.js";
 import businessById from "../queries/businessById.js";
+import cartById from "../queries/cartById.js";
 
 export const handleCheckoutCompleted = async (session: any) => {
   const paymentIntentId = session.payment_intent;
@@ -22,14 +23,7 @@ export const handleCheckoutCompleted = async (session: any) => {
   const code = generateCode();
   const status = getStatus(session.payment_status);
 
-  const cart = await Cart.findById(paymentIntent.metadata.cartId);
-  if (!cart) {
-    customError({
-      code: "404",
-      path: "cart",
-      message: "cart not found",
-    });
-  }
+  const cart = await cartById(paymentIntent.metadata.cartId);
   const user = await userById(paymentIntent.metadata.userId);
   const shop = await shopById(paymentIntent.metadata.shopId);
   const business = await businessById(paymentIntent.metadata.businessId);

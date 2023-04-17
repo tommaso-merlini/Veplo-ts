@@ -10,9 +10,15 @@ if (process.env.NODE_ENV === "production") {
   databaseUrl = process.env.DEV_DATABASE_URL || "";
 }
 
+const keepAliveInitialDelayInSeconds = 100;
+const keepAliveInitialDelayInMilliseconds =
+  keepAliveInitialDelayInSeconds * 1000;
+
 const initMongoose = () => {
   mongoose.set("strictQuery", false);
   mongoose.connect(databaseUrl, {
+    keepAlive: true,
+    keepAliveInitialDelay: keepAliveInitialDelayInMilliseconds,
     // useUnifiedTopology: true,
     // useNewUrlParser: true,
     //!not supported anymore useFindAndModify: false,
