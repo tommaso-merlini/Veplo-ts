@@ -50,7 +50,7 @@ export const shoes_sizes = [
 export const constants = {
   brands: brands,
   fits: ["skinny", "slim", "regular", "oversize", "baggy"],
-  traits: ["vegan", "vintage", "hand-made", "unconventional", "sustainable"],
+  traits: ["vegan", "vintage", "handmade", "eco-friendly"],
   colors: [
     "Nero",
     "Marrone",
