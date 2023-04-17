@@ -29,6 +29,7 @@ import { handleCheckoutAsyncPaymentFailed } from "./controllers/stripe/handleChe
 import { generateProducts } from "../mongoose/scripts/generateProducts.js";
 import path from "path";
 import { generateCode } from "./controllers/generateCode.js";
+import { migration2 } from "../migration/2.js";
 dotenv.config();
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
