@@ -121,6 +121,7 @@ const typeDefs = gql`
     price: Price
     orderCounter: Int
     variations: [ProductVariation!]
+    productsLikeThis(offset: Int!, limit: Int!): [Product!]
   }
 
   type ShopInformations {

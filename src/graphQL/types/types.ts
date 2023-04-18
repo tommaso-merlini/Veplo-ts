@@ -66,6 +66,7 @@ export type Business = {
 
 export type Cart = {
   __typename?: 'Cart';
+  createdAt?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   productVariations?: Maybe<Array<CartProductVariation>>;
   shopInfo?: Maybe<CartShopInfo>;
@@ -450,11 +451,18 @@ export type Product = {
   name?: Maybe<Scalars['String']>;
   orderCounter?: Maybe<Scalars['Int']>;
   price?: Maybe<Price>;
+  productsLikeThis?: Maybe<Array<Product>>;
   score?: Maybe<Scalars['Float']>;
   shopInfo?: Maybe<ShopInfo>;
   status?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   variations?: Maybe<Array<ProductVariation>>;
+};
+
+
+export type ProductProductsLikeThisArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 };
 
 export type ProductFilters = {

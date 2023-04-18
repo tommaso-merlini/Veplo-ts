@@ -38,7 +38,11 @@ import { brands } from "./user/queries/constants/brands.js";
 import { createInformation } from "./user/mutations/Information/createInformation.js";
 import { order } from "./user/queries/order/order.js";
 import { createVariation } from "./user/mutations/variation/createVariation.js";
-import { ShopProductsArgs } from "./types/types.js";
+import {
+  ProductInput,
+  ProductProductsLikeThisArgs,
+  ShopProductsArgs,
+} from "./types/types.js";
 import { refund } from "./user/mutations/stripe/refund.js";
 import { productsNotAvailableRefund } from "./user/mutations/stripe/productsNotAvailableRefund.js";
 import { adminSeeAllOrders } from "./admin/adminSeeAllOrders.js";
@@ -46,6 +50,7 @@ import { adminCreateAdmin } from "./admin/adminCreateAdmin.js";
 import { adminLostPackage } from "./admin/adminLostPackage.js";
 import { adminOrderHasArrived } from "./admin/adminOrderHasArrived.js";
 import { returnOrder } from "./user/mutations/order/returnOrder.js";
+import getRequestedFields from "../../src/controllers/getRequestedFields.js";
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -117,6 +122,97 @@ const resolvers = {
       return products;
     },
     orders,
+  },
+
+  Product: {
+    productsLikeThis: async (
+      product: any,
+      { limit, offset }: ProductProductsLikeThisArgs,
+      _: any,
+      info: any
+    ) => {
+      let productsLikeThis: any = await Product.aggregate([
+        {
+          $search: {
+            index: "ProductSearchIndex",
+            compound: {
+              must: [
+                {
+                  moreLikeThis: {
+                    like: product,
+                  },
+                },
+              ],
+              mustNot: [
+                {
+                  equals: {
+                    path: "_id",
+                    value: product._id,
+                  },
+                },
+              ],
+              should: [
+                //boost products based on how many times it has been bought
+                {
+                  range: {
+                    path: "orderCounter",
+                    gt: 0,
+                    lt: 20,
+                    score: {
+                      boost: {
+                        value: 1,
+                      },
+                    },
+                  },
+                },
+                {
+                  range: {
+                    path: "orderCounter",
+                    gte: 20,
+                    lt: 80,
+                    score: {
+                      boost: {
+                        value: 2,
+                      },
+                    },
+                  },
+                },
+                {
+                  range: {
+                    path: "orderCounter",
+                    gte: 80,
+                    score: {
+                      boost: {
+                        value: 3,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+        {
+          $skip: offset,
+        },
+
+        {
+          $limit: limit,
+        },
+
+        {
+          $project: {
+            score: { $meta: "searchScore" },
+
+            ...getRequestedFields(info),
+            _id: 0,
+            id: "$_id",
+          },
+        },
+      ]);
+
+      return productsLikeThis;
+    },
   },
 
   Business: {
