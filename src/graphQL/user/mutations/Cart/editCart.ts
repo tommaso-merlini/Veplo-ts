@@ -81,17 +81,18 @@ export const editCart = async (
     });
   }
 
+  //get the active cart of the user with this shop
   const cart = await Cart.findOne({
     userId: token?.mongoId,
     "shopInfo.id": product.shopInfo.id,
+    status: "active",
   });
 
-  if (cart) {
+  if (cart && cart.status === "active") {
+    console.log("qui");
     //vedere se la variation e' gia' presente nel carrello
     //cart.productVariations.map(async (variation) =>
     for (const variation of cart.productVariations) {
-      console.log(variation.size.toString());
-      console.log();
       if (
         variation.variationId.toString() === productVariationId.toString() &&
         variation.size.toString() == size.toString()
@@ -171,7 +172,9 @@ export const editCart = async (
     }
   }
 
-  if (!cart) {
+  if (!cart || cart.status === "bought") {
+    console.log("qua");
+
     if (quantity === 0) {
       customError({
         code: "400",
@@ -183,6 +186,7 @@ export const editCart = async (
       userId: token?.mongoId,
       status: "active",
       shopInfo: product.shopInfo,
+      createdAt: new Date(),
       productVariations: [{ variationId: productVariationId, size, quantity }],
     });
     return true;

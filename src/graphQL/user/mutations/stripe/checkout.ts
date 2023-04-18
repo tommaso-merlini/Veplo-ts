@@ -65,14 +65,16 @@ export const checkout = async (
     }
   } else {
     token = {
-      mongoId: "64283d8372f835e8c8d5cd0a",
+      mongoId: "6410ace3850a8aeb92bcbc9e",
       email: "test10@gmail.it",
     };
   }
 
+  //get the active cart of the user with this shopId
   const cart = await Cart.findOne({
     userId: token?.mongoId,
     "shopInfo.id": shopId,
+    status: "active",
   });
 
   if (!cart) {

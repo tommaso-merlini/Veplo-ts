@@ -27,6 +27,11 @@ export const handleCheckoutCompleted = async (session: any) => {
   const user = await userById(paymentIntent.metadata.userId);
   const shop = await shopById(paymentIntent.metadata.shopId);
   const business = await businessById(paymentIntent.metadata.businessId);
+
+  console.log(cart);
+  console.log(user);
+  console.log(shop);
+  console.log(business);
   //get variationsIds
   for (let variation of cart.productVariations) {
     variationsIds.push(variation.variationId);
@@ -141,7 +146,16 @@ export const handleCheckoutCompleted = async (session: any) => {
     productVariations: variationsInCartWithSize,
   });
 
-  await deleteCartById(cart.id);
+  // throw new Error("ciao");
+
+  await Cart.updateOne(
+    {
+      _id: cart._id,
+    },
+    {
+      status: "bought",
+    }
+  );
 
   await removeBoughtQuantityFromVariation(variationsInCartWithSize);
 };

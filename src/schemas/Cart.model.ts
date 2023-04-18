@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const CartSchema = new mongoose.Schema({
   userId: { type: mongoose.Types.ObjectId, required: true },
   status: { type: String, required: true },
+  createdAt: { type: Date, required: true },
   shopInfo: {
     id: { type: mongoose.Types.ObjectId, required: true },
     name: { type: String, required: true },
