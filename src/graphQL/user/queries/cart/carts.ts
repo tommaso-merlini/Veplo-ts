@@ -9,6 +9,7 @@ export const carts = async (user: User) => {
   //get every carts of the user
   const carts: any[] = await Cart.find({
     userId: user.id,
+    status: "active",
   });
   // .explain("executionStats");
 
