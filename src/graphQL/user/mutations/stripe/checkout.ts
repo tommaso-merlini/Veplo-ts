@@ -10,6 +10,7 @@ import userById from "../../../../controllers/queries/userById.js";
 import Cart from "../../../../schemas/Cart.model.js";
 import Product from "../../../../schemas/Product.model.js";
 import dotenv from "dotenv";
+import { generateCode } from "../../../../controllers/generateCode.js";
 dotenv.config();
 
 export const checkout = async (
@@ -19,6 +20,7 @@ export const checkout = async (
 ) => {
   //TODO calcolare amount
   let token;
+  const code = generateCode();
   const lineItems = [];
   const variations = [];
   const variationsIds: string[] = [];
@@ -255,8 +257,8 @@ export const checkout = async (
       enabled: true,
       invoice_data: {
         description: "Acquisto con Veplo",
-        metadata: { order: "order-xyz" },
-        custom_fields: [{ name: "Purchase Order", value: "PO-XYZ" }],
+        metadata: { order: code },
+        custom_fields: [{ name: "Purchase Order", value: code }],
         rendering_options: { amount_tax_display: "include_inclusive_tax" },
         footer: "Veplo",
       },

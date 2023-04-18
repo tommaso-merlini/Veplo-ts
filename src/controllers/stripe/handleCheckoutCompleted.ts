@@ -16,11 +16,11 @@ import cartById from "../queries/cartById.js";
 export const handleCheckoutCompleted = async (session: any) => {
   const paymentIntentId = session.payment_intent;
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  const code = session.invoice_creation.invoice_data.metadata.order;
   const variationsIds = [];
   const variations = [];
   const variationsInCart = [];
   const variationsInCartWithSize = [];
-  const code = generateCode();
   const status = getStatus(session.payment_status);
 
   const cart = await cartById(paymentIntent.metadata.cartId);
