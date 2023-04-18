@@ -41,7 +41,7 @@ import { createVariation } from "./user/mutations/variation/createVariation.js";
 import {
   ProductInput,
   ProductProductsLikeThisArgs,
-  ShopProductsArgs,
+  QueryProductsArgs,
 } from "./types/types.js";
 import { refund } from "./user/mutations/stripe/refund.js";
 import { productsNotAvailableRefund } from "./user/mutations/stripe/productsNotAvailableRefund.js";
@@ -51,6 +51,11 @@ import { adminLostPackage } from "./admin/adminLostPackage.js";
 import { adminOrderHasArrived } from "./admin/adminOrderHasArrived.js";
 import { returnOrder } from "./user/mutations/order/returnOrder.js";
 import getRequestedFields from "../../src/controllers/getRequestedFields.js";
+import { productsWithFilters } from "../../src/controllers/queries/productsWithFilters.js";
+
+interface ShopProductsArgs extends QueryProductsArgs {
+  statuses: string[];
+}
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -106,18 +111,21 @@ const resolvers = {
   },
 
   Shop: {
-    products: async (shop: any, { limit, offset, see }: ShopProductsArgs) => {
-      let status: any = "active";
-      if (see === "everything") {
-        status = { $exists: true };
-      }
-      const products = await Product.find({
-        "shopInfo.id": shop.id,
-        status,
-      })
-        .sort({ updatedAt: -1 })
-        .skip(offset)
-        .limit(limit);
+    products: async (
+      shop: any,
+      { limit, offset, sort, filters, statuses }: ShopProductsArgs,
+      _: any,
+      info: any
+    ) => {
+      const products = await productsWithFilters({
+        info,
+        offset,
+        sort,
+        filters,
+        limit,
+        shopId: shop._id,
+        statuses,
+      });
 
       return products;
     },

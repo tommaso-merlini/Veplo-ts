@@ -86,6 +86,11 @@ const ProductSchema = new mongoose.Schema({
 //   "mappings": {
 //     "dynamic": false,
 //     "fields": {
+//       "status": {
+//         "analyzer": "lucene.keyword",
+//         "searchAnalyzer": "lucene.keyword",
+//         "type": "string"
+//       },
 //       "info": {
 //         "dynamic": false,
 //         "fields": {
@@ -131,6 +136,18 @@ const ProductSchema = new mongoose.Schema({
 //         },
 //         "type": "document"
 //       },
+//       "shopInfo": {
+//         "dynamic": false,
+//         "fields": {
+//           "id": {
+//             "type": "objectId"
+//           },
+//           "status": {
+//             "type": "string"
+//           }
+//         },
+//         "type": "document"
+//       },
 //       "updatedAt": {
 //         "type": "date"
 //       },
@@ -143,11 +160,11 @@ const ProductSchema = new mongoose.Schema({
 //           "lots": {
 //             "dynamic": false,
 //             "fields": {
-//               "size": {
-//                 "type": "string"
-//               },
 //               "quantity": {
 //                 "type": "number"
+//               },
+//               "size": {
+//                 "type": "string"
 //               }
 //             },
 //             "type": "embeddedDocuments"

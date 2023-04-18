@@ -17,7 +17,7 @@ export const createShop = async (
   let token: any = {
     user_id: "prova",
     isBusiness: true,
-    mongoId: "63fcea8f60c595a4975d71dc",
+    mongoId: "641f209eca22d34c3ca1ec1f",
   };
   if (process.env.NODE_ENV !== "development") {
     try {
@@ -42,8 +42,6 @@ export const createShop = async (
     (options.address.location as any).coordinates[0],
     (options.address.location as any).coordinates[1]
   );
-
-  throw new Error("ok");
 
   const postCodeExists = await checkPostCode(postCode);
   if (!postCodeExists) {

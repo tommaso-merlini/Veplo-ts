@@ -1,5 +1,3 @@
-import https from "https";
-
 export const reverseGeocoding = async (latitude: number, longitude: number) => {
   // const endpoint = "mapbox.place";
   // const types = ["postcode"];
@@ -22,13 +20,24 @@ export const reverseGeocoding = async (latitude: number, longitude: number) => {
   //     }
   //   });
   // });
-  try {
-    const response = await https.get(url);
-    // const body = {
-    //   center: response.body.features[0].geometry,
-    //   city: response.body.features[0].context[1].text_it,
-    //   postCode: response.body.features[0].context[0].text_it,
-    // };
-    console.log(response);
-  } catch (e) {}
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await fetch(url);
+      const body = await response.json();
+
+      if (body.features.length == 0) {
+        throw new Error("this location is not supported");
+      } else {
+        const reponse = {
+          center: body.features[0].geometry,
+          city: body.features[0].context[1].text_it,
+          postCode: body.features[0].context[0].text_it,
+        };
+
+        resolve(reponse);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
 };
