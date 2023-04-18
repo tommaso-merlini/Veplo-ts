@@ -110,6 +110,7 @@ const resolvers = {
         "shopInfo.id": shop.id,
         status,
       })
+        .sort({ updatedAt: -1 })
         .skip(offset)
         .limit(limit);
 
