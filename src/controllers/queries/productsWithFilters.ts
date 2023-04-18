@@ -161,12 +161,6 @@ export const productsWithFilters = async ({
   const checkStatuses = () => {
     if (statuses != null) {
       return {
-        exists: {
-          path: "status",
-        },
-      };
-    } else {
-      return {
         phrase: {
           query: statuses,
           path: "status",
@@ -175,6 +169,12 @@ export const productsWithFilters = async ({
               value: 2,
             },
           },
+        },
+      };
+    } else {
+      return {
+        exists: {
+          path: "status",
         },
       };
     }
