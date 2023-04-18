@@ -479,7 +479,6 @@ const typeDefs = gql`
       offset: Int!
       sort: ProductSort
       filters: ProductFilters
-      statuses: [String!]!
     ): [Product!]
 
     #shop
