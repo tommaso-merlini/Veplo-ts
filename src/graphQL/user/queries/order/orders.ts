@@ -26,7 +26,10 @@ export const orders = async (
     orders = await Order.find({
       "user.id": account.id,
       status: checkStatuses,
-    });
+    })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(offset);
   }
 
   if (queryInfo.path.prev.key === "shop") {
