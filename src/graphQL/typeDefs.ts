@@ -480,6 +480,7 @@ const typeDefs = gql`
       sort: ProductSort
       filters: ProductFilters
     ): [Product!]
+    productsAutoComplete(query: String!): [Product!]!
 
     #shop
     shop(id: ID!): Shop

@@ -54,6 +54,7 @@ import getRequestedFields from "../../src/controllers/getRequestedFields.js";
 import { productsWithFilters } from "../../src/controllers/queries/productsWithFilters.js";
 import checkFirebaseErrors from "../../src/controllers/checkFirebaseErrors.js";
 import authenticateToken from "../../src/controllers/authenticateToken.js";
+import { productsAutoComplete } from "./user/queries/product/productsAutoComplete.js";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -77,6 +78,7 @@ const resolvers = {
     brands,
     order,
     adminSeeAllOrders,
+    productsAutoComplete,
   },
 
   Mutation: {

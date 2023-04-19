@@ -557,6 +557,7 @@ export type Query = {
   product?: Maybe<Product>;
   productByVariationUniqueId?: Maybe<Product>;
   products?: Maybe<Array<Product>>;
+  productsAutoComplete: Array<Product>;
   prova: Scalars['String'];
   shop?: Maybe<Shop>;
   shopByFirebaseId?: Maybe<Shop>;
@@ -602,6 +603,11 @@ export type QueryProductsArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   sort?: InputMaybe<ProductSort>;
+};
+
+
+export type QueryProductsAutoCompleteArgs = {
+  query: Scalars['String'];
 };
 
 
