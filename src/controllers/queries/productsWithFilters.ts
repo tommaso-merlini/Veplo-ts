@@ -148,10 +148,17 @@ export const productsWithFilters = async ({
   const checkScoreParams = () => {
     if (shopId != null) {
       return [
+        //boost score based on how young the product is
         {
-          exists: {
-            path: "shopInfo.id",
-            score: { constant: { value: 0 } },
+          near: {
+            path: "updatedAt",
+            origin: today,
+            pivot: datePivotMs, //the first number is the days
+            score: {
+              boost: {
+                value: 3,
+              },
+            },
           },
         },
       ];
