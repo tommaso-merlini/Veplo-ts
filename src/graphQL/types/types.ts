@@ -474,7 +474,7 @@ export type ProductFilters = {
   maxPrice?: InputMaybe<Scalars['Int']>;
   microCategory?: InputMaybe<Scalars['String']>;
   minPrice?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
+  query?: InputMaybe<Scalars['String']>;
   sizes?: InputMaybe<Array<Scalars['String']>>;
   traits?: InputMaybe<Array<Scalars['String']>>;
 };
@@ -660,9 +660,11 @@ export type ShopOrdersArgs = {
 
 
 export type ShopProductsArgs = {
+  filters?: InputMaybe<ProductFilters>;
   limit: Scalars['Int'];
   offset: Scalars['Int'];
-  see?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<ProductSort>;
+  statuses?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ShopFilters = {

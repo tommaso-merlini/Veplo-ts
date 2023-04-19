@@ -120,15 +120,7 @@ export const constants = {
         {
           name: "Jeans",
           url: "jeans",
-          types: [
-            "skinny",
-            "slim",
-            "a palazzo",
-            "shorts",
-            "larghi",
-            "diritti",
-            "jeans a zampa d'elefante",
-          ],
+          types: ["a palazzo", "larghi", "diritti", "jeans a zampa d'elefante"],
           sizes: clothes_sizes,
         },
         {
@@ -276,14 +268,11 @@ export const constants = {
           name: "Jeans",
           url: "jeans",
           types: [
-            "skinny",
-            "slim fit",
             "a palazzo",
             "a gamba dritta",
             "jeans affusolati",
             "taglio largo",
             "a zampa d'elefente",
-            "jeans shorts",
           ],
           sizes: clothes_sizes,
         },

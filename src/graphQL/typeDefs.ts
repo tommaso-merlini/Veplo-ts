@@ -287,7 +287,7 @@ const typeDefs = gql`
     brand: String
     minPrice: Int
     maxPrice: Int
-    name: String
+    query: String
     #cap: String
     gender: String
     macroCategory: String

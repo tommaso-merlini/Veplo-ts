@@ -21,6 +21,7 @@ export const productsWithFilters = async ({
   statuses,
   canSeeAllStatuses,
 }: Args) => {
+  const query = filters?.query;
   const gender = filters?.gender;
   const macroCategory = filters?.macroCategory;
   const microCategory = filters?.microCategory;
@@ -33,6 +34,14 @@ export const productsWithFilters = async ({
   const datePivot = daysPivot * 24 * 60 * 60 * 1000;
   const datePivotMs = datePivot * 24 * 60 * 60 * 1000;
   const today = new Date();
+
+  const fullTextSearchParams = [
+    "info.fit",
+    "info.macroCategory",
+    "info.microCategory",
+    "info.brand",
+    "info.traits",
+  ];
 
   const scoreParams = [
     //boost score based on how young the product is
@@ -167,6 +176,52 @@ export const productsWithFilters = async ({
     }
   };
 
+  const checkQuery = () => {
+    if (query != null) {
+      const keywords = query.match(/\b(\w+)\b/g); //convert from "jeans corti" to ["jeans", "corti"]
+      return {
+        text: {
+          query: keywords,
+          path: fullTextSearchParams,
+          fuzzy: {
+            maxEdits: 1,
+            prefixLength: 2,
+          },
+          score: { boost: { value: 5 } },
+        },
+      };
+    } else {
+      return {
+        exists: {
+          path: "name",
+          score: { constant: { value: 0 } },
+        },
+      };
+    }
+  };
+
+  const checkName = () => {
+    if (query != null) {
+      return {
+        text: {
+          query: query,
+          path: "name",
+          score: { boost: { value: 15 } },
+          fuzzy: {
+            maxEdits: 2,
+            prefixLength: 4,
+          },
+        },
+      };
+    } else {
+      return {
+        exists: {
+          path: "name",
+        },
+      };
+    }
+  };
+
   const checkStatuses = () => {
     if (canSeeAllStatuses) {
       if (statuses != null) {
@@ -233,28 +288,6 @@ export const productsWithFilters = async ({
           query: "active",
           path: "shopInfo.status",
           score: { constant: { value: 0 } },
-        },
-      };
-    }
-  };
-
-  const checkName = () => {
-    if (filters?.name != null) {
-      return {
-        text: {
-          query: filters?.name,
-          path: "name",
-          score: { boost: { value: 10 } },
-          fuzzy: {
-            maxEdits: 2,
-            prefixLength: 4,
-          },
-        },
-      };
-    } else {
-      return {
-        exists: {
-          path: "name",
         },
       };
     }
@@ -567,9 +600,9 @@ export const productsWithFilters = async ({
             checkStatuses(),
             checkShopStatus(),
             checkShopId(),
+            checkGender(),
             checkMacroCategory(),
             checkMicroCategory(),
-            checkGender(),
             checkBrands(),
             checkFit(),
             checkTraits(),
@@ -616,6 +649,10 @@ export const productsWithFilters = async ({
           should: [
             //get the best ranked name on the top of the list
             checkName(),
+
+            //full text search
+            checkQuery(),
+
             //score params
             ...checkScoreParams(),
           ],

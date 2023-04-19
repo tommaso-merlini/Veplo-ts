@@ -86,27 +86,27 @@ const ProductSchema = new mongoose.Schema({
 //   "mappings": {
 //     "dynamic": false,
 //     "fields": {
-//       "status": {
-//         "analyzer": "lucene.keyword",
-//         "searchAnalyzer": "lucene.keyword",
-//         "type": "string"
-//       },
 //       "info": {
 //         "dynamic": false,
 //         "fields": {
 //           "brand": {
+//             "analyzer": "lucene.whitespace",
 //             "type": "string"
 //           },
 //           "fit": {
+//             "analyzer": "lucene.whitespace",
 //             "type": "string"
 //           },
 //           "gender": {
+//             "analyzer": "lucene.whitespace",
 //             "type": "string"
 //           },
 //           "macroCategory": {
+//             "analyzer": "lucene.whitespace",
 //             "type": "string"
 //           },
 //           "microCategory": {
+//             "analyzer": "lucene.whitespace",
 //             "type": "string"
 //           },
 //           "traits": {
@@ -120,10 +120,16 @@ const ProductSchema = new mongoose.Schema({
 //       "location": {
 //         "type": "geo"
 //       },
-//       "name": {
-//         "analyzer": "lucene.italian",
-//         "type": "string"
-//       },
+//       "name": [
+//         {
+//           "analyzer": "lucene.italian",
+//           "type": "string"
+//         },
+//         {
+//           "analyzer": "lucene.standard",
+//           "type": "autocomplete"
+//         }
+//       ],
 //       "orderCounter": {
 //         "type": "number"
 //       },
@@ -148,6 +154,11 @@ const ProductSchema = new mongoose.Schema({
 //         },
 //         "type": "document"
 //       },
+//       "status": {
+//         "analyzer": "lucene.keyword",
+//         "searchAnalyzer": "lucene.keyword",
+//         "type": "string"
+//       },
 //       "updatedAt": {
 //         "type": "date"
 //       },
@@ -155,6 +166,7 @@ const ProductSchema = new mongoose.Schema({
 //         "dynamic": false,
 //         "fields": {
 //           "color": {
+//             "analyzer": "lucene.whitespace",
 //             "type": "string"
 //           },
 //           "lots": {
