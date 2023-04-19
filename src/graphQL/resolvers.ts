@@ -121,11 +121,7 @@ const resolvers = {
     ) => {
       let token;
       if (process.env.NODE_ENV !== "development") {
-        try {
-          token = await admin.auth().verifyIdToken(req.headers.authorization);
-        } catch (e) {
-          checkFirebaseErrors(e);
-        }
+        token = await admin.auth().verifyIdToken(req.headers.authorization);
       } else {
         token = {
           firebaseId: "prova",
