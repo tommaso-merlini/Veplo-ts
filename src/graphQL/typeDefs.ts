@@ -146,7 +146,7 @@ const typeDefs = gql`
       offset: Int!
       sort: ProductSort
       filters: ProductFilters
-      statuses: [String!]!
+      statuses: [String!]
     ): [Product!]
     orders(statuses: [String!], limit: Int!, offset: Int!): [Order!]
   }

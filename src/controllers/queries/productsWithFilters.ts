@@ -7,7 +7,8 @@ import getRequestedFields from "../getRequestedFields.js";
 interface Args extends QueryProductsArgs {
   info: any;
   shopId?: string | ObjectId;
-  statuses: string[];
+  statuses?: string[];
+  canSeeAllStatuses: Boolean;
 }
 
 export const productsWithFilters = async ({
@@ -18,6 +19,7 @@ export const productsWithFilters = async ({
   info,
   shopId,
   statuses,
+  canSeeAllStatuses,
 }: Args) => {
   const gender = filters?.gender;
   const macroCategory = filters?.macroCategory;
@@ -159,22 +161,33 @@ export const productsWithFilters = async ({
   };
 
   const checkStatuses = () => {
-    if (statuses != null) {
-      return {
-        phrase: {
-          query: statuses,
-          path: "status",
-          score: {
-            boost: {
-              value: 2,
+    if (canSeeAllStatuses) {
+      if (statuses != null) {
+        return {
+          phrase: {
+            query: statuses,
+            path: "status",
+            score: {
+              constant: {
+                value: 0,
+              },
             },
           },
-        },
-      };
+        };
+      } else {
+        return {
+          exists: {
+            path: "status",
+            score: { constant: { value: 0 } },
+          },
+        };
+      }
     } else {
       return {
-        exists: {
+        text: {
+          query: "active",
           path: "status",
+          score: { constant: { value: 0 } },
         },
       };
     }
@@ -193,6 +206,7 @@ export const productsWithFilters = async ({
       return {
         exists: {
           path: "shopInfo.id",
+          score: { constant: { value: 0 } },
         },
       };
     }
@@ -203,6 +217,7 @@ export const productsWithFilters = async ({
       return {
         exists: {
           path: "shopInfo.status",
+          score: { constant: { value: 0 } },
         },
       };
     } else {

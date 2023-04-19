@@ -7,7 +7,7 @@ export const shop = async (
   __: any,
   info: any
 ) => {
-  const shop = await shopById(id, info);
+  const shop = await shopById(id);
 
   return shop;
 };

@@ -52,6 +52,8 @@ import { adminOrderHasArrived } from "./admin/adminOrderHasArrived.js";
 import { returnOrder } from "./user/mutations/order/returnOrder.js";
 import getRequestedFields from "../../src/controllers/getRequestedFields.js";
 import { productsWithFilters } from "../../src/controllers/queries/productsWithFilters.js";
+import checkFirebaseErrors from "../../src/controllers/checkFirebaseErrors.js";
+import authenticateToken from "../../src/controllers/authenticateToken.js";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -114,9 +116,35 @@ const resolvers = {
     products: async (
       shop: any,
       { limit, offset, sort, filters, statuses }: ShopProductsArgs,
-      _: any,
+      { admin, req }: any,
       info: any
     ) => {
+      let token;
+      if (process.env.NODE_ENV !== "development") {
+        try {
+          token = await admin.auth().verifyIdToken(req.headers.authorization);
+        } catch (e) {
+          checkFirebaseErrors(e);
+        }
+      } else {
+        token = {
+          firebaseId: "prova",
+          mongoId: "641f209eca22d34c3ca1ec1l",
+          isBusiness: true,
+        };
+      }
+
+      try {
+        authenticateToken({
+          tokenId: token?.mongoId,
+          ids: [String(shop.businessId)],
+          isBusiness: token?.isBusiness,
+        });
+        var canSeeAllStatuses = true;
+      } catch (e) {
+        var canSeeAllStatuses = false;
+      }
+
       const products = await productsWithFilters({
         info,
         offset,
@@ -125,6 +153,7 @@ const resolvers = {
         limit,
         shopId: shop._id,
         statuses,
+        canSeeAllStatuses,
       });
 
       return products;

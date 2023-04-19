@@ -13,7 +13,7 @@ export const products = async (
     offset,
     filters,
     sort,
-    statuses: ["active"],
+    canSeeAllStatuses: false,
   });
 
   // console.log("==================");
