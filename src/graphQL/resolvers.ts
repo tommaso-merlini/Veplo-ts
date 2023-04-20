@@ -121,6 +121,7 @@ const resolvers = {
       { admin, req }: any,
       info: any
     ) => {
+      console.log(statuses);
       let token;
       if (process.env.NODE_ENV !== "development") {
         try {

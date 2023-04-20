@@ -1,6 +1,10 @@
 import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
+  enum ShopProductsStatusesEnum {
+    active
+    not_active
+  }
   #===========SCALARS===============
   scalar Upload
 
@@ -146,7 +150,7 @@ const typeDefs = gql`
       offset: Int!
       sort: ProductSort
       filters: ProductFilters
-      statuses: [String!]
+      statuses: [ShopProductsStatusesEnum!]
     ): [Product!]
     orders(statuses: [String!], limit: Int!, offset: Int!): [Order!]
   }
@@ -470,8 +474,14 @@ const typeDefs = gql`
   type Query {
     prova: String!
 
-    #product
+    #===================PRODUCT===================
+    """
+    get a single product
+    """
     product(id: ID!): Product
+    """
+    get a list of products, you can use the filters and sort
+    """
     products(
       #range: Float!
       limit: Int!
@@ -479,11 +489,23 @@ const typeDefs = gql`
       sort: ProductSort
       filters: ProductFilters
     ): [Product!]
+    """
+    get a list of products with an autocomplete engine under the hood
+    """
     productsAutoComplete(query: String!): [Product!]!
 
-    #shop
+    #===================SHOP===================
+    """
+    get a single shop
+    """
     shop(id: ID!): Shop
+    """
+    get a single shop searching by firebaseId
+    """
     shopByFirebaseId(firebaseId: String!): Shop
+    """
+    get a list of shops, you can use the filters
+    """
     shops(
       #range: Int!
       limit: Int!
@@ -491,23 +513,44 @@ const typeDefs = gql`
       filters: ShopFilters!
     ): [Shop!]!
 
-    #business
+    #===================BUSINESS===================
+    """
+    check if the account is a business
+    """
     isBusiness: Boolean!
+    """
+    get a single business
+    """
     business(id: ID!): Business
 
-    #user
+    #===================USER===================
+    """
+    get a single user - id provided by the jwt
+    """
     user: User
 
-    #cart
+    #===================CART===================
+    """
+    get a single cart
+    """
     cart(id: ID!): Cart!
 
-    #order
+    #===================ORDER===================
+    """
+    get a single order
+    """
     order(id: ID!): Order
 
     #constants
+    """
+    get list of available brands
+    """
     brands: [String!]
 
-    #admin
+    #===================ADMIN===================
+    """
+    admin - get a list of all the orders
+    """
     adminSeeAllOrders(
       offset: Int!
       limit: Int!
@@ -518,65 +561,143 @@ const typeDefs = gql`
   #===================MUTATIONS===================
 
   type Mutation {
-    #product
+    #===================PRODUCT===================
+    """
+    create a single product
+    """
     createProduct(shopId: ID!, options: ProductInput!): CreateProductResponse
+    """
+    edit a product
+    """
     editProduct(id: ID!, options: EditProductInput!): ID!
+    """
+    change the status of a product
+    """
     changeProductStatus(id: ID!, status: String!): Boolean
+    """
+    delete a product
+    """
     deleteProduct(id: ID!): ID!
 
-    #shop
+    #===================SHOP===================
+    """
+    create a shop
+    """
     createShop(options: ShopInput!): ID!
+    """
+    change the status of a shop
+    """
     changeShopStatus(id: ID!, status: String!): Boolean
     #TODO editShop
 
-    #image
+    #===================IMAGE===================
+    """
+    upload a list of images to the image bucket
+    """
     uploadImages(images: [Upload!]!, proportion: String!): [String!]!
 
-    #business
+    #===================BUSINESS===================
+    """
+    the first step of creating a business
+    """
     createBusinessStep1: ID!
+    """
+    change the isBusiness account field
+    """
     setIsBusiness(isBusiness: Boolean!): Boolean!
 
-    #stripe
+    #===================STRIPE===================
+    """
+    create an account on stripe
+    """
     createStripeAccount(
       businessName: String!
       vatNumber: String!
       phone: String!
     ): String
+    """
+    get a checkout url of a cart by providing the shopId, the userId is inside the jwt
+    """
     checkout(shopId: ID!): String
+    """
+    refund an order
+    """
     refund(checkoutSessionId: String): Boolean
+    """
+    shop refunds an order because the products are not available
+    """
     productsNotAvailableRefund(
       orderId: ID!
       productsNotAvailable: [productsNotAvailableInput!]
     ): Boolean
 
-    #cart
+    #===================CART===================
+    """
+    add products to the cart
+    """
     addToCart(productVariationId: ID!, size: String!, quantity: Int!): Boolean
+    """
+    remove product form cart
+    """
     removeFromCart(
       productVariationId: ID!
       size: String!
       quantity: Int!
     ): Boolean
+    """
+    edit a cart (you can add or remove)
+    """
     editCart(productVariationId: ID!, size: String!, quantity: Int!): Boolean
+    """
+    delete a cart
+    """
     deleteCart(shopId: ID!): Boolean
 
-    #variation
+    #===================VARIATION===================
+    """
+    edit a single variation
+    """
     editVariation(id: ID!, options: EditVariationInput!): Boolean
+    """
+    delete a variation
+    """
     deleteVariation(id: ID!): Boolean
+    """
+    create a variation
+    """
     createVariation(productId: ID!, options: ProductVariationInput!): Boolean
 
-    #user
+    #===================USER===================
+    """
+    create a user in mongodb
+    """
     createUser(options: UserInput!): ID!
+    """
+    edit a user
+    """
     editUser(options: EditUserInput!): Boolean
 
-    #order
+    #===================ORDER===================
+    """
+    edit an order
+    """
     editOrder(id: ID!, options: EditOrderInput!): Boolean
+    """
+    user returns an order
+    """
     returnOrder(id: ID!, why: String): Boolean
+    """
+    shop tells that a return order has arrived
+    """
     returnedOrderHasArrived(id: ID!): Boolean
 
     #Information
+    """
+    create information
+    """
     createInformation(options: InformationInput!): Boolean
 
-    #ADMIN
+    #===================ADMIN===================
     adminCreateAdmin: Boolean
     adminCreateProduct(
       shopId: ID!
@@ -584,7 +705,13 @@ const typeDefs = gql`
     ): CreateProductResponse
     adminEditProduct(id: ID!, options: EditProductInput!): ID!
     adminDeleteProduct(id: ID!): ID!
+    """
+    tells that a package was lost
+    """
     adminLostPackage(orderId: ID!): Boolean
+    """
+    tells that an order has arrived
+    """
     adminOrderHasArrived(id: ID!): Boolean
   }
 `;
