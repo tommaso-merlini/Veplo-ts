@@ -7,7 +7,8 @@ const typeDefs = gql`
   }
 
   enum imageProportionsEnum {
-    shop
+    shopCover
+    shopPhoto
     product
   }
   #===========SCALARS===============
@@ -146,7 +147,8 @@ const typeDefs = gql`
     name: String
     createdAt: String
     status: String
-    photo: String
+    profileCover: String
+    profilePhoto: String
     isDigitalOnly: Boolean
     info: ShopInformations
     address: AddressShop
@@ -379,7 +381,8 @@ const typeDefs = gql`
 
   input ShopInput {
     name: String!
-    photo: String
+    profileCover: String
+    profilePhoto: String
     isDigitalOnly: Boolean!
     info: ShopInputInfo!
     address: AddressShopInput!

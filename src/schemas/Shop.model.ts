@@ -15,7 +15,8 @@ const ShopSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  photo: { type: String, required: false },
+  profileCover: { type: String, required: true },
+  profilePhoto: { type: String, required: true },
   isDigitalOnly: { type: Boolean, required: false },
   info: {
     phone: {

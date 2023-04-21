@@ -35,9 +35,13 @@ export const uploadImages = async (
   }
 
   const promises = [];
-  let width = 1528;
-  let height = 2220;
-  if (proportion != "product" && proportion != "shop") {
+  let width: number;
+  let height: number;
+  if (
+    proportion != "product" &&
+    proportion != "shopCover" &&
+    proportion != "shopPhoto"
+  ) {
     customError({
       code: "400",
       path: "image",
@@ -45,10 +49,21 @@ export const uploadImages = async (
     });
   }
 
-  if (proportion === "shop") {
+  if (proportion === "ShopCover") {
     width = 720;
     height = 450;
   }
+
+  if (proportion === "ShopPhoto") {
+    width = 500;
+    height = 500;
+  }
+
+  if (proportion === "product") {
+    width = 1528;
+    height = 2220;
+  }
+
   for (let i = 0; i < images.length; i++) {
     promises.push(
       new Promise(async (resolve) => {
