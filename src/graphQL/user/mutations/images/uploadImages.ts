@@ -16,7 +16,6 @@ export const uploadImages = async (
     user_id: "prova",
     isBusiness: true,
   };
-  console.log("arrivaa");
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
