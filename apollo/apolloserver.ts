@@ -27,12 +27,13 @@ const apolloserver = new ApolloServer({
   csrfPrevention: process.env.NODE_ENV !== "development",
   // introspection: process.env.NODE_ENV !== "production",
   introspection: true,
-  cache: new InMemoryLRUCache({
-    // ~100MiB
-    maxSize: Math.pow(2, 20) * 100,
-    // 5 minutes (in milliseconds)
-    ttl: 300_000,
-  }),
+  // cache: new InMemoryLRUCache({
+  //   // ~100MiB
+  //   maxSize: Math.pow(2, 20) * 100,
+  //   // 5 minutes (in milliseconds)
+  //   ttl: 300_000,
+  // }),
+  cache: "bounded",
 
   //TODO uncomment below when in production
   plugins: plugins,

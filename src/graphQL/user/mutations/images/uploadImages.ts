@@ -16,6 +16,7 @@ export const uploadImages = async (
     user_id: "prova",
     isBusiness: true,
   };
+  console.log("arrivaa");
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -64,9 +65,11 @@ export const uploadImages = async (
 
         const id = crypto.randomUUID();
 
+        const title = `${id}.webp`;
+
         const params: any = {
           Bucket: "veplo-images", // The path to the directory you want to upload the object to, starting with your Space name.
-          Key: id, // Object key, referenced whenever you want to access this file later.
+          Key: title, // Object key, referenced whenever you want to access this file later.
           Body: newBlob, // The object's contents. This variable is an object, not a string.
           ACL: "public-read", // Defines ACL permissions, such as private or public.
           ContentType: "image/webp",
@@ -81,7 +84,7 @@ export const uploadImages = async (
           });
         }
 
-        resolve(id);
+        resolve(title);
         // console.log(`foto numero ${i} risoluta: id ${id}`);
       })
     );

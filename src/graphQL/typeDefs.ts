@@ -5,6 +5,11 @@ const typeDefs = gql`
     active
     not_active
   }
+
+  enum imageProportionsEnum {
+    shop
+    product
+  }
   #===========SCALARS===============
   scalar Upload
 
@@ -594,7 +599,10 @@ const typeDefs = gql`
     """
     upload a list of images to the image bucket
     """
-    uploadImages(images: [Upload!]!, proportion: String!): [String!]!
+    uploadImages(
+      images: [Upload!]!
+      proportion: imageProportionsEnum!
+    ): [String!]!
 
     #===================BUSINESS===================
     """
