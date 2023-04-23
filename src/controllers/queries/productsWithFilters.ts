@@ -577,9 +577,9 @@ export const productsWithFilters = async ({
             checkShopStatus(),
             checkShopId(),
             checkGender(),
+            checkMacroCategory(),
           ],
           should: [
-            checkMacroCategory(),
             checkMicroCategory(),
             checkBrands(),
             checkFit(),
