@@ -49,8 +49,6 @@ const checkConstants = (obj: any, is: String) => {
       }
     }
   }
-
-  throw new Error();
 };
 
 export default checkConstants;

@@ -5,6 +5,7 @@ import {
   allFilters,
 } from "../../constants/filters.js";
 import lodash from "lodash";
+import { dictionary } from "../../dictionary.js";
 
 export const BetterInputGenerator = (input: any) => {
   const filters: any = {
@@ -14,10 +15,15 @@ export const BetterInputGenerator = (input: any) => {
 
   const queryWords = query.split(/\s+/);
 
-  //TODO get the best word from the dictionary
-
   //get closest filter for each word
   for (let word of queryWords) {
+    //get the best word from the dictionary
+    for (let terms of dictionary) {
+      if (terms.includes(word)) {
+        word = terms[0];
+      }
+    }
+
     const closestValue = closest(word, allFiltersRaw);
 
     //check closestValue diff
