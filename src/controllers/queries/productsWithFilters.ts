@@ -176,37 +176,13 @@ export const productsWithFilters = async ({
     }
   };
 
-  const checkQuery = () => {
-    if (query != null) {
-      const keywords = query.match(/\b(\w+)\b/g); //convert from "jeans corti" to ["jeans", "corti"]
-      return {
-        text: {
-          query: keywords,
-          path: fullTextSearchParams,
-          fuzzy: {
-            maxEdits: 1,
-            prefixLength: 2,
-          },
-          score: { boost: { value: 5 } },
-        },
-      };
-    } else {
-      return {
-        exists: {
-          path: "name",
-          score: { constant: { value: 0 } },
-        },
-      };
-    }
-  };
-
   const checkName = () => {
     if (query != null) {
       return {
         text: {
           query: query,
           path: "name",
-          score: { boost: { value: 15 } },
+          score: { boost: { value: 30 } },
           fuzzy: {
             maxEdits: 2,
             prefixLength: 4,
@@ -299,11 +275,11 @@ export const productsWithFilters = async ({
         text: {
           query: gender,
           path: "info.gender",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
+          // score: {
+          //   constant: {
+          //     value: 0,
+          //   },
+          // },
         },
       };
     } else {
@@ -323,13 +299,13 @@ export const productsWithFilters = async ({
     if (brand != null) {
       return {
         text: {
-          query: microCategory,
-          path: "info.microCategory",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
+          query: brand,
+          path: "info.brand",
+          // score: {
+          //   constant: {
+          //     value: 0,
+          //   },
+          // },
         },
       };
     } else {
@@ -351,11 +327,11 @@ export const productsWithFilters = async ({
         text: {
           query: fit,
           path: "info.fit",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
+          // score: {
+          //   constant: {
+          //     value: 0,
+          //   },
+          // },
         },
       };
     } else {
@@ -432,11 +408,11 @@ export const productsWithFilters = async ({
         range: {
           path: "variations.lots.quantity",
           gt: 0,
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
+          // score: {
+          //   constant: {
+          //     value: 0,
+          //   },
+          // },
         },
       };
     } else {
@@ -459,11 +435,11 @@ export const productsWithFilters = async ({
         text: {
           query: macroCategory,
           path: "info.macroCategory",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
+          // score: {
+          //   constant: {
+          //     value: 0,
+          //   },
+          // },
         },
       };
     } else {
@@ -486,11 +462,11 @@ export const productsWithFilters = async ({
         text: {
           query: microCategory,
           path: "info.microCategory",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
+          // score: {
+          //   constant: {
+          //     value: 0,
+          //   },
+          // },
         },
       };
     } else {
@@ -570,11 +546,11 @@ export const productsWithFilters = async ({
         text: {
           query: colors,
           path: "variations.color",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
+          // score: {
+          //   constant: {
+          //     value: 0,
+          //   },
+          // },
         },
       };
     } else {
@@ -601,6 +577,8 @@ export const productsWithFilters = async ({
             checkShopStatus(),
             checkShopId(),
             checkGender(),
+          ],
+          should: [
             checkMacroCategory(),
             checkMicroCategory(),
             checkBrands(),
@@ -608,19 +586,24 @@ export const productsWithFilters = async ({
             checkTraits(),
             checkMaxPrice(),
             checkMinPrice(),
+            //get the best ranked name on the top of the list
+            checkName(),
+
+            //score params
+            ...checkScoreParams(),
             {
               embeddedDocument: {
                 path: "variations",
                 operator: {
                   compound: {
-                    filter: [
+                    should: [
                       checkColors(),
                       {
                         embeddedDocument: {
                           path: "variations.lots",
                           operator: {
                             compound: {
-                              must: [checkSizes(), checkQuantity()],
+                              filter: [checkSizes(), checkQuantity()],
                               should: [
                                 {
                                   range: {
@@ -644,17 +627,6 @@ export const productsWithFilters = async ({
                 },
               },
             },
-          ],
-
-          should: [
-            //get the best ranked name on the top of the list
-            checkName(),
-
-            //full text search
-            checkQuery(),
-
-            //score params
-            ...checkScoreParams(),
           ],
         },
       },

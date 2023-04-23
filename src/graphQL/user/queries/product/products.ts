@@ -13,7 +13,7 @@ export const products = async (
     info,
     limit,
     offset,
-    filters,
+    filters: betterInput,
     sort,
     canSeeAllStatuses: false,
   });

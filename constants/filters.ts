@@ -1,3 +1,5 @@
+import { brands } from "./brands.js";
+
 export const clothesSizes = [
   "xxs",
   "xs",
@@ -45,6 +47,27 @@ export const shoesSizes = [
   "50",
 ];
 
+export const colors = [
+  "Nero",
+  "Marrone",
+  "Beige",
+  "Grigio",
+  "Bianco",
+  "Blu",
+  "Petrolio",
+  "Azzurro",
+  "Verde",
+  "Oliva",
+  "Giallo",
+  "Arancione",
+  "Rosso",
+  "Rosa",
+  "Lilla",
+  "Oro",
+  "Argento",
+  "Multicolore",
+];
+
 export const occasions = ["casual", "elegante", "serio", "festa"];
 export const materials = [
   //   "alpaca",
@@ -89,7 +112,7 @@ export const genders = ["m", "f"];
 
 export const lengths = ["corto", "lungo", "normale"];
 
-export const making = ["basic", "stampato", "ricamato"];
+export const makings = ["basic", "stampato", "ricamato"];
 
 export const fits = ["skinny", "slim", "regular", "oversize", "baggy"];
 
@@ -105,33 +128,258 @@ export const shirtCollars = [
 
 export const sweaterCollars = ["girocollo", "dolcevita", "cardigan"];
 
-export const macroCategories: any[] = [
+interface macroCategory {
+  macroCategory: string;
+  occasions?: string[];
+  materials?: string[];
+  genders: string[];
+  lengths?: string[];
+  making?: string[];
+  fits: string[];
+  collars?: string[];
+  microCategories: string[];
+  sizes: string[];
+}
+
+const vestitiMicroCategories = [
+  "caftani",
+  "camicia",
+  "maglina",
+  "tubini",
+  "lunghi",
+];
+const tshirtMicroCategories = [
+  "maniche lunghe",
+  "maniche corte",
+  "mezze maniche",
+  "senza maniche",
+  "jeans",
+];
+
+const topMicroCategories = [
+  "maniche lunghe",
+  "maniche corte",
+  "mezze maniche",
+  "senza maniche",
+];
+
+const camicieMicroCategories = ["basic", "hawaiana", "jeans", "lino"];
+
+const bluseMicroCategories = ["basic", "senza maniche", "trapezio"];
+
+const pantaloniMicroCategories = [
+  "basic",
+  "leggins",
+  "cargo",
+  "salopette",
+  "tuta",
+  "palazzo",
+  "zampa d'elefante",
+];
+
+const jeansMicroCategories = ["basic", "palazzo", "zampa d'elefante"];
+
+const felpeMicroCategories = ["cappuccio", "zip", "senza cappuccio"];
+
+const giaccheMicroCategories = [
+  "leggere",
+  "impermeabili",
+  "smanicate",
+  "vento",
+  "sportive",
+  "invernali",
+  "piumini",
+  "bomber",
+  "jeans",
+  "gilet",
+];
+
+const blazerMicroCategories = [
+  "leggeri",
+  "impermeabili",
+  "smanicati",
+  "vento",
+  "sportivi",
+  "invernali",
+  "jeans",
+];
+
+const cappottiMicroCategories = ["basic", "parka", "trench", "invernali"];
+
+const maglioniMicroCategories = ["liscio", "trecce", "coste"];
+
+const costumiMicroCategories = ["interi", "bikini", "bermuda", "boxer", "slip"];
+
+const gonneMicroCategories = [
+  "pieghe",
+  "trapezio",
+  "tubino",
+  "portafoglio",
+  "jeans",
+];
+
+const shortsMicroCategories = ["basic", "sportivi"];
+
+const scarpeMicroCategories = [
+  "sneakers",
+  "sandali",
+  "piatte",
+  "ciabatte",
+  "tacco",
+  "ballerine",
+  "stivaletti",
+  "stivali",
+  "sportive",
+  "mare",
+  "sposa",
+  "pantofole",
+  "trekking",
+];
+
+const poloMicroCategories = [
+  "maniche lunghe",
+  "maniche corte",
+  "mezze maniche",
+  "senza maniche",
+];
+
+const bermudaMicroCategories = ["cargo", "jeans", "tuta", "basic"];
+
+const macroCategoriesRaw = [
+  "vestiti",
+  "t-shirt",
+  "top",
+  "camicie",
+  "bluse",
+  "pantaloni",
+  "jeans",
+  "felpe",
+  "giacche",
+  "blazer",
+  "cappotti",
+  "maglioni",
+  "costumi",
+  "gonne",
+  "shorts",
+  "scarpe",
+  "polo",
+  "bermuda",
+];
+
+export const allFiltersRaw = [
+  //microCategories
+  ...vestitiMicroCategories,
+  ...tshirtMicroCategories,
+  ...topMicroCategories,
+  ...camicieMicroCategories,
+  ...bluseMicroCategories,
+  ...pantaloniMicroCategories,
+  ...jeansMicroCategories,
+  ...felpeMicroCategories,
+  ...giaccheMicroCategories,
+  ...blazerMicroCategories,
+  ...cappottiMicroCategories,
+  ...maglioniMicroCategories,
+  ...costumiMicroCategories,
+  ...gonneMicroCategories,
+  ...shortsMicroCategories,
+  ...scarpeMicroCategories,
+  ...poloMicroCategories,
+  ...bermudaMicroCategories,
+  //occasions
+  ...occasions,
+  //materials
+  ...materials,
+  //genders
+  ...genders,
+  //lenghts
+  ...lengths,
+  //making
+  ...makings,
+  //fits
+  ...fits,
+  //traits
+  ...traits,
+  //collars
+  ...shirtCollars,
+  ...sweaterCollars,
+  //colors
+  ...colors,
+  //brands
+  ...brands,
+  //macroCategories
+  ...macroCategoriesRaw,
+];
+
+const allMicroCategoriesRaw = [
+  ...vestitiMicroCategories,
+  ...tshirtMicroCategories,
+  ...topMicroCategories,
+  ...camicieMicroCategories,
+  ...bluseMicroCategories,
+  ...pantaloniMicroCategories,
+  ...jeansMicroCategories,
+  ...felpeMicroCategories,
+  ...giaccheMicroCategories,
+  ...blazerMicroCategories,
+  ...cappottiMicroCategories,
+  ...maglioniMicroCategories,
+  ...costumiMicroCategories,
+  ...gonneMicroCategories,
+  ...shortsMicroCategories,
+  ...scarpeMicroCategories,
+  ...poloMicroCategories,
+  ...bermudaMicroCategories,
+];
+
+export const allFilters = [
+  //microCategories
+  { microCategory: allMicroCategoriesRaw },
+  //occasions
+  { occasion: occasions },
+  //materials
+  { material: materials },
+  //genders
+  { gender: genders },
+  //lenghts
+  { length: lengths },
+  //making
+  { making: makings },
+  //fits
+  { fit: fits },
+  //traits
+  { traits },
+  //collars
+  { collar: [...shirtCollars, ...sweaterCollars] },
+  //colors
+  { colors },
+  //brands
+  { brand: brands },
+  //macroCategories
+  { macroCategory: macroCategoriesRaw },
+];
+
+export const macroCategories: macroCategory[] = [
   {
     macroCategory: "vestiti",
     occasions: occasions,
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategories: ["caftani", "camicia", "maglina", "tubini", "lunghi"],
+    microCategories: vestitiMicroCategories,
     sizes: clothesSizes,
   },
   {
-    macroCategory: "t-Shirt",
+    macroCategory: "t-shirt",
     occasions: occasions,
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategories: [
-      "maniche lunghe",
-      "maniche corte",
-      "mezze maniche",
-      "senza maniche",
-      "jeans",
-    ],
+    microCategories: tshirtMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -140,14 +388,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: [
-      "maniche lunghe",
-      "maniche corte",
-      "mezze maniche",
-      "senza maniche",
-    ],
+    microCategories: topMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -156,10 +399,10 @@ export const macroCategories: any[] = [
     materials: materials, //TODO FATTO
     genders: genders,
     lengths: lengths, //TODO FATTO
-    making: making, //TODO FATTO
+    making: makings, //TODO FATTO
     collars: shirtCollars, //TODO
     fits: fits,
-    microCategory: ["basic", "hawaiana", "jeans", "lino"],
+    microCategories: camicieMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -168,9 +411,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: ["basic", "senza maniche", "trapezio"],
+    microCategories: bluseMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -178,18 +421,10 @@ export const macroCategories: any[] = [
     occasions: occasions,
     materials: materials,
     genders: genders,
-    making: making,
+    making: makings,
     //non ha lenghts perche la lunghezza sarebbe la taglia
     fits: fits,
-    microCategory: [
-      "basic",
-      "leggins",
-      "cargo",
-      "salopette",
-      "tuta",
-      "palazzo",
-      "zampa d'elefante",
-    ],
+    microCategories: pantaloniMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -197,10 +432,10 @@ export const macroCategories: any[] = [
     occasions: occasions,
     materials: materials,
     genders: genders,
-    making: making,
+    making: makings,
     //non ha lenghts perche la lunghezza sarebbe la taglia
     fits: fits,
-    microCategory: ["basic", "palazzo", "zampa d'elefante"],
+    microCategories: jeansMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -209,9 +444,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: ["cappuccio", "zip", "senza cappuccio"],
+    microCategories: felpeMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -220,20 +455,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: [
-      "leggere",
-      "impermeabili",
-      "smanicate",
-      "vento",
-      "sportive",
-      "invernali",
-      "piumini",
-      "bomber",
-      "jeans",
-      "gilet",
-    ],
+    microCategories: giaccheMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -242,17 +466,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: [
-      "leggeri",
-      "impermeabili",
-      "smanicati",
-      "vento",
-      "sportivi",
-      "invernali",
-      "jeans",
-    ],
+    microCategories: blazerMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -261,9 +477,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: ["basic", "parka", "trench", "invernali"],
+    microCategories: cappottiMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -272,10 +488,10 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
     collars: sweaterCollars,
-    microCategory: ["liscio", "trecce", "coste"],
+    microCategories: maglioniMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -283,9 +499,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: ["interi", "bikini", "bermuda", "boxer", "slip"],
+    microCategories: costumiMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -294,9 +510,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: ["pieghe", "trapezio", "tubino", "portafoglio", "jeans"],
+    microCategories: gonneMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -305,9 +521,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategory: ["basic", "sportivi"],
+    microCategories: shortsMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -315,21 +531,8 @@ export const macroCategories: any[] = [
     occasions: occasions,
     materials: materials,
     genders: genders,
-    microCategory: [
-      "sneakers",
-      "sandali",
-      "piatte",
-      "ciabatte",
-      "tacco",
-      "ballerine",
-      "stivaletti",
-      "stivali",
-      "sportive",
-      "mare",
-      "sposa",
-      "pantofole",
-      "trekking",
-    ],
+    fits: fits,
+    microCategories: scarpeMicroCategories,
     sizes: shoesSizes,
   },
   {
@@ -338,14 +541,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategories: [
-      "maniche lunghe",
-      "maniche corte",
-      "mezze maniche",
-      "senza maniche",
-    ],
+    microCategories: poloMicroCategories,
     sizes: clothesSizes,
   },
   {
@@ -354,9 +552,9 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    making: making,
+    making: makings,
     fits: fits,
-    microCategories: ["cargo", "jeans", "tuta", "basic"],
+    microCategories: bermudaMicroCategories,
     sizes: clothesSizes,
   },
 ];
