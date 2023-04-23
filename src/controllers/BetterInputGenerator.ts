@@ -39,7 +39,5 @@ export const BetterInputGenerator = (input: any) => {
   //merge the hard-filters with the new filters
   const mergedFilters = lodash.merge(filters, input); //! si da piu importanza agli hard-filters, se si vuole cambiare: scambiare l'ordine degli argomenti
 
-  console.log(mergedFilters);
-
   return mergedFilters;
 };

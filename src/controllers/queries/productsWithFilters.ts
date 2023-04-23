@@ -182,7 +182,7 @@ export const productsWithFilters = async ({
         text: {
           query: query,
           path: "name",
-          score: { boost: { value: 30 } },
+          score: { boost: { value: 15 } },
           fuzzy: {
             maxEdits: 2,
             prefixLength: 4,
