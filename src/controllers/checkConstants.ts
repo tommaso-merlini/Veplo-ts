@@ -15,6 +15,14 @@ const checkConstants = (obj: any, is: String) => {
     sizes: sizeValues,
   };
 
+  console.log(checkableObject);
+
+  //TODO check the integrity of the macrocategory
+  /*
+    Ex:
+    if macroCatgory is scarpe you cannot input the collar filter
+  */
+
   for (const property in checkableObject) {
     for (let filter of allFilters) {
       if (Object.keys(filter)[0] === property) {
@@ -41,6 +49,8 @@ const checkConstants = (obj: any, is: String) => {
       }
     }
   }
+
+  throw new Error();
 };
 
 export default checkConstants;
