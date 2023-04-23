@@ -1,5 +1,6 @@
 import { QueryProductsArgs } from "src/graphQL/types/types.js";
 import { productsWithFilters } from "../../../../controllers/queries/productsWithFilters.js";
+import { BetterInputGenerator } from "../../../../controllers/BetterInputGenerator.js";
 
 export const products = async (
   _: any,
@@ -7,6 +8,7 @@ export const products = async (
   __: any,
   info: any
 ) => {
+  const betterInput = BetterInputGenerator(filters);
   const products: any = await productsWithFilters({
     info,
     limit,

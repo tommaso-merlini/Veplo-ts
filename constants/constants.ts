@@ -92,15 +92,27 @@ export const constants = {
           sizes: clothes_sizes,
         },
         {
-          name: "T-Shirt e Top",
-          url: "t-shirt-e-top",
-          types: ["top", "t-shirt", "polo", "a maniche lunghe"],
+          name: "T-Shirt",
+          url: "t-shirt",
+          types: ["basic", "stampate", "a maniche lunghe"],
           sizes: clothes_sizes,
         },
         {
-          name: "Camicie e Bluse", //Camicie & Bluse
-          url: "camicie-e-bluse",
-          types: ["camicie", "camiciette", "bluse"],
+          name: "Top",
+          url: "top",
+          types: ["a maniche lunghe", "a maniche corte"],
+          sizes: clothes_sizes,
+        },
+        {
+          name: "Camicie", //Camicie & Bluse
+          url: "camicie",
+          types: ["corte", "lunghe"],
+          sizes: clothes_sizes,
+        },
+        {
+          name: "Bluse", //Camicie & Bluse
+          url: "bluse",
+          types: ["corto", "lungo"],
           sizes: clothes_sizes,
         },
         {
@@ -126,25 +138,38 @@ export const constants = {
         {
           name: "Felpe",
           url: "felpe",
-          types: ["felpe", "con il cappuccio", "con la zip", "pile"],
+          types: ["con il cappuccio", "con la zip", "pile"],
           sizes: clothes_sizes,
         },
         {
-          name: "Giacche & Blazer",
-          url: "giacche-e-blazer",
+          name: "Giacche",
+          url: "giacche",
           types: [
-            "giacche leggere",
-            "giacche impermeabili",
+            "leggere",
+            "impermeabili",
             "di pelle",
             "di jeans",
-            "blazer",
-            "mantelle",
-            "smanicati",
-            "giacche a vento",
+            "smanicate",
+            "a vento",
             "sportive",
             "invernali",
             "piumini corti",
-            "giacche bomber",
+            "bomber",
+          ],
+          sizes: clothes_sizes,
+        },
+        {
+          name: "Blazer",
+          url: "blazer",
+          types: [
+            "leggeri",
+            "impermeabili",
+            "di pelle",
+            "di jeans",
+            "smanicati",
+            "a vento",
+            "sportivi",
+            "invernali",
           ],
           sizes: clothes_sizes,
         },
@@ -162,16 +187,22 @@ export const constants = {
           sizes: clothes_sizes,
         },
         {
-          name: "Maglieria",
-          url: "pullover-e-cardigan",
-          types: ["pullover", "cardigan"],
+          name: "Pullover",
+          url: "pullover",
+          types: ["corto", "lungo"],
+          sizes: clothes_sizes,
+        },
+        {
+          name: "Cardigan",
+          url: "cardigan",
+          types: ["corto", "lungo"],
           sizes: clothes_sizes,
         },
         //!aggiunto costumi: ["costumi"],
         {
           name: "Costumi",
           url: "costumi",
-          types: ["costumi interi", "bikini"],
+          types: ["interi", "bikini"],
           sizes: clothes_sizes,
         },
         {
@@ -241,9 +272,15 @@ export const constants = {
     uomo: {
       abbigliamento: [
         {
-          name: "T-shirt e Polo",
-          url: "t-shirt-e-polo",
-          types: ["basic", "stampate", "canotte", "polo", "a maniche lunghe"],
+          name: "T-shirt",
+          url: "t-shirt",
+          types: ["basic", "stampate", "canotte", "a maniche lunghe"],
+          sizes: clothes_sizes,
+        },
+        {
+          name: "Polo",
+          url: "polo",
+          types: ["basic", "stampate", "a maniche lunghe"],
           sizes: clothes_sizes,
         },
         {
@@ -259,9 +296,15 @@ export const constants = {
           sizes: clothes_sizes,
         },
         {
-          name: "Maglieria",
-          url: "maglieria",
-          types: ["cardigan", "pullover"],
+          name: "Pullover",
+          url: "pullover",
+          types: ["corto", "lungo"],
+          sizes: clothes_sizes,
+        },
+        {
+          name: "Cardigan",
+          url: "cardigan",
+          types: ["corto", "lungo"],
           sizes: clothes_sizes,
         },
         {
