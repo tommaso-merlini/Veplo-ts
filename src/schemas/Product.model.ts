@@ -45,6 +45,11 @@ const ProductSchema = new mongoose.Schema({
     brand: { type: String, required: true },
     fit: { type: String, required: true },
     traits: [{ type: String, required: true }],
+    occasions: [{ type: String, required: false }],
+    materials: [{ type: String, required: false }],
+    length: { type: String, required: false },
+    making: { type: String, required: false },
+    collar: { type: String, required: false },
   },
   location: {
     type: {

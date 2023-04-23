@@ -45,8 +45,8 @@ export const shoesSizes = [
   "50",
 ];
 
-const occasions = ["casual", "elegante", "serio", "festa"];
-const materials = [
+export const occasions = ["casual", "elegante", "serio", "festa"];
+export const materials = [
   //   "alpaca",
   //   "angora",
   //   "cammello",
@@ -85,17 +85,17 @@ const materials = [
   "jeans",
 ];
 
-const genders = ["m", "f"];
+export const genders = ["m", "f"];
 
-const lengths = ["corto", "lungo", "normale"];
+export const lengths = ["corto", "lungo", "normale"];
 
-const types = ["basic", "stampato", "ricamato"];
+export const making = ["basic", "stampato", "ricamato"];
 
-const fits = ["skinny", "slim", "regular", "oversize", "baggy"];
+export const fits = ["skinny", "slim", "regular", "oversize", "baggy"];
 
-const traits = ["vegan", "vintage", "handmade", "eco-friendly"];
+export const traits = ["vegan", "vintage", "handmade", "eco-friendly"];
 
-const shirtCollars = [
+export const shirtCollars = [
   "italiano",
   "francese",
   "button down",
@@ -103,7 +103,7 @@ const shirtCollars = [
   "cerimonia",
 ];
 
-const sweaterCollars = ["girocollo", "dolcevita", "cardigan"];
+export const sweaterCollars = ["girocollo", "dolcevita", "cardigan"];
 
 export const macroCategories: any[] = [
   {
@@ -112,7 +112,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategories: ["caftani", "camicia", "maglina", "tubini", "lunghi"],
     sizes: clothesSizes,
@@ -123,7 +123,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategories: [
       "maniche lunghe",
@@ -140,7 +140,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: [
       "maniche lunghe",
@@ -152,14 +152,14 @@ export const macroCategories: any[] = [
   },
   {
     macroCategory: "camicie",
-    occasions: occasions, //TODO
-    materials: materials, //TODO
+    occasions: occasions, //TODO FATTO
+    materials: materials, //TODO FATTO
     genders: genders,
-    lengths: lengths, //TODO
-    types: types, //TODO
+    lengths: lengths, //TODO FATTO
+    making: making, //TODO FATTO
     collars: shirtCollars, //TODO
     fits: fits,
-    microCategory: ["basic", "hawaiana", "jeans"],
+    microCategory: ["basic", "hawaiana", "jeans", "lino"],
     sizes: clothesSizes,
   },
   {
@@ -168,7 +168,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: ["basic", "senza maniche", "trapezio"],
     sizes: clothesSizes,
@@ -178,7 +178,7 @@ export const macroCategories: any[] = [
     occasions: occasions,
     materials: materials,
     genders: genders,
-    types: types,
+    making: making,
     //non ha lenghts perche la lunghezza sarebbe la taglia
     fits: fits,
     microCategory: [
@@ -197,7 +197,7 @@ export const macroCategories: any[] = [
     occasions: occasions,
     materials: materials,
     genders: genders,
-    types: types,
+    making: making,
     //non ha lenghts perche la lunghezza sarebbe la taglia
     fits: fits,
     microCategory: ["basic", "palazzo", "zampa d'elefante"],
@@ -209,7 +209,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: ["cappuccio", "zip", "senza cappuccio"],
     sizes: clothesSizes,
@@ -220,7 +220,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: [
       "leggere",
@@ -242,7 +242,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: [
       "leggeri",
@@ -261,7 +261,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: ["basic", "parka", "trench", "invernali"],
     sizes: clothesSizes,
@@ -272,7 +272,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     collars: sweaterCollars,
     microCategory: ["liscio", "trecce", "coste"],
@@ -283,7 +283,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: ["interi", "bikini", "bermuda", "boxer", "slip"],
     sizes: clothesSizes,
@@ -294,7 +294,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: ["pieghe", "trapezio", "tubino", "portafoglio", "jeans"],
     sizes: clothesSizes,
@@ -305,7 +305,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategory: ["basic", "sportivi"],
     sizes: clothesSizes,
@@ -338,7 +338,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategories: [
       "maniche lunghe",
@@ -354,7 +354,7 @@ export const macroCategories: any[] = [
     materials: materials,
     genders: genders,
     lengths: lengths,
-    types: types,
+    making: making,
     fits: fits,
     microCategories: ["cargo", "jeans", "tuta", "basic"],
     sizes: clothesSizes,

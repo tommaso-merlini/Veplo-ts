@@ -57,7 +57,11 @@ const typeDefs = gql`
     microCategory: String
     brand: String
     fit: String
-    traits: [String]
+    traits: [String!]
+    materials: [String!]
+    length: String
+    making: String
+    collar: String
   }
 
   type Lot {
@@ -345,6 +349,10 @@ const typeDefs = gql`
     brand: String!
     fit: String!
     traits: [String]!
+    materials: [String!]
+    length: String
+    making: String
+    collar: String
   }
 
   input ProductLotInput {
