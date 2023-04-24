@@ -51,19 +51,19 @@ const app = express();
 const port = process.env.PORT || 3000;
 const appId = generateCode();
 
-if (process.env.NODE_ENV === "production") {
-  const whitelist = ["www.veplo.it", "127.0.0.1"];
-  const corsOptions = {
-    origin: function (origin: any, callback: any) {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback("Cors Error");
-      }
-    },
-  };
-  app.use(cors());
-}
+// if (process.env.NODE_ENV === "production") {
+//   const whitelist = ["www.veplo.it", "127.0.0.1"];
+//   const corsOptions = {
+//     origin: function (origin: any, callback: any) {
+//       if (whitelist.indexOf(origin) !== -1) {
+//         callback(null, true);
+//       } else {
+//         callback("Cors Error");
+//       }
+//     },
+//   };
+//   app.use(cors());
+// }
 
 // const numCpus = os.cpus().length;
 let endpointSecretCheckout: string;
