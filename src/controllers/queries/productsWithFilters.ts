@@ -275,11 +275,11 @@ export const productsWithFilters = async ({
         text: {
           query: gender,
           path: "info.gender",
-          // score: {
-          //   constant: {
-          //     value: 0,
-          //   },
-          // },
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
@@ -301,11 +301,11 @@ export const productsWithFilters = async ({
         text: {
           query: brand,
           path: "info.brand",
-          // score: {
-          //   constant: {
-          //     value: 0,
-          //   },
-          // },
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
@@ -327,11 +327,11 @@ export const productsWithFilters = async ({
         text: {
           query: fit,
           path: "info.fit",
-          // score: {
-          //   constant: {
-          //     value: 0,
-          //   },
-          // },
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
@@ -408,11 +408,11 @@ export const productsWithFilters = async ({
         range: {
           path: "variations.lots.quantity",
           gt: 0,
-          // score: {
-          //   constant: {
-          //     value: 0,
-          //   },
-          // },
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
@@ -435,11 +435,11 @@ export const productsWithFilters = async ({
         text: {
           query: macroCategory,
           path: "info.macroCategory",
-          // score: {
-          //   constant: {
-          //     value: 0,
-          //   },
-          // },
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
@@ -462,11 +462,11 @@ export const productsWithFilters = async ({
         text: {
           query: microCategory,
           path: "info.microCategory",
-          // score: {
-          //   constant: {
-          //     value: 0,
-          //   },
-          // },
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
@@ -546,11 +546,11 @@ export const productsWithFilters = async ({
         text: {
           query: colors,
           path: "variations.color",
-          // score: {
-          //   constant: {
-          //     value: 0,
-          //   },
-          // },
+          score: {
+            constant: {
+              value: 0,
+            },
+          },
         },
       };
     } else {
@@ -578,25 +578,18 @@ export const productsWithFilters = async ({
             checkShopId(),
             checkGender(),
             checkMacroCategory(),
-          ],
-          should: [
             checkMicroCategory(),
             checkBrands(),
             checkFit(),
             checkTraits(),
             checkMaxPrice(),
             checkMinPrice(),
-            //get the best ranked name on the top of the list
-            checkName(),
-
-            //score params
-            ...checkScoreParams(),
             {
               embeddedDocument: {
                 path: "variations",
                 operator: {
                   compound: {
-                    should: [
+                    filter: [
                       checkColors(),
                       {
                         embeddedDocument: {
@@ -627,6 +620,13 @@ export const productsWithFilters = async ({
                 },
               },
             },
+          ],
+          should: [
+            //get the best ranked name on the top of the list
+            checkName(),
+
+            //score params
+            ...checkScoreParams(),
           ],
         },
       },
