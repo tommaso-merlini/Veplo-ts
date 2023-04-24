@@ -24,6 +24,23 @@ export const BetterInputGenerator = (input: any) => {
       }
     }
 
+    //remove artticles
+    if (word === "il" || word === "la" || word === "lo") {
+      continue;
+    }
+
+    //remove articolo partitivi
+    if (
+      word === "del" ||
+      word === "dei" ||
+      word === "dello" ||
+      word === "degli" ||
+      word === "della" ||
+      word === "delle"
+    ) {
+      continue;
+    }
+
     const closestValue = closest(word, allFiltersRaw);
 
     //check closestValue diff
