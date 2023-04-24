@@ -61,6 +61,7 @@ const ProductSchema = new mongoose.Schema({
   shopInfo: {
     id: { type: mongoose.Types.ObjectId, required: true },
     businessId: { type: mongoose.Types.ObjectId, required: true },
+    profilePhoto: { type: String, required: true },
     name: {
       type: String,
       required: true,

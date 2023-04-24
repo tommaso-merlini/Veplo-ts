@@ -26,6 +26,7 @@ const typeDefs = gql`
     name: String
     city: String
     status: String
+    profilePhoto: String
     businessStatus: String
   }
 
