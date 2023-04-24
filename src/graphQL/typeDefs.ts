@@ -138,6 +138,27 @@ const typeDefs = gql`
     productsLikeThis(offset: Int!, limit: Int!): [Product!]
   }
 
+  type ProductsQueryResponse {
+    products: [Product!]!
+    filters: ProductFiltersResponse!
+  }
+
+  type ProductFiltersResponse {
+    colors: [String!]
+    sizes: [String!]
+    brand: String
+    minPrice: Int
+    maxPrice: Int
+    query: String
+    gender: String
+    macroCategory: String
+    microCategory: String
+    fit: String
+    traits: [String!]
+    collar: String
+    length: String
+  }
+
   type ShopInformations {
     phone: String
     description: String
@@ -162,7 +183,7 @@ const typeDefs = gql`
       sort: ProductSort
       filters: ProductFilters
       statuses: [ShopProductsStatusesEnum!]
-    ): [Product!]
+    ): [ProductsQueryResponse!]
     orders(statuses: [String!], limit: Int!, offset: Int!): [Order!]
   }
 
@@ -504,7 +525,7 @@ const typeDefs = gql`
       offset: Int!
       sort: ProductSort
       filters: ProductFilters
-    ): [Product!]
+    ): ProductsQueryResponse!
     """
     get a list of products with an autocomplete engine under the hood
     """

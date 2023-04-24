@@ -18,9 +18,5 @@ export const products = async (
     canSeeAllStatuses: false,
   });
 
-  // console.log("==================");
-  // console.log(products);
-  // console.log("==================");
-
   return products;
 };

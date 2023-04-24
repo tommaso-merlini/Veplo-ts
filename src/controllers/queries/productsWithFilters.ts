@@ -3,6 +3,7 @@ import { QueryProductsArgs } from "../../graphQL/types/types.js";
 import Product from "../../schemas/Product.model.js";
 import customError from "../errors/customError.js";
 import getRequestedFields from "../getRequestedFields.js";
+import graphqlFields from "graphql-fields";
 
 interface Args extends QueryProductsArgs {
   info: any;
@@ -643,7 +644,7 @@ export const productsWithFilters = async ({
       $project: {
         score: { $meta: "searchScore" },
 
-        ...getRequestedFields(info),
+        ...getRequestedFields(info, "products"),
         _id: 0,
         id: "$_id",
       },
@@ -651,5 +652,9 @@ export const productsWithFilters = async ({
 
     { $sort: checkSort },
   ]);
-  return products;
+
+  return {
+    products,
+    filters,
+  };
 };
