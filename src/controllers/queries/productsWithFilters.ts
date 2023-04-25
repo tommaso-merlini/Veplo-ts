@@ -36,14 +36,6 @@ export const productsWithFilters = async ({
   const datePivotMs = datePivot * 24 * 60 * 60 * 1000;
   const today = new Date();
 
-  const fullTextSearchParams = [
-    "info.fit",
-    "info.macroCategory",
-    "info.microCategory",
-    "info.brand",
-    "info.traits",
-  ];
-
   const scoreParams = [
     //boost score based on how young the product is
     {

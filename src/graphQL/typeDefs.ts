@@ -184,7 +184,7 @@ const typeDefs = gql`
       sort: ProductSort
       filters: ProductFilters
       statuses: [ShopProductsStatusesEnum!]
-    ): [ProductsQueryResponse!]
+    ): ProductsQueryResponse!
     orders(statuses: [String!], limit: Int!, offset: Int!): [Order!]
   }
 

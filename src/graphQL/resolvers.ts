@@ -55,6 +55,7 @@ import { productsWithFilters } from "../../src/controllers/queries/productsWithF
 import checkFirebaseErrors from "../../src/controllers/checkFirebaseErrors.js";
 import authenticateToken from "../../src/controllers/authenticateToken.js";
 import { productsAutoComplete } from "./user/queries/product/productsAutoComplete.js";
+import { BetterInputGenerator } from "../controllers/BetterInputGenerator.js";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -121,7 +122,6 @@ const resolvers = {
       { admin, req }: any,
       info: any
     ) => {
-      console.log(statuses);
       let token;
       if (process.env.NODE_ENV !== "development") {
         try {
@@ -147,17 +147,20 @@ const resolvers = {
       } catch (e) {
         var canSeeAllStatuses = false;
       }
+      const betterInput = BetterInputGenerator(filters);
 
       const products = await productsWithFilters({
         info,
         offset,
         sort,
-        filters,
+        filters: betterInput,
         limit,
         shopId: shop._id,
         statuses,
         canSeeAllStatuses,
       });
+
+      console.log(products);
 
       return products;
     },
