@@ -8,7 +8,7 @@ import lodash from "lodash";
 import { dictionary } from "../../dictionary.js";
 
 export const BetterInputGenerator = (input: any) => {
-  if (input.query == null) return input; //if the query is null return the original input
+  if (input?.query == null || input == null) return input; //if the query is null return the original input
   const filters: any = {
     keywords: [],
   };
