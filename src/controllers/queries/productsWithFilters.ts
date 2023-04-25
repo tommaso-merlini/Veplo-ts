@@ -36,6 +36,8 @@ export const productsWithFilters = async ({
   const datePivotMs = datePivot * 24 * 60 * 60 * 1000;
   const today = new Date();
 
+  console.log(filters);
+
   const scoreParams = [
     //boost score based on how young the product is
     {
@@ -172,7 +174,7 @@ export const productsWithFilters = async ({
   const checkName = () => {
     if (query != null) {
       return {
-        text: {
+        phrase: {
           query: query,
           path: "name",
           score: { boost: { value: 15 } },
@@ -265,7 +267,7 @@ export const productsWithFilters = async ({
   const checkGender = () => {
     if (gender != null) {
       return {
-        text: {
+        phrase: {
           query: gender,
           path: "info.gender",
           score: {
@@ -291,7 +293,7 @@ export const productsWithFilters = async ({
   const checkBrands = () => {
     if (brand != null) {
       return {
-        text: {
+        phrase: {
           query: brand,
           path: "info.brand",
           score: {
@@ -317,7 +319,7 @@ export const productsWithFilters = async ({
   const checkFit = () => {
     if (fit != null) {
       return {
-        text: {
+        phrase: {
           query: fit,
           path: "info.fit",
           score: {
@@ -371,7 +373,7 @@ export const productsWithFilters = async ({
   const checkSizes = () => {
     if (sizes != null) {
       return {
-        text: {
+        phrase: {
           query: sizes,
           path: "variations.lots.size",
           score: {
@@ -425,7 +427,7 @@ export const productsWithFilters = async ({
   const checkMacroCategory = () => {
     if (filters?.macroCategory != null && filters?.macroCategory != "") {
       return {
-        text: {
+        phrase: {
           query: macroCategory,
           path: "info.macroCategory",
           score: {
@@ -452,7 +454,7 @@ export const productsWithFilters = async ({
   const checkMicroCategory = () => {
     if (filters?.microCategory != null && filters?.microCategory != "") {
       return {
-        text: {
+        phrase: {
           query: microCategory,
           path: "info.microCategory",
           score: {
@@ -536,7 +538,7 @@ export const productsWithFilters = async ({
   const checkColors = () => {
     if (colors != null) {
       return {
-        text: {
+        phrase: {
           query: colors,
           path: "variations.color",
           score: {
