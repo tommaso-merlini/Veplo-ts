@@ -649,7 +649,7 @@ export const productsWithFilters = async ({
     products,
     filters: {
       ...filters,
-      colors: [filters.colors],
+      colors: [filters?.colors],
     },
   };
 };
