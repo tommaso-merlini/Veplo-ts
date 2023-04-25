@@ -2,7 +2,6 @@ import express, { Response } from "express";
 import chalk from "chalk";
 // import { GraphQLError } from "graphql";
 import initMongoose from "../mongoose/initMongoose.js";
-import apolloserver from "../apollo/apolloserver.js";
 //@ts-ignore
 import { expressMiddleware } from "@apollo/server/express4";
 
@@ -30,9 +29,22 @@ import { generateProducts } from "../mongoose/scripts/generateProducts.js";
 import path from "path";
 import { generateCode } from "./controllers/generateCode.js";
 import { migration2 } from "../migration/2.js";
+import { ApolloServer } from "@apollo/server";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "@apollo/server-plugin-landing-page-graphql-playground";
+import { ApolloServerPluginLandingPageDisabled } from "@apollo/server/plugin/disabled";
+import { InMemoryLRUCache } from "@apollo/utils.keyvaluecache";
+import depthLimit from "graphql-depth-limit";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import typeDefs from "../src/graphQL/typeDefs.js";
+import resolvers from "../src/graphQL/resolvers.js";
+import { formatError } from "../apollo/formatError.js";
+import plugins from "../apollo/plugins.js";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+
 dotenv.config();
 
 const app = express();
+const httpServer = http.createServer(app);
 const port = process.env.PORT || 3000;
 const appId = generateCode();
 
@@ -194,6 +206,26 @@ async function startServer() {
   //========/APOLLO SERVER/========/
   app.use(graphqlUploadExpress());
 
+  const apolloserver = new ApolloServer({
+    typeDefs,
+    resolvers,
+    csrfPrevention: process.env.NODE_ENV !== "development",
+    // introspection: process.env.NODE_ENV !== "production",
+    introspection: true,
+    cache: new InMemoryLRUCache({
+      // ~100MiB
+      maxSize: Math.pow(2, 20) * 100,
+      // 5 minutes (in milliseconds)
+      ttl: 300_000,
+    }),
+    // cache: "bounded",
+
+    //TODO uncomment below when in production
+    plugins: [...plugins, ApolloServerPluginDrainHttpServer({ httpServer })],
+    validationRules: [depthLimit(7)],
+    formatError,
+  });
+
   await apolloserver.start();
   app.use(
     "/graphql",
@@ -205,15 +237,14 @@ async function startServer() {
   );
 
   //========/START APP/========/
-  app.listen(port, async () => {
+  httpServer.listen({ port: port }, async () => {
     console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
     console.log(
-      chalk.bgGreen.black(`Express is listening at http://localhost:${port}`)
+      chalk.bgGreen.black(`server is listening at http://localhost:${port}`)
     );
     console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
     // await generateProducts();
   });
-  // }
 }
 
 startServer();

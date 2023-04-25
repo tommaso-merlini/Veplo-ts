@@ -172,7 +172,7 @@ export const productsWithFilters = async ({
   const checkName = () => {
     if (query != null) {
       return {
-        phrase: {
+        text: {
           query: query,
           path: "name",
           score: { boost: { value: 15 } },
