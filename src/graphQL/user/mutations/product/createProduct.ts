@@ -7,6 +7,7 @@ import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1
 import Product from "../../../../schemas/Product.model.js";
 import { checkLotQuantity } from "../../../../controllers/checkLotQuantity.js";
 import { MutationCreateProductArgs } from "src/graphQL/types/types.js";
+import customError from "src/controllers/errors/customError.js";
 
 export const createProduct = async (
   _: any,
@@ -29,6 +30,14 @@ export const createProduct = async (
   }
 
   //TODO check status
+
+  if (options.info.keywords != null && options.info.keywords.length > 5) {
+    customError({
+      code: "422",
+      path: "keywords",
+      message: "maximum amount of weywords exedeed",
+    });
+  }
 
   checkConstants(options, "product");
 

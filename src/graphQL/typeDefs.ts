@@ -63,6 +63,7 @@ const typeDefs = gql`
     length: String
     making: String
     collar: String
+    keywords: [String!]
   }
 
   type Lot {
@@ -375,6 +376,7 @@ const typeDefs = gql`
     length: String
     making: String
     collar: String
+    keywords: [String!]
   }
 
   input ProductLotInput {

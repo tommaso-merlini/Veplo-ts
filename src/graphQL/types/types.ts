@@ -196,37 +196,65 @@ export type Lot = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** add products to the cart */
   addToCart?: Maybe<Scalars['Boolean']>;
   adminCreateAdmin?: Maybe<Scalars['Boolean']>;
   adminCreateProduct?: Maybe<CreateProductResponse>;
   adminDeleteProduct: Scalars['ID'];
   adminEditProduct: Scalars['ID'];
+  /** tells that a package was lost */
   adminLostPackage?: Maybe<Scalars['Boolean']>;
+  /** tells that an order has arrived */
   adminOrderHasArrived?: Maybe<Scalars['Boolean']>;
+  /** change the status of a product */
   changeProductStatus?: Maybe<Scalars['Boolean']>;
+  /** change the status of a shop */
   changeShopStatus?: Maybe<Scalars['Boolean']>;
+  /** get a checkout url of a cart by providing the shopId, the userId is inside the jwt */
   checkout?: Maybe<Scalars['String']>;
+  /** the first step of creating a business */
   createBusinessStep1: Scalars['ID'];
+  /** create information */
   createInformation?: Maybe<Scalars['Boolean']>;
+  /** create a single product */
   createProduct?: Maybe<CreateProductResponse>;
+  /** create a shop */
   createShop: Scalars['ID'];
+  /** create an account on stripe */
   createStripeAccount?: Maybe<Scalars['String']>;
+  /** create a user in mongodb */
   createUser: Scalars['ID'];
+  /** create a variation */
   createVariation?: Maybe<Scalars['Boolean']>;
+  /** delete a cart */
   deleteCart?: Maybe<Scalars['Boolean']>;
+  /** delete a product */
   deleteProduct: Scalars['ID'];
+  /** delete a variation */
   deleteVariation?: Maybe<Scalars['Boolean']>;
+  /** edit a cart (you can add or remove) */
   editCart?: Maybe<Scalars['Boolean']>;
+  /** edit an order */
   editOrder?: Maybe<Scalars['Boolean']>;
+  /** edit a product */
   editProduct: Scalars['ID'];
+  /** edit a user */
   editUser?: Maybe<Scalars['Boolean']>;
+  /** edit a single variation */
   editVariation?: Maybe<Scalars['Boolean']>;
+  /** shop refunds an order because the products are not available */
   productsNotAvailableRefund?: Maybe<Scalars['Boolean']>;
+  /** refund an order */
   refund?: Maybe<Scalars['Boolean']>;
+  /** remove product form cart */
   removeFromCart?: Maybe<Scalars['Boolean']>;
+  /** user returns an order */
   returnOrder?: Maybe<Scalars['Boolean']>;
+  /** shop tells that a return order has arrived */
   returnedOrderHasArrived?: Maybe<Scalars['Boolean']>;
+  /** change the isBusiness account field */
   setIsBusiness: Scalars['Boolean'];
+  /** upload a list of images to the image bucket */
   uploadImages: Array<Scalars['String']>;
 };
 
@@ -397,7 +425,7 @@ export type MutationSetIsBusinessArgs = {
 
 export type MutationUploadImagesArgs = {
   images: Array<Scalars['Upload']>;
-  proportion: Scalars['String'];
+  proportion: ImageProportionsEnum;
 };
 
 export type Opening = {
@@ -479,21 +507,48 @@ export type ProductFilters = {
   traits?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type ProductFiltersResponse = {
+  __typename?: 'ProductFiltersResponse';
+  brand?: Maybe<Scalars['String']>;
+  collar?: Maybe<Scalars['String']>;
+  colors?: Maybe<Array<Maybe<Scalars['String']>>>;
+  fit?: Maybe<Scalars['String']>;
+  gender?: Maybe<Scalars['String']>;
+  length?: Maybe<Scalars['String']>;
+  macroCategory?: Maybe<Scalars['String']>;
+  maxPrice?: Maybe<Scalars['Int']>;
+  microCategory?: Maybe<Scalars['String']>;
+  minPrice?: Maybe<Scalars['Int']>;
+  query?: Maybe<Scalars['String']>;
+  sizes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  traits?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 export type ProductInfo = {
   __typename?: 'ProductInfo';
   brand?: Maybe<Scalars['String']>;
+  collar?: Maybe<Scalars['String']>;
   fit?: Maybe<Scalars['String']>;
   gender?: Maybe<Scalars['String']>;
+  keywords?: Maybe<Array<Scalars['String']>>;
+  length?: Maybe<Scalars['String']>;
   macroCategory?: Maybe<Scalars['String']>;
+  making?: Maybe<Scalars['String']>;
+  materials?: Maybe<Array<Scalars['String']>>;
   microCategory?: Maybe<Scalars['String']>;
-  traits?: Maybe<Array<Maybe<Scalars['String']>>>;
+  traits?: Maybe<Array<Scalars['String']>>;
 };
 
 export type ProductInfoInput = {
   brand: Scalars['String'];
+  collar?: InputMaybe<Scalars['String']>;
   fit: Scalars['String'];
   gender: Scalars['String'];
+  keywords?: InputMaybe<Array<Scalars['String']>>;
+  length?: InputMaybe<Scalars['String']>;
   macroCategory: Scalars['String'];
+  making?: InputMaybe<Scalars['String']>;
+  materials?: InputMaybe<Array<Scalars['String']>>;
   microCategory: Scalars['String'];
   traits: Array<InputMaybe<Scalars['String']>>;
 };
@@ -546,22 +601,40 @@ export type ProductVariationsOrder = {
   variationId?: Maybe<Scalars['ID']>;
 };
 
+export type ProductsQueryResponse = {
+  __typename?: 'ProductsQueryResponse';
+  filters: ProductFiltersResponse;
+  products: Array<Product>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  /** admin - get a list of all the orders */
   adminSeeAllOrders?: Maybe<Array<Order>>;
+  /** get list of available brands */
   brands?: Maybe<Array<Scalars['String']>>;
+  /** get a single business */
   business?: Maybe<Business>;
+  /** get a single cart */
   cart: Cart;
+  /** check if the account is a business */
   isBusiness: Scalars['Boolean'];
+  /** get a single order */
   order?: Maybe<Order>;
+  /** get a single product */
   product?: Maybe<Product>;
-  productByVariationUniqueId?: Maybe<Product>;
-  products?: Maybe<Array<Product>>;
+  /** get a list of products, you can use the filters and sort */
+  products: ProductsQueryResponse;
+  /** get a list of products with an autocomplete engine under the hood */
   productsAutoComplete: Array<Product>;
   prova: Scalars['String'];
+  /** get a single shop */
   shop?: Maybe<Shop>;
+  /** get a single shop searching by firebaseId */
   shopByFirebaseId?: Maybe<Shop>;
+  /** get a list of shops, you can use the filters */
   shops: Array<Shop>;
+  /** get a single user - id provided by the jwt */
   user?: Maybe<User>;
 };
 
@@ -590,11 +663,6 @@ export type QueryOrderArgs = {
 
 export type QueryProductArgs = {
   id: Scalars['ID'];
-};
-
-
-export type QueryProductByVariationUniqueIdArgs = {
-  uniqueId: Scalars['ID'];
 };
 
 
@@ -652,8 +720,9 @@ export type Shop = {
   isDigitalOnly?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
   orders?: Maybe<Array<Order>>;
-  photo?: Maybe<Scalars['String']>;
-  products?: Maybe<Array<Product>>;
+  products: ProductsQueryResponse;
+  profileCover?: Maybe<Scalars['String']>;
+  profilePhoto?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
 };
 
@@ -670,7 +739,7 @@ export type ShopProductsArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
   sort?: InputMaybe<ProductSort>;
-  statuses?: InputMaybe<Array<Scalars['String']>>;
+  statuses?: InputMaybe<Array<ShopProductsStatusesEnum>>;
 };
 
 export type ShopFilters = {
@@ -685,6 +754,7 @@ export type ShopInfo = {
   city?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
+  profilePhoto?: Maybe<Scalars['String']>;
   status?: Maybe<Scalars['String']>;
 };
 
@@ -700,7 +770,8 @@ export type ShopInput = {
   info: ShopInputInfo;
   isDigitalOnly: Scalars['Boolean'];
   name: Scalars['String'];
-  photo?: InputMaybe<Scalars['String']>;
+  profileCover?: InputMaybe<Scalars['String']>;
+  profilePhoto?: InputMaybe<Scalars['String']>;
 };
 
 export type ShopInputInfo = {
@@ -716,6 +787,11 @@ export type ShopOrder = {
   name?: Maybe<Scalars['String']>;
   stripeId?: Maybe<Scalars['String']>;
 };
+
+export enum ShopProductsStatusesEnum {
+  Active = 'active',
+  NotActive = 'not_active'
+}
 
 export type Stripe = {
   __typename?: 'Stripe';
@@ -804,6 +880,12 @@ export type VariationProductInfoInfo = {
   macroCategory?: Maybe<Scalars['String']>;
   microCategory?: Maybe<Scalars['String']>;
 };
+
+export enum ImageProportionsEnum {
+  Product = 'product',
+  ShopCover = 'shopCover',
+  ShopPhoto = 'shopPhoto'
+}
 
 export type ProductsNotAvailableInput = {
   productId: Scalars['ID'];
