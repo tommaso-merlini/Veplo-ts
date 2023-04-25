@@ -145,8 +145,8 @@ const typeDefs = gql`
   }
 
   type ProductFiltersResponse {
-    colors: [String!]
-    sizes: [String!]
+    colors: [String]
+    sizes: [String]
     brand: String
     minPrice: Int
     maxPrice: Int
@@ -155,7 +155,7 @@ const typeDefs = gql`
     macroCategory: String
     microCategory: String
     fit: String
-    traits: [String!]
+    traits: [String]
     collar: String
     length: String
   }

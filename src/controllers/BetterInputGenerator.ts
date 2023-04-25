@@ -3,9 +3,19 @@ import {
   macroCategories,
   allFiltersRaw,
   allFilters,
+  shoesSizes,
+  clothesSizes,
 } from "../../constants/filters.js";
 import lodash from "lodash";
 import { dictionary } from "../../dictionary.js";
+import {
+  articoliDeterminativi,
+  articoliIndeterminativi,
+  articoliPartitivi,
+  nomiComuni,
+  preposizioni,
+  preposizioniArticolate,
+} from "../../constants/italian.js";
 
 export const BetterInputGenerator = (input: any) => {
   if (input?.query == null || input == null) return input; //if the query is null return the original input
@@ -18,28 +28,28 @@ export const BetterInputGenerator = (input: any) => {
 
   //get closest filter for each word
   for (let word of queryWords) {
+    //remove all italians trash words
+    if (
+      articoliDeterminativi.includes(word) ||
+      articoliIndeterminativi.includes(word) ||
+      articoliPartitivi.includes(word) ||
+      preposizioni.includes(word) ||
+      preposizioniArticolate.includes(word) ||
+      nomiComuni.includes(word)
+    ) {
+      continue;
+    }
+
+    //remove sizes
+    if (clothesSizes.includes(word) || shoesSizes.includes(word)) {
+      continue;
+    }
+
     //get the best word from the dictionary
     for (let terms of dictionary) {
       if (terms.includes(word)) {
         word = terms[0];
       }
-    }
-
-    //remove artticles
-    if (word === "il" || word === "la" || word === "lo") {
-      continue;
-    }
-
-    //remove articolo partitivi
-    if (
-      word === "del" ||
-      word === "dei" ||
-      word === "dello" ||
-      word === "degli" ||
-      word === "della" ||
-      word === "delle"
-    ) {
-      continue;
     }
 
     const closestValue = closest(word, allFiltersRaw);

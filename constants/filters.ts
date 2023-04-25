@@ -68,7 +68,7 @@ export const colors = [
   "Multicolore",
 ];
 
-export const occasions = ["casual", "elegante", "serio", "festa"];
+export const occasions = ["casual", "elegante", "serio", "festa", "mare"];
 export const materials = [
   //   "alpaca",
   //   "angora",

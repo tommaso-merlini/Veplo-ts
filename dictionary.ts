@@ -5,6 +5,7 @@ export const dictionary: string[][] = [
   ["m", "uomo", "men", "man", "maschio", "maschi", "ragazzo", "ragazzi"],
   ["f", "donna", "women", "woman", "femmina", "femmine", "ragazza", "ragazze"],
   ["cappotti", "capo spalla", "spolverino"],
-  ["oversize", "largo", "larghi", "larghe"],
+  ["oversize", "largo", "larghi", "larghe", "larga"],
   ["slim", "stretti", "stretto", "strette"],
+  ["hawaiana", "hawaiiana"],
 ];
