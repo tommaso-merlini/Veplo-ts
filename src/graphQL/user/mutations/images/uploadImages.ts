@@ -49,17 +49,17 @@ export const uploadImages = async (
     });
   }
 
-  if (proportion === "ShopCover") {
+  if (String(proportion) === "ShopCover") {
     width = 720;
     height = 450;
   }
 
-  if (proportion === "ShopPhoto") {
+  if (String(proportion) === "ShopPhoto") {
     width = 500;
     height = 500;
   }
 
-  if (proportion === "product") {
+  if (String(proportion) === "product") {
     width = 1528;
     height = 2220;
   }

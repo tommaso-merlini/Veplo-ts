@@ -7,7 +7,7 @@ import { checkPriceV2BelowV1 } from "../../../../controllers/checkPriceV2BelowV1
 import Product from "../../../../schemas/Product.model.js";
 import { checkLotQuantity } from "../../../../controllers/checkLotQuantity.js";
 import { MutationCreateProductArgs } from "src/graphQL/types/types.js";
-import customError from "src/controllers/errors/customError.js";
+import customError from "../../../../controllers/errors/customError.js";
 
 export const createProduct = async (
   _: any,
