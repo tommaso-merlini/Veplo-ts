@@ -56,12 +56,140 @@ if (process.env.NODE_ENV === "production") {
     process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_PROD || "";
 }
 
+//========/REST API/========/
+app.get("/", (req, res: Response) => {
+  res.send({ status: "ok", process_id: appId });
+});
+
+app.get("/brands", (req, res: Response) => {
+  const brands = constants.brands;
+
+  res.send(brands);
+});
+
+app.get("/categories", (req, res: Response) => {
+  const categories = constants.genders;
+
+  res.send(categories);
+});
+
+app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
+  res.sendFile(
+    path.resolve("./loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
+  );
+});
+
+//========/WEBHOOKS/========/
+app.post(
+  "/webhook/account",
+  express.raw({ type: "application/json" }),
+  async (request, response) => {
+    const sig: any = request.headers["stripe-signature"];
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        sig,
+        endpointSecretAccount
+      );
+    } catch (err) {
+      console.log(err.message);
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    try {
+      switch (event.type) {
+        case "account.updated":
+          handleAccountUpdated(event.data.object);
+          break;
+
+        default:
+          if (process.env.NODE_ENV !== "production") {
+            console.log(`event.type not handled`);
+          }
+      }
+    } catch (e) {
+      console.log(e);
+      response.status(400).send(`{
+          defaultError: ${e.message},
+          customError: {
+            code: ${e.extensions.customCode},
+            path: ${e.extensions.customPath},
+            message: ${e.extensions.customMessage},
+          }
+        }`);
+      return;
+    }
+
+    // Return a 200 response to acknowledge receipt of the event
+    response.send();
+  }
+);
+
+app.post(
+  "/webhook/checkout",
+  express.raw({ type: "application/json" }),
+  async (request, response) => {
+    const sig: any = request.headers["stripe-signature"];
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        sig,
+        endpointSecretCheckout
+      );
+    } catch (err) {
+      // console.log(err.message);
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    try {
+      switch (event.type) {
+        case "checkout.session.completed":
+          await handleCheckoutCompleted(event.data.object);
+          break;
+        case "checkout.session.async_payment_succeeded":
+          await handleCheckoutAsyncPaymentSuccedeed(event.data.object);
+          break;
+        case "checkout.session.async_payment_failed":
+          handleCheckoutAsyncPaymentFailed(event.data.object);
+          break;
+        case "charge.refunded":
+          handleChargeRefunded(event.data.object);
+          break;
+
+        default:
+          if (process.env.NODE_ENV !== "production") {
+            console.log(`event.type not handled`);
+          }
+      }
+    } catch (e) {
+      console.log(e);
+      response.status(400).send(`{
+          defaultError: ${e.message},
+          customError: {
+            code: ${e.extensions.customCode},
+            path: ${e.extensions.customPath},
+            message: ${e.extensions.customMessage},
+          }
+        }`);
+      return;
+    }
+
+    // Return a 200 response to acknowledge receipt of the event
+    response.send();
+  }
+);
+
 async function startServer() {
   //========/MONGODB/========/
   await initMongoose();
-
-  // If the Node process ends, close the Mongoose connection
-  process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
 
   //========/APOLLO SERVER/========/
   app.use(graphqlUploadExpress());
@@ -74,137 +202,6 @@ async function startServer() {
     expressMiddleware(apolloserver, {
       context,
     })
-  );
-
-  //========/REST API/========/
-  app.get("/", (req, res: Response) => {
-    res.send({ status: "ok", process_id: appId });
-  });
-
-  app.get("/brands", (req, res: Response) => {
-    const brands = constants.brands;
-
-    res.send(brands);
-  });
-
-  app.get("/categories", (req, res: Response) => {
-    const categories = constants.genders;
-
-    res.send(categories);
-  });
-
-  app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
-    res.sendFile(
-      path.resolve("./loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
-    );
-  });
-
-  //========/WEBHOOKS/========/
-  app.post(
-    "/webhook/account",
-    express.raw({ type: "application/json" }),
-    async (request, response) => {
-      const sig: any = request.headers["stripe-signature"];
-
-      let event;
-
-      try {
-        event = stripe.webhooks.constructEvent(
-          request.body,
-          sig,
-          endpointSecretAccount
-        );
-      } catch (err) {
-        console.log(err.message);
-        response.status(400).send(`Webhook Error: ${err.message}`);
-        return;
-      }
-
-      try {
-        switch (event.type) {
-          case "account.updated":
-            handleAccountUpdated(event.data.object);
-            break;
-
-          default:
-            if (process.env.NODE_ENV !== "production") {
-              console.log(`event.type not handled`);
-            }
-        }
-      } catch (e) {
-        console.log(e);
-        response.status(400).send(`{
-          defaultError: ${e.message},
-          customError: {
-            code: ${e.extensions.customCode},
-            path: ${e.extensions.customPath},
-            message: ${e.extensions.customMessage},
-          }
-        }`);
-        return;
-      }
-
-      // Return a 200 response to acknowledge receipt of the event
-      response.send();
-    }
-  );
-
-  app.post(
-    "/webhook/checkout",
-    express.raw({ type: "application/json" }),
-    async (request, response) => {
-      const sig: any = request.headers["stripe-signature"];
-
-      let event;
-
-      try {
-        event = stripe.webhooks.constructEvent(
-          request.body,
-          sig,
-          endpointSecretCheckout
-        );
-      } catch (err) {
-        // console.log(err.message);
-        response.status(400).send(`Webhook Error: ${err.message}`);
-        return;
-      }
-
-      try {
-        switch (event.type) {
-          case "checkout.session.completed":
-            await handleCheckoutCompleted(event.data.object);
-            break;
-          case "checkout.session.async_payment_succeeded":
-            await handleCheckoutAsyncPaymentSuccedeed(event.data.object);
-            break;
-          case "checkout.session.async_payment_failed":
-            handleCheckoutAsyncPaymentFailed(event.data.object);
-            break;
-          case "charge.refunded":
-            handleChargeRefunded(event.data.object);
-            break;
-
-          default:
-            if (process.env.NODE_ENV !== "production") {
-              console.log(`event.type not handled`);
-            }
-        }
-      } catch (e) {
-        console.log(e);
-        response.status(400).send(`{
-          defaultError: ${e.message},
-          customError: {
-            code: ${e.extensions.customCode},
-            path: ${e.extensions.customPath},
-            message: ${e.extensions.customMessage},
-          }
-        }`);
-        return;
-      }
-
-      // Return a 200 response to acknowledge receipt of the event
-      response.send();
-    }
   );
 
   //========/START APP/========/
@@ -231,6 +228,9 @@ const gracefulExit = () => {
     process.exit(0);
   });
 };
+
+// If the Node process ends, close the Mongoose connection
+process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
 
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();

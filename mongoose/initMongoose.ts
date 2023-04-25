@@ -24,28 +24,28 @@ const initMongoose = () => {
     // useNewUrlParser: true,
     //!not supported anymore useFindAndModify: false,
   });
-
-  // If the connection throws an error
-  mongoose.connection.on("error", function (err: Error) {
-    console.error(
-      chalk.bgRed.black("Failed to connect to MongoDB on startup "),
-      err
-    );
-  });
-
-  mongoose.connection.on("connected", async function () {
-    console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
-  });
-
-  // When the connection is disconnected
-  mongoose.connection.on("disconnected", function () {
-    console.log(
-      chalk.bgYellow.black(
-        "Mongoose default connection to MongoDB is disconnected"
-      )
-    );
-    initMongoose();
-  });
 };
+
+// If the connection throws an error
+mongoose.connection.on("error", function (err: Error) {
+  console.error(
+    chalk.bgRed.black("Failed to connect to MongoDB on startup "),
+    err
+  );
+});
+
+mongoose.connection.on("connected", async function () {
+  console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
+});
+
+// When the connection is disconnected
+mongoose.connection.on("disconnected", function () {
+  console.log(
+    chalk.bgYellow.black(
+      "Mongoose default connection to MongoDB is disconnected"
+    )
+  );
+  initMongoose();
+});
 
 export default initMongoose;
