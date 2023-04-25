@@ -1,5 +1,6 @@
 import express, { Response } from "express";
 import chalk from "chalk";
+// import { GraphQLError } from "graphql";
 import initMongoose from "../mongoose/initMongoose.js";
 import apolloserver from "../apollo/apolloserver.js";
 //@ts-ignore
@@ -10,9 +11,11 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
 import http from "http";
+// import bodyParser from "body-parser";
+// import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
-import cluster from "cluster";
-import os from "os";
+// import cluster from "cluster";
+// import os from "os";
 import crypto from "crypto";
 import stripe from "../stripe/stripe.js";
 import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated.js";
@@ -26,13 +29,13 @@ import { handleCheckoutAsyncPaymentFailed } from "./controllers/stripe/handleChe
 import { generateProducts } from "../mongoose/scripts/generateProducts.js";
 import path from "path";
 import { generateCode } from "./controllers/generateCode.js";
+import { migration2 } from "../migration/2.js";
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 const appId = generateCode();
 
-// const numCpus = os.cpus().length;
 let endpointSecretCheckout: string;
 let endpointSecretAccount: string;
 
@@ -55,20 +58,23 @@ if (process.env.NODE_ENV === "production") {
 
 async function startServer() {
   //========/MONGODB/========/
-  // await initMongoose();
+  await initMongoose();
 
-  // //========/APOLLO SERVER/========/
-  // app.use(graphqlUploadExpress());
+  // If the Node process ends, close the Mongoose connection
+  process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
 
-  // await apolloserver.start();
-  // app.use(
-  //   "/graphql",
-  //   cors<cors.CorsRequest>(),
-  //   bodyParser.json(),
-  //   expressMiddleware(apolloserver, {
-  //     context,
-  //   })
-  // );
+  //========/APOLLO SERVER/========/
+  app.use(graphqlUploadExpress());
+
+  await apolloserver.start();
+  app.use(
+    "/graphql",
+    cors<cors.CorsRequest>(),
+    bodyParser.json(),
+    expressMiddleware(apolloserver, {
+      context,
+    })
+  );
 
   //========/REST API/========/
   app.get("/", (req, res: Response) => {
@@ -225,9 +231,6 @@ const gracefulExit = () => {
     process.exit(0);
   });
 };
-
-// If the Node process ends, close the Mongoose connection
-process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
 
 process.on("uncaughtException", function (err) {
   const errorId = crypto.randomUUID();
