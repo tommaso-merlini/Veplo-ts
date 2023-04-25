@@ -9,6 +9,7 @@ export const products = async (
   info: any
 ) => {
   const betterInput = BetterInputGenerator(filters);
+  console.log(betterInput);
   const products: any = await productsWithFilters({
     info,
     limit,

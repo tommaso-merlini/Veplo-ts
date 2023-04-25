@@ -653,8 +653,12 @@ export const productsWithFilters = async ({
     { $sort: checkSort },
   ]);
 
+  console.log(filters.colors);
   return {
     products,
-    filters,
+    filters: {
+      ...filters,
+      colors: [filters.colors],
+    },
   };
 };
