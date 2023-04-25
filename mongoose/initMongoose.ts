@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import chalk from "chalk";
 dotenv.config();
 
 let databaseUrl: string;
@@ -24,20 +25,27 @@ const initMongoose = () => {
     //!not supported anymore useFindAndModify: false,
   });
 
-  // mongoose.connection.on("error", (err: any) => {
-  //   console.log(chalk.bgRedBright.black("Mongoose has occured an error"));
-  //   console.log(err.message);
-  // });
+  // If the connection throws an error
+  mongoose.connection.on("error", function (err: Error) {
+    console.error(
+      chalk.bgRed.black("Failed to connect to MongoDB on startup "),
+      err
+    );
+  });
 
-  // mongoose.connection.on("open", (err: any) => {
-  //   console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
-  // });
+  mongoose.connection.on("connected", async function () {
+    console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
+  });
 
-  // process.on("SIGINT", async () => {
-  //   await mongoose.connection.close();
-  //   console.log(chalk.bgYellowBright.black("Mongoose has disconnected"));
-  //   process.exit(0);
-  // });
+  // When the connection is disconnected
+  mongoose.connection.on("disconnected", function () {
+    console.log(
+      chalk.bgYellow.black(
+        "Mongoose default connection to MongoDB is disconnected"
+      )
+    );
+    initMongoose();
+  });
 };
 
 export default initMongoose;

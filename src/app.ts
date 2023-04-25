@@ -1,6 +1,5 @@
 import express, { Response } from "express";
 import chalk from "chalk";
-// import { GraphQLError } from "graphql";
 import initMongoose from "../mongoose/initMongoose.js";
 import apolloserver from "../apollo/apolloserver.js";
 //@ts-ignore
@@ -11,11 +10,9 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
 import http from "http";
-// import bodyParser from "body-parser";
-// import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
-// import cluster from "cluster";
-// import os from "os";
+import cluster from "cluster";
+import os from "os";
 import crypto from "crypto";
 import stripe from "../stripe/stripe.js";
 import { handleAccountUpdated } from "./controllers/stripe/handleAccountUpdated.js";
@@ -29,41 +26,11 @@ import { handleCheckoutAsyncPaymentFailed } from "./controllers/stripe/handleChe
 import { generateProducts } from "../mongoose/scripts/generateProducts.js";
 import path from "path";
 import { generateCode } from "./controllers/generateCode.js";
-import { migration2 } from "../migration/2.js";
 dotenv.config();
-process.on("uncaughtException", function (err) {
-  const errorId = crypto.randomUUID();
-  console.log("================================================");
-  console.log(`message: ${err.message}`);
-  console.log(`errorId: ${errorId}`);
-  console.log(`date: ${new Date()}`);
-  console.log("===============================================");
-});
-
-// const limiter = rateLimit({
-//   windowMs: 10 * 1000, // 15 minutes
-//   max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-//   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-//   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-// });
 
 const app = express();
 const port = process.env.PORT || 3000;
 const appId = generateCode();
-
-// if (process.env.NODE_ENV === "production") {
-//   const whitelist = ["www.veplo.it", "127.0.0.1"];
-//   const corsOptions = {
-//     origin: function (origin: any, callback: any) {
-//       if (whitelist.indexOf(origin) !== -1) {
-//         callback(null, true);
-//       } else {
-//         callback("Cors Error");
-//       }
-//     },
-//   };
-//   app.use(cors());
-// }
 
 // const numCpus = os.cpus().length;
 let endpointSecretCheckout: string;
@@ -87,65 +54,21 @@ if (process.env.NODE_ENV === "production") {
 }
 
 async function startServer() {
-  // if (cluster.isPrimary) {
-  //   for (let i = 0; i < numCpus; i++) {
-  //     cluster.fork();
-  //   }
-  // } else {
-
   //========/MONGODB/========/
-  await initMongoose();
-  mongoose.connection.on("connected", async function () {
-    console.log(chalk.bgGreen.black("Mongoose is connected to MongoDB"));
-  });
+  // await initMongoose();
 
-  // If the connection throws an error
-  mongoose.connection.on("error", function (err: Error) {
-    console.error(
-      chalk.bgRed.black("Failed to connect to MongoDB on startup "),
-      err
-    );
-  });
+  // //========/APOLLO SERVER/========/
+  // app.use(graphqlUploadExpress());
 
-  // When the connection is disconnected
-  mongoose.connection.on("disconnected", function () {
-    console.log(
-      chalk.bgYellow.black(
-        "Mongoose default connection to MongoDB is disconnected"
-      )
-    );
-    initMongoose();
-  });
-
-  var gracefulExit = function () {
-    mongoose.connection.close(function () {
-      console.log(
-        chalk.bgYellow.black(
-          "Mongoose default connection to MongoDB is disconnected through app termination"
-        )
-      );
-      process.exit(0);
-    });
-  };
-
-  // If the Node process ends, close the Mongoose connection
-  process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
-
-  //========/APOLLO SERVER/========/
-  app.use(graphqlUploadExpress());
-
-  await apolloserver.start();
-  app.use(
-    "/graphql",
-    cors<cors.CorsRequest>(),
-    bodyParser.json(),
-    expressMiddleware(apolloserver, {
-      context,
-    })
-  );
-  // await apolloserver.applyMiddleware({ app });
-
-  // app.use(limiter);
+  // await apolloserver.start();
+  // app.use(
+  //   "/graphql",
+  //   cors<cors.CorsRequest>(),
+  //   bodyParser.json(),
+  //   expressMiddleware(apolloserver, {
+  //     context,
+  //   })
+  // );
 
   //========/REST API/========/
   app.get("/", (req, res: Response) => {
@@ -169,8 +92,6 @@ async function startServer() {
       path.resolve("./loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
     );
   });
-
-  // app.use(express.json());
 
   //========/WEBHOOKS/========/
   app.post(
@@ -293,3 +214,26 @@ async function startServer() {
 }
 
 startServer();
+
+const gracefulExit = () => {
+  mongoose.connection.close(function () {
+    console.log(
+      chalk.bgYellow.black(
+        "Mongoose default connection to MongoDB is disconnected through app termination"
+      )
+    );
+    process.exit(0);
+  });
+};
+
+// If the Node process ends, close the Mongoose connection
+process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
+
+process.on("uncaughtException", function (err) {
+  const errorId = crypto.randomUUID();
+  console.log("================================================");
+  console.log(`message: ${err.message}`);
+  console.log(`errorId: ${errorId}`);
+  console.log(`date: ${new Date()}`);
+  console.log("===============================================");
+});
