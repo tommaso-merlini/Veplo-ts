@@ -243,6 +243,25 @@ export const productsWithFilters = async ({
     }
   };
 
+  const checkBusinessStatus = () => {
+    if (shopId != null) {
+      return {
+        exists: {
+          path: "shopInfo.businessStatus",
+          score: { constant: { value: 0 } },
+        },
+      };
+    } else {
+      return {
+        text: {
+          query: "active",
+          path: "shopInfo.businessStatus",
+          score: { constant: { value: 0 } },
+        },
+      };
+    }
+  };
+
   const checkShopStatus = () => {
     if (shopId != null) {
       return {
