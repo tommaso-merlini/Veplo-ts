@@ -52,7 +52,7 @@ export const createShop = async (
   (options.address as any).postcode = postCode;
   const newShop = await Shop.create({
     ...options,
-    status: "not_active",
+    status: "active",
     businessStatus: business.status,
     createdAt: new Date(),
     businessId: token.mongoId,
