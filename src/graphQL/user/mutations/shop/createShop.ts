@@ -37,7 +37,6 @@ export const createShop = async (
     });
   }
 
-  checkConstants(options, "shop");
   let { center, city, postCode }: any = await reverseGeocoding(
     (options.address.location as any).coordinates[0],
     (options.address.location as any).coordinates[1]
