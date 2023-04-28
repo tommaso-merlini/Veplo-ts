@@ -39,7 +39,7 @@ export const createProduct = async (
     });
   }
 
-  checkConstants(options, "product");
+  // checkConstants(options, "product");
 
   checkPriceV2BelowV1(options);
 

@@ -52,8 +52,10 @@ export const formatError = (err: any) => {
     }
   }
 
+  console.log(err);
+
   return {
-    name: err.extensions.code || "Unknow Error",
+    name: err.extensions.code || "Unknown Error",
     code: "500",
     path: err.path[0] || "unknown",
     message: err.message || "unknown",

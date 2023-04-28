@@ -16,4 +16,4 @@ if (process.env.NODE_ENV === "production") {
   plugins.push(ApolloServerPluginLandingPageDisabled());
 }
 
-export default plugins;
+export default [];

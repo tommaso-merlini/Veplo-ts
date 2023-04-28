@@ -370,7 +370,7 @@ const typeDefs = gql`
     macroCategory: String!
     microCategory: String!
     brand: String!
-    fit: String!
+    fit: String
     traits: [String]!
     materials: [String!]
     length: String
