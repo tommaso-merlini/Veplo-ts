@@ -36,6 +36,10 @@ export const productsWithFilters = async ({
   const datePivotMs = datePivot * 24 * 60 * 60 * 1000;
   const today = new Date();
 
+  const filtersInfo: any[] = [];
+  const filtersVariations: any[] = [];
+  const filtersLots: any[] = [];
+
   const scoreParams = [
     //boost score based on how young the product is
     {
@@ -194,7 +198,7 @@ export const productsWithFilters = async ({
   const checkStatuses = () => {
     if (canSeeAllStatuses) {
       if (statuses != null) {
-        return {
+        filtersInfo.push({
           phrase: {
             query: statuses,
             path: "status",
@@ -204,42 +208,28 @@ export const productsWithFilters = async ({
               },
             },
           },
-        };
-      } else {
-        return {
-          exists: {
-            path: "status",
-            score: { constant: { value: 0 } },
-          },
-        };
+        });
       }
     } else {
-      return {
+      filtersInfo.push({
         text: {
           query: "active",
           path: "status",
           score: { constant: { value: 0 } },
         },
-      };
+      });
     }
   };
 
   const checkShopId = () => {
     if (shopId != null) {
-      return {
+      filtersInfo.push({
         equals: {
           value: shopId,
           path: "shopInfo.id",
           score: { constant: { value: 0 } },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "shopInfo.id",
-          score: { constant: { value: 0 } },
-        },
-      };
+      });
     }
   };
 
@@ -263,27 +253,20 @@ export const productsWithFilters = async ({
   };
 
   const checkShopStatus = () => {
-    if (shopId != null) {
-      return {
-        exists: {
-          path: "shopInfo.status",
-          score: { constant: { value: 0 } },
-        },
-      };
-    } else {
-      return {
+    if (shopId == null) {
+      filtersInfo.push({
         text: {
           query: "active",
           path: "shopInfo.status",
           score: { constant: { value: 0 } },
         },
-      };
+      });
     }
   };
 
   const checkGender = () => {
     if (gender != null) {
-      return {
+      filtersInfo.push({
         phrase: {
           query: gender,
           path: "info.gender",
@@ -293,23 +276,12 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "info.gender",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
   const checkBrands = () => {
     if (brand != null) {
-      return {
+      filtersInfo.push({
         phrase: {
           query: brand,
           path: "info.brand",
@@ -319,23 +291,12 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "info.brand",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
   const checkFit = () => {
     if (fit != null) {
-      return {
+      filtersInfo.push({
         phrase: {
           query: fit,
           path: "info.fit",
@@ -345,25 +306,14 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "info.fit",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
 
   const checkTraits = () => {
     //per fare una cosa in cui ogni trait ce debba essere si potrebbe usare "minimumShouldMatch"
     if (traits != null) {
-      return {
+      filtersInfo.push({
         phrase: {
           query: traits,
           path: "info.traits",
@@ -373,23 +323,12 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "info.traits",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
   const checkSizes = () => {
     if (sizes != null) {
-      return {
+      filtersLots.push({
         phrase: {
           query: sizes,
           path: "variations.lots.size",
@@ -399,18 +338,7 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "variations.lots.size",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
 
@@ -443,7 +371,7 @@ export const productsWithFilters = async ({
 
   const checkMacroCategory = () => {
     if (filters?.macroCategory != null && filters?.macroCategory != "") {
-      return {
+      filtersInfo.push({
         phrase: {
           query: macroCategory,
           path: "info.macroCategory",
@@ -453,24 +381,13 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "info.macroCategory",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
 
   const checkMicroCategory = () => {
     if (filters?.microCategory != null && filters?.microCategory != "") {
-      return {
+      filtersInfo.push({
         phrase: {
           query: microCategory,
           path: "info.microCategory",
@@ -480,18 +397,7 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "info.microCategory",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
 
@@ -554,7 +460,7 @@ export const productsWithFilters = async ({
 
   const checkColors = () => {
     if (colors != null) {
-      return {
+      filtersVariations.push({
         phrase: {
           query: colors,
           path: "variations.color",
@@ -564,20 +470,27 @@ export const productsWithFilters = async ({
             },
           },
         },
-      };
-    } else {
-      return {
-        exists: {
-          path: "variations.color",
-          score: {
-            constant: {
-              value: 0,
-            },
-          },
-        },
-      };
+      });
     }
   };
+
+  const checkAllFilters = () => {
+    checkStatuses(),
+      checkShopStatus(),
+      checkShopId(),
+      checkGender(),
+      checkMacroCategory(),
+      checkMicroCategory(),
+      checkBrands(),
+      checkFit(),
+      checkTraits(),
+      // checkMaxPrice(),
+      // checkMinPrice(),
+      checkColors(),
+      checkSizes();
+  };
+
+  checkAllFilters();
 
   let products: any = await Product.aggregate([
     {
@@ -585,30 +498,20 @@ export const productsWithFilters = async ({
         index: "ProductSearchIndex",
         compound: {
           filter: [
-            checkStatuses(),
-            checkShopStatus(),
-            checkShopId(),
-            checkGender(),
-            checkMacroCategory(),
-            checkMicroCategory(),
-            checkBrands(),
-            checkFit(),
-            checkTraits(),
-            checkMaxPrice(),
-            checkMinPrice(),
+            ...filtersInfo,
             {
               embeddedDocument: {
                 path: "variations",
                 operator: {
                   compound: {
                     filter: [
-                      checkColors(),
+                      ...filtersVariations,
                       {
                         embeddedDocument: {
                           path: "variations.lots",
                           operator: {
                             compound: {
-                              filter: [checkSizes(), checkQuantity()],
+                              filter: [...filtersLots],
                               should: [
                                 {
                                   range: {

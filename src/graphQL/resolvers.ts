@@ -132,7 +132,7 @@ const resolvers = {
       } else {
         token = {
           firebaseId: "prova",
-          mongoId: "641f209eca22d34c3ca1ec1l",
+          mongoId: "644a3f69cfa126b466825a59",
           isBusiness: true,
         };
       }
