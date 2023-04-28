@@ -160,8 +160,6 @@ const resolvers = {
         canSeeAllStatuses,
       });
 
-      console.log(products);
-
       return products;
     },
     orders,

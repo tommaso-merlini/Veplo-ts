@@ -54,8 +54,6 @@ export const BetterInputGenerator = (input: any) => {
 
     const closestValue = closest(word, allFiltersRaw);
 
-    console.log(`closest: ${closestValue}`);
-
     //check closestValue diff
     const distanceValue = distance(word, closestValue);
 
