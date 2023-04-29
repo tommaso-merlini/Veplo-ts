@@ -129,6 +129,11 @@ export const productsWithFilters = async ({
     },
   ];
   let checkSort: any = { score: -1 };
+
+  if (canSeeAllStatuses) {
+    checkSort = { updatedAt: -1 };
+  }
+
   if (sort != null) {
     switch (sort.for) {
       case "price":
@@ -151,23 +156,11 @@ export const productsWithFilters = async ({
     }
   }
 
+  console.log(checkSort);
+
   const checkScoreParams = () => {
-    if (shopId != null) {
-      return [
-        //boost score based on how young the product is
-        {
-          near: {
-            path: "updatedAt",
-            origin: today,
-            pivot: datePivotMs, //the first number is the days
-            score: {
-              boost: {
-                value: 3,
-              },
-            },
-          },
-        },
-      ];
+    if (canSeeAllStatuses != null) {
+      return [];
     } else {
       return scoreParams;
     }

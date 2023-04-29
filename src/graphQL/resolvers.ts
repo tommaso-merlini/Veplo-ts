@@ -132,7 +132,7 @@ const resolvers = {
       } else {
         token = {
           firebaseId: "prova",
-          mongoId: "644a3f69cfa126b466825a59",
+          mongoId: "641f209eca22d34c3ca1ec1f",
           isBusiness: true,
         };
       }
@@ -147,6 +147,7 @@ const resolvers = {
       } catch (e) {
         var canSeeAllStatuses = false;
       }
+
       const betterInput = BetterInputGenerator(filters);
 
       const products = await productsWithFilters({
