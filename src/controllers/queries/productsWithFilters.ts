@@ -156,8 +156,6 @@ export const productsWithFilters = async ({
     }
   }
 
-  console.log(checkSort);
-
   const checkScoreParams = () => {
     if (canSeeAllStatuses != null) {
       return [];
