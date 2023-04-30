@@ -51,6 +51,7 @@ const ProductSchema = new mongoose.Schema({
     making: { type: String, required: false },
     collar: { type: String, required: false },
     keywords: [{ type: String, required: false }],
+    description: { type: String, required: false },
   },
   location: {
     type: {
