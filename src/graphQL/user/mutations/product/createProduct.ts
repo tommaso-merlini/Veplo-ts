@@ -39,11 +39,24 @@ export const createProduct = async (
     });
   }
 
-  // checkConstants(options, "product");
+  //check price > 0
+  console.log(options);
+  if (options.price.v1 < 2 || options.price.v2 < 2) {
+    //!minimum price
+    customError({
+      code: "400",
+      path: `price`,
+      message: "price cannot be < 2",
+    });
+  }
 
   checkPriceV2BelowV1(options);
 
   checkLotQuantity(options.variations);
+
+  checkConstants(options, "product");
+
+  throw new Error();
 
   const shop = await shopById(shopId);
 

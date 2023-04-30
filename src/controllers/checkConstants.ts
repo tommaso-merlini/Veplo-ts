@@ -15,8 +15,6 @@ const checkConstants = (obj: any, is: String) => {
     sizes: sizeValues,
   };
 
-  console.log(checkableObject);
-
   //TODO check the integrity of the macrocategory
   /*
     Ex:
