@@ -55,8 +55,6 @@ export const createProduct = async (
 
   checkConstants(options, "product");
 
-  throw new Error();
-
   const shop = await shopById(shopId);
 
   //token operations
