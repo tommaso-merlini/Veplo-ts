@@ -126,7 +126,7 @@ export const shirtCollars = [
   "cerimonia",
 ];
 
-export const sweaterCollars = ["girocollo", "dolcevita", "cardigan"];
+export const sweaterCollars = ["girocollo", "dolcevita"];
 
 interface macroCategory {
   macroCategory: string;
@@ -163,7 +163,13 @@ const topMicroCategories = [
   "senza maniche",
 ];
 
-const camicieMicroCategories = ["basic", "hawaiana", "jeans", "lino"];
+const camicieMicroCategories = [
+  "casual",
+  "hawaiana",
+  "jeans",
+  "lino",
+  "eleganti",
+];
 
 const bluseMicroCategories = ["basic", "senza maniche", "trapezio"];
 
@@ -175,9 +181,15 @@ const pantaloniMicroCategories = [
   "tuta",
   "palazzo",
   "zampa d'elefante",
+  "chino",
 ];
 
-const jeansMicroCategories = ["basic", "palazzo", "zampa d'elefante"];
+const jeansMicroCategories = [
+  "basic",
+  "palazzo",
+  "zampa d'elefante",
+  "affusolati",
+];
 
 const felpeMicroCategories = ["cappuccio", "zip", "senza cappuccio"];
 
@@ -204,9 +216,22 @@ const blazerMicroCategories = [
   "jeans",
 ];
 
-const cappottiMicroCategories = ["basic", "parka", "trench", "invernali"];
+const cappottiMicroCategories = [
+  "basic",
+  "parka",
+  "trench",
+  "invernali",
+  "piumini",
+];
 
-const maglioniMicroCategories = ["liscio", "trecce", "coste"];
+const maglieriaMicroCategories = [
+  "liscio",
+  "trecce",
+  "coste",
+  "pullover",
+  "cardigan",
+  "maglioni",
+];
 
 const costumiMicroCategories = ["interi", "bikini", "bermuda", "boxer", "slip"];
 
@@ -230,10 +255,19 @@ const scarpeMicroCategories = [
   "stivaletti",
   "stivali",
   "sportive",
-  "mare",
   "sposa",
   "pantofole",
   "trekking",
+  "mocassini",
+  "polacchine",
+  "basse",
+  "décolletè",
+  "zoccoli",
+  "aperte",
+  "mocassini",
+  "stringate",
+  "slip-on",
+  "eleganti",
 ];
 
 const poloMicroCategories = [
@@ -279,7 +313,7 @@ export const allFiltersRaw = [
   ...giaccheMicroCategories,
   ...blazerMicroCategories,
   ...cappottiMicroCategories,
-  ...maglioniMicroCategories,
+  ...maglieriaMicroCategories,
   ...costumiMicroCategories,
   ...gonneMicroCategories,
   ...shortsMicroCategories,
@@ -323,7 +357,7 @@ const allMicroCategoriesRaw = [
   ...giaccheMicroCategories,
   ...blazerMicroCategories,
   ...cappottiMicroCategories,
-  ...maglioniMicroCategories,
+  ...maglieriaMicroCategories,
   ...costumiMicroCategories,
   ...gonneMicroCategories,
   ...shortsMicroCategories,
@@ -483,7 +517,7 @@ export const macroCategories: macroCategory[] = [
     sizes: clothesSizes,
   },
   {
-    macroCategory: "maglioni",
+    macroCategory: "maglieria",
     occasions: occasions,
     materials: materials,
     genders: genders,
@@ -491,7 +525,7 @@ export const macroCategories: macroCategory[] = [
     making: makings,
     fits: fits,
     collars: sweaterCollars,
-    microCategories: maglioniMicroCategories,
+    microCategories: maglieriaMicroCategories,
     sizes: clothesSizes,
   },
   {
