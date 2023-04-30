@@ -40,7 +40,7 @@ export const createProduct = async (
   }
 
   //check price > 2
-  if (options.price.v1 < 2 || options.price.v2 < 2) {
+  if (options.price.v1 < 0 || options.price.v2 < 0) {
     //!minimum price
     customError({
       code: "400",
