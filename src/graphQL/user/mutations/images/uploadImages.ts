@@ -50,8 +50,8 @@ export const uploadImages = async (
   }
 
   if (String(proportion) === "ShopCover") {
-    width = 720;
-    height = 450;
+    width = 1552;
+    height = 675;
   }
 
   if (String(proportion) === "ShopPhoto") {
@@ -60,8 +60,8 @@ export const uploadImages = async (
   }
 
   if (String(proportion) === "product") {
-    width = 1528;
-    height = 2220;
+    width = 1890;
+    height = 2250;
   }
 
   for (let i = 0; i < images.length; i++) {
