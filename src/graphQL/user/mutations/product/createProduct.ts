@@ -39,8 +39,7 @@ export const createProduct = async (
     });
   }
 
-  //check price > 0
-  console.log(options);
+  //check price > 2
   if (options.price.v1 < 2 || options.price.v2 < 2) {
     //!minimum price
     customError({
