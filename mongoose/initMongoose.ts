@@ -23,6 +23,8 @@ const initMongoose = () => {
     // useUnifiedTopology: true,
     // useNewUrlParser: true,
     //!not supported anymore useFindAndModify: false,
+    // minPoolSize: 10,
+    // maxPoolSize: 100,
   });
 };
 
