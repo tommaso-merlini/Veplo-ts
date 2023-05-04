@@ -444,7 +444,7 @@ const typeDefs = gql`
     macroCategory: String
     brand: String
     fit: String
-    traits: [String!]!
+    traits: [String!]
   }
 
   input EditUserInput {

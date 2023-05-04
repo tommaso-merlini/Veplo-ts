@@ -48,6 +48,9 @@ export const editProduct = async (
       isBusiness: token?.isBusiness,
     });
 
+  //check the validity of the fields based on the constants
+  checkConstants(options, "product");
+
   const mergedProduct = lodash.merge(product, options);
 
   //if the price is modified
@@ -56,16 +59,13 @@ export const editProduct = async (
   }
 
   //if the traits are modified
-  if (options.info.traits) {
+  if (options?.info?.traits) {
     mergedProduct.info.traits = removeDuplicates(options.info.traits);
   }
 
-  console.log("==================================");
-  console.log(mergedProduct);
-  console.log("==================================");
-
-  //check the validity of the fields based on the constants
-  checkConstants(mergedProduct, "product");
+  // console.log("==================================");
+  // console.log(mergedProduct);
+  // console.log("==================================");
 
   await Product.updateOne({ _id: id }, mergedProduct);
 

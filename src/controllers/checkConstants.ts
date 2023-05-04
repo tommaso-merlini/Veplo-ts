@@ -3,17 +3,28 @@ import { allFilters, colors } from "../../constants/filters.js";
 const checkConstants = (obj: any, is: String) => {
   const colorValues = [];
   const sizeValues = [];
-  for (let variation of obj.variations) {
-    colorValues.push(variation.color);
-    for (let lot of variation.lots) {
-      sizeValues.push(lot.size);
+
+  if (obj.variations != null) {
+    for (let variation of obj.variations) {
+      colorValues.push(variation.color);
+      for (let lot of variation.lots) {
+        sizeValues.push(lot.size);
+      }
     }
   }
+
   const checkableObject = {
     ...obj.info,
-    colors: colorValues,
-    sizes: sizeValues,
+    colors: colorValues.length > 0 ? colorValues : null,
+    sizes: sizeValues.length > 0 ? sizeValues : null,
   };
+
+  //delete null values in chackableobject
+  for (let value in checkableObject) {
+    if (checkableObject[value] == null) {
+      delete checkableObject[value];
+    }
+  }
 
   //TODO check the integrity of the macrocategory
   /*
