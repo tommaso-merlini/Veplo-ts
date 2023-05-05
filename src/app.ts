@@ -241,17 +241,17 @@ async function startServer() {
   //========/START APP/========/
   const server = fastify();
 
-  server.listen({ port: 3000 }, () => {
+  server.listen({ port: Number(port) }, () => {
     console.log("fastify up and running");
   });
 
-  server.get("/", async (request, reply) => {
+  server.get("/", async (request: any, reply: any) => {
     return { status: "active" };
   });
 
   server.get(
     "/loaderio-04cbc2e6e8994582817d57faa8742ee5",
-    async (request, reply) => {
+    async (request: any, reply: any) => {
       return "loaderio-04cbc2e6e8994582817d57faa8742ee5";
     }
   );
