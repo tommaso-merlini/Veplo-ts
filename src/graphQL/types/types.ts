@@ -116,6 +116,12 @@ export type CreateProductResponse = {
   photos?: Maybe<Array<Scalars['String']>>;
 };
 
+export type EditAddressShopInput = {
+  city: Scalars['String'];
+  location: LocationInput;
+  street: Scalars['String'];
+};
+
 export type EditLotsInput = {
   quantity: Scalars['Int'];
   size: Scalars['String'];
@@ -136,9 +142,11 @@ export type EditProductInfo = {
   brand?: InputMaybe<Scalars['String']>;
   fit?: InputMaybe<Scalars['String']>;
   gender?: InputMaybe<Scalars['String']>;
+  length?: InputMaybe<Scalars['String']>;
   macroCategory?: InputMaybe<Scalars['String']>;
+  materials?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   microCategory?: InputMaybe<Scalars['String']>;
-  traits: Array<Scalars['String']>;
+  traits?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type EditProductInput = {
@@ -147,6 +155,22 @@ export type EditProductInput = {
   name?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<PriceInput>;
   status?: InputMaybe<Scalars['String']>;
+};
+
+export type EditShopInput = {
+  address?: InputMaybe<EditAddressShopInput>;
+  info?: InputMaybe<EditShopInputInfo>;
+  isDigitalOnly?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  profileCover?: InputMaybe<Scalars['String']>;
+  profilePhoto?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
+export type EditShopInputInfo = {
+  description?: InputMaybe<Scalars['String']>;
+  opening?: InputMaybe<OpeningInput>;
+  phone?: InputMaybe<Scalars['String']>;
 };
 
 export type EditUserInput = {
@@ -238,6 +262,8 @@ export type Mutation = {
   editOrder?: Maybe<Scalars['Boolean']>;
   /** edit a product */
   editProduct: Scalars['ID'];
+  /** change the status of a shop */
+  editShop?: Maybe<Scalars['Boolean']>;
   /** edit a user */
   editUser?: Maybe<Scalars['Boolean']>;
   /** edit a single variation */
@@ -375,6 +401,12 @@ export type MutationEditOrderArgs = {
 export type MutationEditProductArgs = {
   id: Scalars['ID'];
   options: EditProductInput;
+};
+
+
+export type MutationEditShopArgs = {
+  id: Scalars['ID'];
+  options: EditShopInput;
 };
 
 
@@ -528,6 +560,7 @@ export type ProductInfo = {
   __typename?: 'ProductInfo';
   brand?: Maybe<Scalars['String']>;
   collar?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   fit?: Maybe<Scalars['String']>;
   gender?: Maybe<Scalars['String']>;
   keywords?: Maybe<Array<Scalars['String']>>;
@@ -542,7 +575,8 @@ export type ProductInfo = {
 export type ProductInfoInput = {
   brand: Scalars['String'];
   collar?: InputMaybe<Scalars['String']>;
-  fit: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
+  fit?: InputMaybe<Scalars['String']>;
   gender: Scalars['String'];
   keywords?: InputMaybe<Array<Scalars['String']>>;
   length?: InputMaybe<Scalars['String']>;

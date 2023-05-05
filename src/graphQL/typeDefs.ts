@@ -513,6 +513,28 @@ const typeDefs = gql`
     firebaseId: String
   }
 
+  input EditShopInput {
+    name: String
+    status: String
+    profileCover: String
+    profilePhoto: String
+    isDigitalOnly: Boolean
+    info: EditShopInputInfo
+    address: EditAddressShopInput
+  }
+
+  input EditShopInputInfo {
+    phone: String
+    description: String
+    opening: OpeningInput
+  }
+
+  input EditAddressShopInput {
+    city: String!
+    street: String!
+    location: LocationInput!
+  }
+
   #=============QUERIES=================
 
   type Query {
@@ -632,7 +654,10 @@ const typeDefs = gql`
     change the status of a shop
     """
     changeShopStatus(id: ID!, status: String!): Boolean
-    #TODO editShop
+    """
+    change the status of a shop
+    """
+    editShop(id: ID!, options: EditShopInput!): Boolean
 
     #===================IMAGE===================
     """

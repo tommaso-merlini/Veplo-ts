@@ -56,6 +56,7 @@ import checkFirebaseErrors from "../../src/controllers/checkFirebaseErrors.js";
 import authenticateToken from "../../src/controllers/authenticateToken.js";
 import { productsAutoComplete } from "./user/queries/product/productsAutoComplete.js";
 import { BetterInputGenerator } from "../controllers/BetterInputGenerator.js";
+import { editShop } from "./user/mutations/shop/editShop.js";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -113,6 +114,7 @@ const resolvers = {
     adminLostPackage,
     adminOrderHasArrived,
     returnOrder,
+    editShop,
   },
 
   Shop: {
