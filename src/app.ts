@@ -45,7 +45,7 @@ import fastify from "fastify";
 
 dotenv.config();
 
-// const app = express();
+const app = express();
 // const httpServer = http.createServer(app);
 const port = process.env.PORT || 3000;
 const appId = generateCode();
@@ -89,7 +89,7 @@ const appId = generateCode();
 
 // app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
 //   res.sendFile(
-//     path.resolve("./loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
+//     path.resolve("../loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
 //   );
 // });
 
@@ -240,6 +240,7 @@ async function startServer() {
 
   //========/START APP/========/
   const server = fastify();
+
   server.listen({ port: 3000 }, () => {
     console.log("fastify up and running");
   });
@@ -247,6 +248,13 @@ async function startServer() {
   server.get("/", async (request, reply) => {
     return { status: "active" };
   });
+
+  server.get(
+    "/loaderio-04cbc2e6e8994582817d57faa8742ee5",
+    async (request, reply) => {
+      return "loaderio-04cbc2e6e8994582817d57faa8742ee5";
+    }
+  );
 
   // httpServer.listen({ port: port }, async () => {
   //   console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
