@@ -49,6 +49,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "fastest-levenshtein": "^1.0.16",
+    "fastify": "^4.17.0",
     "firebase-admin": "^11.2.0",
     "graphql": "^16.6.0",
     "graphql-depth-limit": "^1.1.0",
