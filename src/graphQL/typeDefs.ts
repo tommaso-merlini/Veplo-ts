@@ -445,6 +445,8 @@ const typeDefs = gql`
     brand: String
     fit: String
     traits: [String!]
+    length: String
+    materials: [String]
   }
 
   input EditUserInput {
