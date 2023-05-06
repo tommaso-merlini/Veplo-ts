@@ -63,9 +63,9 @@ export const editProduct = async (
     mergedProduct.info.traits = removeDuplicates(options.info.traits);
   }
 
-  console.log("==================================");
-  console.log(mergedProduct.info);
-  console.log("==================================");
+  // console.log("==================================");
+  // console.log(mergedProduct.info);
+  // console.log("==================================");
 
   await Product.updateOne({ _id: id }, mergedProduct);
 
