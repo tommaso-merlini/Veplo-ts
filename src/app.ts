@@ -46,257 +46,240 @@ import fastifyStatic from "@fastify/static";
 
 dotenv.config();
 
-const app = express();
-// const httpServer = http.createServer(app);
+//========/START APP/========/
+const server = fastify();
 const port = process.env.PORT || 3000;
 const appId = generateCode();
 
-// let endpointSecretCheckout: string;
-// let endpointSecretAccount: string;
+let endpointSecretCheckout: string;
+let endpointSecretAccount: string;
 
-// if (process.env.NODE_ENV === "development") {
-//   endpointSecretAccount = process.env.STRIPE_WEBHOOK_SECRET_DEV || "";
-//   endpointSecretCheckout = process.env.STRIPE_WEBHOOK_SECRET_DEV || "";
-// }
+if (process.env.NODE_ENV === "development") {
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_SECRET_DEV || "";
+  endpointSecretCheckout = process.env.STRIPE_WEBHOOK_SECRET_DEV || "";
+}
 
-// if (process.env.NODE_ENV === "testing") {
-//   endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_TEST || "";
-//   endpointSecretCheckout =
-//     process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_TEST || "";
-// }
+if (process.env.NODE_ENV === "testing") {
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_TEST || "";
+  endpointSecretCheckout =
+    process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_TEST || "";
+}
 
-// if (process.env.NODE_ENV === "production") {
-//   endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_PROD || "";
-//   endpointSecretCheckout =
-//     process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_PROD || "";
-// }
+if (process.env.NODE_ENV === "production") {
+  endpointSecretAccount = process.env.STRIPE_WEBHOOK_ACCOUNT_SECRET_PROD || "";
+  endpointSecretCheckout =
+    process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_PROD || "";
+}
 
-// //========/REST API/========/
-// app.get("/", (req, res: Response) => {
-//   res.send({ status: "ok", process_id: appId });
-// });
+//========/REST API/========/
+server.register(fastifyStatic, {
+  root: process.cwd() + "/loadtest",
+});
 
-// app.get("/brands", (req, res: Response) => {
-//   const brands = constants.brands;
+server.get("/", async (request: any, reply: any) => {
+  return { status: "active" };
+});
 
-//   res.send(brands);
-// });
+server.get(
+  "/loaderio-04cbc2e6e8994582817d57faa8742ee5.html",
+  async (req: any, reply: any) => {
+    const fileName = "loaderio-04cbc2e6e8994582817d57faa8742ee5.html";
+    try {
+      await reply.sendFile(fileName);
+    } catch (err) {
+      reply.send(err);
+    }
+  }
+);
 
-// app.get("/categories", (req, res: Response) => {
-//   const categories = constants.genders;
+server.get("/brands", (req: any, reply: any) => {
+  const brands = constants.brands;
 
-//   res.send(categories);
-// });
+  reply.send(brands);
+});
 
-// app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
-//   res.sendFile(
-//     path.resolve("../loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
-//   );
-// });
+server.get("/categories", (req: any, reply: any) => {
+  const categories = constants.genders;
 
-// //========/WEBHOOKS/========/
-// app.post(
-//   "/webhook/account",
-//   express.raw({ type: "application/json" }),
-//   async (request, response) => {
-//     const sig: any = request.headers["stripe-signature"];
+  reply.send(categories);
+});
 
-//     let event;
+//========/WEBHOOKS/========/
+server.post(
+  "/webhook/account",
+  express.raw({ type: "application/json" }),
+  async (request: any, response: any) => {
+    const sig: any = request.headers["stripe-signature"];
 
-//     try {
-//       event = stripe.webhooks.constructEvent(
-//         request.body,
-//         sig,
-//         endpointSecretAccount
-//       );
-//     } catch (err) {
-//       console.log(err.message);
-//       response.status(400).send(`Webhook Error: ${err.message}`);
-//       return;
-//     }
+    let event;
 
-//     try {
-//       switch (event.type) {
-//         case "account.updated":
-//           handleAccountUpdated(event.data.object);
-//           break;
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        sig,
+        endpointSecretAccount
+      );
+    } catch (err) {
+      console.log(err.message);
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
 
-//         default:
-//           if (process.env.NODE_ENV !== "production") {
-//             console.log(`event.type not handled`);
-//           }
-//       }
-//     } catch (e) {
-//       console.log(e);
-//       response.status(400).send(`{
-//           defaultError: ${e.message},
-//           customError: {
-//             code: ${e.extensions.customCode},
-//             path: ${e.extensions.customPath},
-//             message: ${e.extensions.customMessage},
-//           }
-//         }`);
-//       return;
-//     }
+    try {
+      switch (event.type) {
+        case "account.updated":
+          handleAccountUpdated(event.data.object);
+          break;
 
-//     // Return a 200 response to acknowledge receipt of the event
-//     response.send();
-//   }
-// );
+        default:
+          if (process.env.NODE_ENV !== "production") {
+            console.log(`event.type not handled`);
+          }
+      }
+    } catch (e) {
+      console.log(e);
+      response.status(400).send(`{
+          defaultError: ${e.message},
+          customError: {
+            code: ${e.extensions.customCode},
+            path: ${e.extensions.customPath},
+            message: ${e.extensions.customMessage},
+          }
+        }`);
+      return;
+    }
 
-// app.post(
-//   "/webhook/checkout",
-//   express.raw({ type: "application/json" }),
-//   async (request, response) => {
-//     const sig: any = request.headers["stripe-signature"];
+    // Return a 200 response to acknowledge receipt of the event
+    response.send();
+  }
+);
 
-//     let event;
+server.post(
+  "/webhook/checkout",
+  express.raw({ type: "application/json" }),
+  async (request: any, response: any) => {
+    const sig: any = request.headers["stripe-signature"];
 
-//     try {
-//       event = stripe.webhooks.constructEvent(
-//         request.body,
-//         sig,
-//         endpointSecretCheckout
-//       );
-//     } catch (err) {
-//       // console.log(err.message);
-//       response.status(400).send(`Webhook Error: ${err.message}`);
-//       return;
-//     }
+    let event;
 
-//     try {
-//       switch (event.type) {
-//         case "checkout.session.completed":
-//           await handleCheckoutCompleted(event.data.object);
-//           break;
-//         case "checkout.session.async_payment_succeeded":
-//           await handleCheckoutAsyncPaymentSuccedeed(event.data.object);
-//           break;
-//         case "checkout.session.async_payment_failed":
-//           handleCheckoutAsyncPaymentFailed(event.data.object);
-//           break;
-//         case "charge.refunded":
-//           handleChargeRefunded(event.data.object);
-//           break;
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        sig,
+        endpointSecretCheckout
+      );
+    } catch (err) {
+      // console.log(err.message);
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
 
-//         default:
-//           if (process.env.NODE_ENV !== "production") {
-//             console.log(`event.type not handled`);
-//           }
-//       }
-//     } catch (e) {
-//       console.log(e);
-//       response.status(400).send(`{
-//           defaultError: ${e.message},
-//           customError: {
-//             code: ${e.extensions.customCode},
-//             path: ${e.extensions.customPath},
-//             message: ${e.extensions.customMessage},
-//           }
-//         }`);
-//       return;
-//     }
+    try {
+      switch (event.type) {
+        case "checkout.session.completed":
+          await handleCheckoutCompleted(event.data.object);
+          break;
+        case "checkout.session.async_payment_succeeded":
+          await handleCheckoutAsyncPaymentSuccedeed(event.data.object);
+          break;
+        case "checkout.session.async_payment_failed":
+          handleCheckoutAsyncPaymentFailed(event.data.object);
+          break;
+        case "charge.refunded":
+          handleChargeRefunded(event.data.object);
+          break;
 
-//     // Return a 200 response to acknowledge receipt of the event
-//     response.send();
-//   }
-// );
+        default:
+          if (process.env.NODE_ENV !== "production") {
+            console.log(`event.type not handled`);
+          }
+      }
+    } catch (e) {
+      console.log(e);
+      response.status(400).send(`{
+          defaultError: ${e.message},
+          customError: {
+            code: ${e.extensions.customCode},
+            path: ${e.extensions.customPath},
+            message: ${e.extensions.customMessage},
+          }
+        }`);
+      return;
+    }
+
+    // Return a 200 response to acknowledge receipt of the event
+    response.send();
+  }
+);
 
 async function startServer() {
-  // //========/MONGODB/========/
-  // await initMongoose();
+  //========/MONGODB/========/
+  await initMongoose();
 
-  // //========/APOLLO SERVER/========/
-  // app.use(graphqlUploadExpress());
-
-  // const apolloserver = new ApolloServer({
-  //   typeDefs,
-  //   resolvers,
-  //   csrfPrevention: process.env.NODE_ENV !== "development",
-  //   // introspection: process.env.NODE_ENV !== "production",
-  //   introspection: true,
-  //   cache: new InMemoryLRUCache({
-  //     // ~100MiB
-  //     maxSize: Math.pow(2, 20) * 100,
-  //     // 5 minutes (in milliseconds)
-  //     ttl: 300_000,
-  //   }),
-  //   // cache: "bounded",
-
-  //   //TODO uncomment below when in production
-  //   plugins: [...plugins, ApolloServerPluginDrainHttpServer({ httpServer })],
-  //   validationRules: [depthLimit(7)],
-  //   formatError,
-  // });
-
-  // await apolloserver.start();
-  // app.use(
-  //   "/graphql",
-  //   cors<cors.CorsRequest>(),
-  //   bodyParser.json(),
-  //   expressMiddleware(apolloserver, {
-  //     context,
-  //   })
-  // );
-
-  //========/START APP/========/
-  const server = fastify();
-
-  server.listen({ port: Number(port), host: "0.0.0.0" }, () => {
-    console.log(`fastify up and running at port: ${port}`);
+  await server.listen({ port: Number(port), host: "0.0.0.0" }, () => {
+    console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
+    console.log(
+      chalk.bgGreen.black(`server is listening at http://localhost:${port}`)
+    );
+    console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
+    // await generateProducts();
   });
 
-  server.register(fastifyStatic, {
-    root: process.cwd() + "/loadtest",
+  //========/APOLLO SERVER/========/
+  server.register(graphqlUploadExpress());
+
+  const apolloserver = new ApolloServer({
+    typeDefs,
+    resolvers,
+    csrfPrevention: process.env.NODE_ENV !== "development",
+    // introspection: process.env.NODE_ENV !== "production",
+    introspection: true,
+    cache: new InMemoryLRUCache({
+      // ~100MiB
+      maxSize: Math.pow(2, 20) * 100,
+      // 5 minutes (in milliseconds)
+      ttl: 300_000,
+    }),
+    // cache: "bounded",
+
+    //TODO uncomment below when in production
+    plugins: [...plugins],
+    validationRules: [depthLimit(7)],
+    formatError,
   });
 
-  server.get("/", async (request: any, reply: any) => {
-    return { status: "active" };
-  });
-
-  server.get(
-    "/loaderio-04cbc2e6e8994582817d57faa8742ee5.html",
-    async (req: any, reply: any) => {
-      const fileName = "loaderio-04cbc2e6e8994582817d57faa8742ee5.html";
-      try {
-        await reply.sendFile(fileName);
-      } catch (err) {
-        reply.send(err);
-      }
-    }
+  await apolloserver.start();
+  server.route(
+    "/graphql",
+    cors<cors.CorsRequest>(),
+    bodyParser.json(),
+    expressMiddleware(apolloserver, {
+      context,
+    })
   );
-
-  // httpServer.listen({ port: port }, async () => {
-  //   console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
-  //   console.log(
-  //     chalk.bgGreen.black(`server is listening at http://localhost:${port}`)
-  //   );
-  //   console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
-  //   // await generateProducts();
-  // });
 }
 
 startServer();
 
-// const gracefulExit = () => {
-//   mongoose.connection.close(function () {
-//     console.log(
-//       chalk.bgYellow.black(
-//         "Mongoose default connection to MongoDB is disconnected through app termination"
-//       )
-//     );
-//     process.exit(0);
-//   });
-// };
+const gracefulExit = () => {
+  mongoose.connection.close(function () {
+    console.log(
+      chalk.bgYellow.black(
+        "Mongoose default connection to MongoDB is disconnected through app termination"
+      )
+    );
+    process.exit(0);
+  });
+};
 
-// // If the Node process ends, close the Mongoose connection
-// process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
+// If the Node process ends, close the Mongoose connection
+process.on("SIGINT", gracefulExit).on("SIGTERM", gracefulExit);
 
-// process.on("uncaughtException", function (err) {
-//   const errorId = crypto.randomUUID();
-//   console.log("================================================");
-//   console.log(`message: ${err.message}`);
-//   console.log(`errorId: ${errorId}`);
-//   console.log(`date: ${new Date()}`);
-//   console.log("===============================================");
-// });
+process.on("uncaughtException", function (err) {
+  const errorId = crypto.randomUUID();
+  console.log("================================================");
+  console.log(`message: ${err.message}`);
+  console.log(`errorId: ${errorId}`);
+  console.log(`date: ${new Date()}`);
+  console.log("===============================================");
+});
