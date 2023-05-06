@@ -447,6 +447,7 @@ const typeDefs = gql`
     traits: [String!]
     length: String
     materials: [String]
+    description: String
   }
 
   input EditUserInput {
