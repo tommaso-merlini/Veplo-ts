@@ -241,8 +241,8 @@ async function startServer() {
   //========/START APP/========/
   const server = fastify();
 
-  server.listen({ port: Number(port) }, () => {
-    console.log("fastify up and running");
+  server.listen({ port: Number(port), host: "0.0.0.0" }, () => {
+    console.log(`fastify up and running at port: ${port}`);
   });
 
   server.get("/", async (request: any, reply: any) => {
