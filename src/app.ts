@@ -246,20 +246,25 @@ async function startServer() {
     console.log(`fastify up and running at port: ${port}`);
   });
 
+  server.register(fastifyStatic, {
+    root: process.cwd() + "/loadtest",
+  });
+
   server.get("/", async (request: any, reply: any) => {
     return { status: "active" };
   });
 
   server.get(
-    "/loaderio-04cbc2e6e8994582817d57faa8742ee5",
-    async (request: any, reply: any) => {
-      return "loaderio-04cbc2e6e8994582817d57faa8742ee5";
+    "/loaderio-04cbc2e6e8994582817d57faa8742ee5.html",
+    async (req: any, reply: any) => {
+      const fileName = "loaderio-04cbc2e6e8994582817d57faa8742ee5.html";
+      try {
+        await reply.sendFile(fileName);
+      } catch (err) {
+        reply.send(err);
+      }
     }
   );
-
-  server.register(fastifyStatic, {
-    root: path.join("/"),
-  });
 
   // httpServer.listen({ port: port }, async () => {
   //   console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
