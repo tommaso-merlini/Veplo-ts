@@ -42,6 +42,7 @@ import plugins from "../apollo/plugins.js";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
 import fastify from "fastify";
+import fastifyStatic from "@fastify/static";
 
 dotenv.config();
 
@@ -255,6 +256,10 @@ async function startServer() {
       return "loaderio-04cbc2e6e8994582817d57faa8742ee5";
     }
   );
+
+  server.register(fastifyStatic, {
+    root: path.join("/"),
+  });
 
   // httpServer.listen({ port: port }, async () => {
   //   console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
