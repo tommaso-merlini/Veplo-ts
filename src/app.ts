@@ -9,7 +9,7 @@ import { context } from "../apollo/context.js";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
-import http, { Server } from "http";
+import http from "http";
 // import bodyParser from "body-parser";
 // import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
@@ -41,14 +41,11 @@ import { formatError } from "../apollo/formatError.js";
 import plugins from "../apollo/plugins.js";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
-import fastify from "fastify";
-import fastifyStatic from "@fastify/static";
-
 dotenv.config();
 
-//========/START APP/========/
-const server = fastify();
-const port = process.env.PORT || 3000;
+const app = express();
+const httpServer = http.createServer(app);
+const port = Number(process.env.PORT) || 3000;
 const appId = generateCode();
 
 let endpointSecretCheckout: string;
@@ -72,43 +69,33 @@ if (process.env.NODE_ENV === "production") {
 }
 
 //========/REST API/========/
-server.register(fastifyStatic, {
-  root: process.cwd() + "/loadtest",
+app.get("/", (req, res: Response) => {
+  res.send({ status: "ok", process_id: appId });
 });
 
-server.get("/", async (request: any, reply: any) => {
-  return { status: "active" };
-});
-
-server.get(
-  "/loaderio-04cbc2e6e8994582817d57faa8742ee5.html",
-  async (req: any, reply: any) => {
-    const fileName = "loaderio-04cbc2e6e8994582817d57faa8742ee5.html";
-    try {
-      await reply.sendFile(fileName);
-    } catch (err) {
-      reply.send(err);
-    }
-  }
-);
-
-server.get("/brands", (req: any, reply: any) => {
+app.get("/brands", (req, res: Response) => {
   const brands = constants.brands;
 
-  reply.send(brands);
+  res.send(brands);
 });
 
-server.get("/categories", (req: any, reply: any) => {
+app.get("/categories", (req, res: Response) => {
   const categories = constants.genders;
 
-  reply.send(categories);
+  res.send(categories);
+});
+
+app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
+  res.sendFile(
+    path.resolve("./loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
+  );
 });
 
 //========/WEBHOOKS/========/
-server.post(
+app.post(
   "/webhook/account",
   express.raw({ type: "application/json" }),
-  async (request: any, response: any) => {
+  async (request, response) => {
     const sig: any = request.headers["stripe-signature"];
 
     let event;
@@ -154,10 +141,10 @@ server.post(
   }
 );
 
-server.post(
+app.post(
   "/webhook/checkout",
   express.raw({ type: "application/json" }),
-  async (request: any, response: any) => {
+  async (request, response) => {
     const sig: any = request.headers["stripe-signature"];
 
     let event;
@@ -216,17 +203,8 @@ async function startServer() {
   //========/MONGODB/========/
   await initMongoose();
 
-  await server.listen({ port: Number(port), host: "0.0.0.0" }, () => {
-    console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
-    console.log(
-      chalk.bgGreen.black(`server is listening at http://localhost:${port}`)
-    );
-    console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
-    // await generateProducts();
-  });
-
   //========/APOLLO SERVER/========/
-  server.register(graphqlUploadExpress());
+  app.use(graphqlUploadExpress());
 
   const apolloserver = new ApolloServer({
     typeDefs,
@@ -243,13 +221,13 @@ async function startServer() {
     // cache: "bounded",
 
     //TODO uncomment below when in production
-    plugins: [...plugins],
+    plugins: [...plugins, ApolloServerPluginDrainHttpServer({ httpServer })],
     validationRules: [depthLimit(7)],
     formatError,
   });
 
   await apolloserver.start();
-  server.route(
+  app.use(
     "/graphql",
     cors<cors.CorsRequest>(),
     bodyParser.json(),
@@ -257,6 +235,16 @@ async function startServer() {
       context,
     })
   );
+
+  //========/START APP/========/
+  httpServer.listen({ port: port }, async () => {
+    console.log(chalk.bgGreen.black(`process ID: ${process.pid}`));
+    console.log(
+      chalk.bgGreen.black(`server is listening at http://localhost:${port}`)
+    );
+    console.log(chalk.bgGreen.black(`Environment: ${process.env.NODE_ENV}`));
+    // await generateProducts();
+  });
 }
 
 startServer();
