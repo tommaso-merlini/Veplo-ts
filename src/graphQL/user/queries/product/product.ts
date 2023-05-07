@@ -4,7 +4,7 @@ import productById from "../../../../controllers/queries/productById.js";
 export const product = async (
   _: any,
   { id }: QueryProductArgs,
-  __: any,
+  { stripe }: any,
   info: any
 ) => {
   const product = await productById(id);

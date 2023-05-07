@@ -11,6 +11,7 @@ import Cart from "../../../../schemas/Cart.model.js";
 import Product from "../../../../schemas/Product.model.js";
 import dotenv from "dotenv";
 import { generateCode } from "../../../../controllers/generateCode.js";
+import shopById from "../../../../controllers/queries/shopById.js";
 dotenv.config();
 
 export const checkout = async (
@@ -52,12 +53,6 @@ export const checkout = async (
     IVA = process.env.STRIPE_IVA_PROD; //TODO
   }
 
-  if (process.env.NODE_ENV !== "production") {
-    shippingRate = process.env.STRIPE_SHIPPING_RATE_TEST;
-  } else {
-    shippingRate = process.env.STRIPE_SHIPPING_RATE_PROD; //TODO
-  }
-
   let total = 0;
   if (process.env.NODE_ENV !== "development") {
     try {
@@ -78,6 +73,8 @@ export const checkout = async (
     "shopInfo.id": shopId,
     status: "active",
   });
+
+  console.log(cart.id);
 
   if (!cart) {
     customError({
@@ -190,7 +187,7 @@ export const checkout = async (
           price = variation.price.v1;
         }
 
-        total = total + price;
+        total = total + price * cartVariation.quantity;
 
         lineItems.push({
           price_data: {
@@ -228,6 +225,25 @@ export const checkout = async (
       100
   );
 
+  const shop = await shopById(shopId);
+
+  if (
+    shop.minimumAmountForFreeShipping != null &&
+    total >= shop.minimumAmountForFreeShipping
+  ) {
+    if (process.env.NODE_ENV !== "production") {
+      shippingRate = process.env.STRIPE_FREE_SHIPPING_RATE_TEST;
+    } else {
+      shippingRate = process.env.STRIPE_FREE_SHIPPING_RATE_PROD; //TODO
+    }
+  } else {
+    if (process.env.NODE_ENV !== "production") {
+      shippingRate = process.env.STRIPE_SHIPPING_RATE_TEST;
+    } else {
+      shippingRate = process.env.STRIPE_SHIPPING_RATE_PROD; //TODO
+    }
+  }
+
   // Create Checkout Sessions from body params.
   const session = await stripe.checkout.sessions.create({
     // payment_method_types: ['card', 'klarna'],
@@ -254,7 +270,7 @@ export const checkout = async (
     },
 
     invoice_creation: {
-      enabled: true,
+      enabled: false,
       invoice_data: {
         description: "Acquisto con Veplo",
         metadata: { order: code },
@@ -277,7 +293,7 @@ export const checkout = async (
         message: "La preghiamo di inserire il suo indirizzo completo.",
       },
       submit: {
-        message: "Ricevera' un'email con la fattura dell'ordine",
+        message: "Riceverai un'email con il dettaglio dell'ordine",
       },
     },
     shipping_options: [{ shipping_rate: shippingRate }], //TODO shippingrate -> mettere su .env (test/prod)
