@@ -1,5 +1,6 @@
 export const orderItem = (item: any) => {
   return `
+  <a href="https://www.veplo.it/prodotto/${item.productId}/">
         <tr>
                           <td class="esdev-adapt-off" align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px">
                             <table cellpadding="0" cellspacing="0" class="esdev-mso-table" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:560px">
@@ -83,5 +84,6 @@ export const orderItem = (item: any) => {
                             </table>
                           </td>
                         </tr>
+                        </a>
     `;
 };
