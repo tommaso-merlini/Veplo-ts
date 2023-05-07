@@ -12,8 +12,9 @@ import Shop from "../../../../schemas/Shop.model.js";
 import Product from "../../../../schemas/Product.model.js";
 import businessById from "../../../../../src/controllers/queries/businessById.js";
 import lodash from "lodash";
-import customError from "../../../../../src/controllers/errors/customError.js";
 import Business from "src/schemas/Business.model.js";
+import { greaterOrEqualThanZero } from "../../../../../src/controllers/greaterOrEqualThanZero.js";
+import customError from "../../../../../src/controllers/errors/customError.js";
 
 export const editShop = async (
   _: any,
@@ -43,6 +44,17 @@ export const editShop = async (
         customMessage: "token's owner is not a business",
       },
     });
+  }
+
+  if (options.minimumAmountForFreeShipping != null) {
+    if (!greaterOrEqualThanZero(options.minimumAmountForFreeShipping)) {
+      customError({
+        code: "400",
+        path: "minimum amount for free shipping",
+        message:
+          "the minimum amount for free shipping must be greater or equal than 0",
+      });
+    }
   }
 
   //get the business

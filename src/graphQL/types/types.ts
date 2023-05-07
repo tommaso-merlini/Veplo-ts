@@ -140,6 +140,7 @@ export type EditPriceInput = {
 
 export type EditProductInfo = {
   brand?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   fit?: InputMaybe<Scalars['String']>;
   gender?: InputMaybe<Scalars['String']>;
   length?: InputMaybe<Scalars['String']>;
@@ -161,6 +162,7 @@ export type EditShopInput = {
   address?: InputMaybe<EditAddressShopInput>;
   info?: InputMaybe<EditShopInputInfo>;
   isDigitalOnly?: InputMaybe<Scalars['Boolean']>;
+  minimumAmountForFreeShipping?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
   profileCover?: InputMaybe<Scalars['String']>;
   profilePhoto?: InputMaybe<Scalars['String']>;
@@ -752,6 +754,7 @@ export type Shop = {
   id?: Maybe<Scalars['ID']>;
   info?: Maybe<ShopInformations>;
   isDigitalOnly?: Maybe<Scalars['Boolean']>;
+  minimumAmountForFreeShipping?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   orders?: Maybe<Array<Order>>;
   products: ProductsQueryResponse;
@@ -803,6 +806,7 @@ export type ShopInput = {
   address: AddressShopInput;
   info: ShopInputInfo;
   isDigitalOnly: Scalars['Boolean'];
+  minimumAmountForFreeShipping?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   profileCover?: InputMaybe<Scalars['String']>;
   profilePhoto?: InputMaybe<Scalars['String']>;

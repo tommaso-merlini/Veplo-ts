@@ -7,6 +7,8 @@ import { createPostCode } from "../../../../controllers/createPostCode.js";
 import { reverseGeocoding } from "../../../../controllers/reverseGeocoding.js";
 import Shop from "../../../../schemas/Shop.model.js";
 import businessById from "../../../../../src/controllers/queries/businessById.js";
+import { greaterOrEqualThanZero } from "../../../../../src/controllers/greaterOrEqualThanZero.js";
+import customError from "../../../../../src/controllers/errors/customError.js";
 
 export const createShop = async (
   _: any,
@@ -35,6 +37,17 @@ export const createShop = async (
         customMessage: "token's owner is not a business",
       },
     });
+  }
+
+  if (options.minimumAmountForFreeShipping != null) {
+    if (!greaterOrEqualThanZero(options.minimumAmountForFreeShipping)) {
+      customError({
+        code: "400",
+        path: "minimum amount for free shipping",
+        message:
+          "the minimum amount for free shipping must be greater or equal than 0",
+      });
+    }
   }
 
   let { center, city, postCode }: any = await reverseGeocoding(
