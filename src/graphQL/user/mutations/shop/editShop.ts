@@ -48,8 +48,10 @@ export const editShop = async (
   //get the business
   const business = await businessById(token.mongoId);
 
+  console.log(options);
+
   //get the shop
-  const shop = await Shop.findOneAndUpdate({ _id: id }, options);
+  const shop = await Shop.findByIdAndUpdate(id, options);
 
   if (!shop) {
     customError({
@@ -95,6 +97,7 @@ export const editShop = async (
     }
   );
 
+  //todo execute this only if teh ShopInfo changed
   await Product.updateMany(
     {
       "shopInfo.id": id,
