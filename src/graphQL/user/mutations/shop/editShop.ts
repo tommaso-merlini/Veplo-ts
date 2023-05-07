@@ -48,8 +48,6 @@ export const editShop = async (
   //get the business
   const business = await businessById(token.mongoId);
 
-  console.log(options);
-
   //get the shop
   const shop = await Shop.findByIdAndUpdate(id, options);
 
