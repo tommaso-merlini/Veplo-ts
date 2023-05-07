@@ -43,7 +43,7 @@ export const orderItem = (item: any) => {
                                                 </tr>
                                                 <tr>
                                                   <td align="left" style="padding:0;Margin:0">
-                                                    <p class="p_description" style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Nunito, Roboto, sans-serif;line-height:21px;color:#0F181A;font-size:14px">${
+                                                    <p class="p_description" style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Nunito, Roboto, sans-serif;line-height:21px;color:#0F181A;font-size:14px">quantita': ${
                                                       item.quantity
                                                     }</p>
                                                   </td>

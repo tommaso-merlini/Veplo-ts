@@ -23,9 +23,15 @@ export const getOrderReceived = (order: Order) => {
   const formattedDate = `${day} ${month} ${year}`;
 
   const getOrderItems = () => {
+    let itemsHtml = "";
     for (let variation of order.productVariations) {
-      orderItem(variation);
+      console.log("=============================");
+      console.log(variation);
+      console.log("=============================");
+      const newItemHtml = orderItem(variation);
+      itemsHtml = itemsHtml + newItemHtml;
     }
+    return itemsHtml;
   };
 
   return `<body data-new-gr-c-s-loaded="14.1088.0" style="width:100%;font-family:arial, 'helvetica neue', helvetica, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
@@ -189,8 +195,8 @@ export const getOrderReceived = (order: Order) => {
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Nunito, Roboto, sans-serif;line-height:21px;color:#909090;font-size:14px">Abbiamo appena avvertito ${
                                               order.shop.name
                                             } del tuo ordine, spedira' il pacco all'indirizzo ${
-    order.recipient.address
-  }</p>
+    order.recipient.address.city
+  }, ${order.recipient.address.line1}</p>
                                           </td>
                                         </tr>
                                         <tr>
@@ -273,7 +279,7 @@ export const getOrderReceived = (order: Order) => {
                                         </tr>
                                         <tr>
                                           <td align="left" style="padding:0;Margin:0">
-                                            <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Nunito, Roboto, sans-serif;line-height:21px;color:#909090;font-size:14px">Destinatario:&nbsp<strong style="color: #2a2a2a">${
+                                            <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Nunito, Roboto, sans-serif;line-height:21px;color:#909090;font-size:14px">Destinatario:&nbsp;<strong style="color: #2a2a2a">${
                                               order.recipient.name
                                             }</strong></p>
                                             <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Nunito, Roboto, sans-serif;line-height:21px;color:#909090;font-size:14px">Indirizzo:&nbsp;<strong style="color: #2a2a2a">${

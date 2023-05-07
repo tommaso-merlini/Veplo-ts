@@ -8,7 +8,7 @@ export const sendOrderReceived = async (order: Order) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   const msg = {
-    to: order.user.email, // Change to your recipient
+    to: "tommaso.merlini.2004@gmail.com", // Change to your recipient
     from: "info@veplo.it", // Change to your verified sender
     subject: "Ordine Ricevuto!",
     html: getOrderReceived(order),
