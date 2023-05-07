@@ -1,10 +1,11 @@
 import Order from "../../schemas/Order.model.js";
+import { sendOrderReceived } from "../email/sendOrderReceived.js";
 
 export const handleCheckoutAsyncPaymentSuccedeed = async (session: any) => {
   const checkoutSessionId = session.id;
   const status = "PAY01";
 
-  await Order.updateOne(
+  const order: any = await Order.findOneAndUpdate(
     {
       checkoutSessionId,
     },
@@ -18,4 +19,6 @@ export const handleCheckoutAsyncPaymentSuccedeed = async (session: any) => {
       },
     }
   );
+
+  sendOrderReceived(order);
 };

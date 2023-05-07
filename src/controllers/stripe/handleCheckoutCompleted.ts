@@ -12,6 +12,9 @@ import userById from "../queries/userById.js";
 import shopById from "../queries/shopById.js";
 import businessById from "../queries/businessById.js";
 import cartById from "../queries/cartById.js";
+import { sendOrderReceived } from "../email/sendOrderReceived.js";
+import { type } from "os";
+import { Order as OrderType } from "src/graphQL/types/types.js";
 
 export const handleCheckoutCompleted = async (session: any) => {
   const paymentIntentId = session.payment_intent;
@@ -93,7 +96,7 @@ export const handleCheckoutCompleted = async (session: any) => {
     }
   }
 
-  await Order.create({
+  const order: any = await Order.create({
     code,
     status,
     createdAt: new Date(),
@@ -145,6 +148,8 @@ export const handleCheckoutCompleted = async (session: any) => {
     },
     productVariations: variationsInCartWithSize,
   });
+
+  sendOrderReceived(order);
 
   // throw new Error("ciao");
 

@@ -40,6 +40,8 @@ import resolvers from "../src/graphQL/resolvers.js";
 import { formatError } from "../apollo/formatError.js";
 import plugins from "../apollo/plugins.js";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import sgMail from "@sendgrid/mail";
+import { getOrderReceived } from "./controllers/html/getOrderReceived.js";
 
 dotenv.config();
 
