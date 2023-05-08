@@ -74,14 +74,53 @@ export const checkout = async (
     status: "active",
   });
 
-  console.log(cart.id);
-
   if (!cart) {
     customError({
       code: "404",
       path: "cart",
       message: "cart not found",
     });
+  }
+
+  //check if every product in cart is OK
+  for (let variation of cart.productVariations) {
+    const product: any = await Product.findOne({
+      variations: {
+        $elemMatch: {
+          _id: variation.variationId,
+          lots: {
+            $elemMatch: {
+              size: variation.size,
+            },
+          },
+        },
+      },
+    });
+    if (product == null) {
+      customError({
+        code: "400",
+        path: `variation with id ${variation.variationId}`,
+        message: "variation color or variation size is not existing",
+      });
+    }
+
+    //get the variation
+    for (let productVariation of product.variations) {
+      if (String(variation.variationId) === String(productVariation.id)) {
+        for (let lot of productVariation.lots) {
+          if (variation.size === lot.size) {
+            if (variation.quantity > lot.quantity) {
+              customError({
+                code: "400",
+                path: `variation quantity with id ${variation.variationId} `,
+                message: "too much quantity",
+              });
+            }
+            break;
+          }
+        }
+      }
+    }
   }
 
   if (process.env.NODE_ENV !== "production") {

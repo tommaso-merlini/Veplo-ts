@@ -6,6 +6,7 @@ export const carts = async (user: User) => {
   const variationsIds: string[] = [];
   const variations: any[] = [];
   const warnings = [];
+  const warningVariationIds = [];
   //get every carts of the user
   const carts: any[] = await Cart.find({
     userId: user.id,
@@ -270,6 +271,11 @@ export const carts = async (user: User) => {
 
     cart.total = Number(total.toFixed(2));
   });
+
+  //delete variations with error
+  for (let warning of warnings) {
+    warningVariationIds.push(warning.variationId);
+  }
 
   return {
     carts,
