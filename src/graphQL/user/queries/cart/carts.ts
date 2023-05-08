@@ -272,9 +272,24 @@ export const carts = async (user: User) => {
     cart.total = Number(total.toFixed(2));
   });
 
-  //delete variations with error
+  //delete variations cart if the error is product non existing
   for (let warning of warnings) {
-    warningVariationIds.push(warning.variationId);
+    if (warning.isProductNonExisting) {
+      await Cart.updateOne(
+        {
+          userId: user.id,
+          "productVariations.variationId": warning.variationId,
+          status: "active",
+        },
+        {
+          $pull: {
+            productVariations: {
+              variationId: warning.variationId,
+            },
+          },
+        }
+      );
+    }
   }
 
   return {

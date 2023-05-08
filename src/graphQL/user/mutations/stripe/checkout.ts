@@ -112,7 +112,7 @@ export const checkout = async (
             if (variation.quantity > lot.quantity) {
               customError({
                 code: "400",
-                path: `${variation.variationId} `,
+                path: `${variation.variationId}`,
                 message: "too much quantity variation",
               });
             }
