@@ -99,8 +99,8 @@ export const checkout = async (
     if (product == null) {
       customError({
         code: "400",
-        path: `variation with id ${variation.variationId}`,
-        message: "variation color or variation size is not existing",
+        path: `${variation.variationId}`,
+        message: "variation color or variation size does not exist",
       });
     }
 
@@ -112,8 +112,8 @@ export const checkout = async (
             if (variation.quantity > lot.quantity) {
               customError({
                 code: "400",
-                path: `variation quantity with id ${variation.variationId} `,
-                message: "too much quantity",
+                path: `${variation.variationId} `,
+                message: "too much quantity variation",
               });
             }
             break;
