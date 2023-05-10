@@ -42,6 +42,7 @@ import plugins from "../apollo/plugins.js";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import sgMail from "@sendgrid/mail";
 import { getOrderReceived } from "./controllers/html/getOrderReceived.js";
+import { macroCategories } from "../constants/filters.js";
 
 dotenv.config();
 
@@ -82,7 +83,7 @@ app.get("/brands", (req, res: Response) => {
 });
 
 app.get("/categories", (req, res: Response) => {
-  const categories = constants.genders;
+  const categories = macroCategories;
 
   res.send(categories);
 });
