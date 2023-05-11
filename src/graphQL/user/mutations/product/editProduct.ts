@@ -51,7 +51,13 @@ export const editProduct = async (
   //check the validity of the fields based on the constants
   checkConstants(options, "product");
 
-  const mergedProduct = lodash.merge(product, options);
+  function customizer(objValue: any, srcValue: any) {
+    if (lodash.isArray(objValue)) {
+      return srcValue;
+    }
+  }
+
+  const mergedProduct = lodash.mergeWith(product, options, customizer);
 
   //if the price is modified
   if (options.price) {
@@ -61,6 +67,11 @@ export const editProduct = async (
   //if the traits are modified
   if (options?.info?.traits) {
     mergedProduct.info.traits = removeDuplicates(options.info.traits);
+  }
+
+  //if the materials are modified
+  if (options?.info?.materials) {
+    mergedProduct.info.materials = removeDuplicates(options.info.materials);
   }
 
   // console.log("==================================");

@@ -372,7 +372,7 @@ export const allFilters = [
   //occasions
   { occasion: occasions },
   //materials
-  { material: materials },
+  { materials: materials },
   //genders
   { gender: genders },
   //lenghts
