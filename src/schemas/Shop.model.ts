@@ -19,6 +19,7 @@ const ShopSchema = new mongoose.Schema({
   profilePhoto: { type: String, required: true },
   isDigitalOnly: { type: Boolean, required: false },
   minimumAmountForFreeShipping: { type: Number, required: false },
+  categories: [{ type: String, required: true }],
   info: {
     phone: {
       type: String,

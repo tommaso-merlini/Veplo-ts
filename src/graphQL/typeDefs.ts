@@ -179,6 +179,7 @@ const typeDefs = gql`
     profilePhoto: String
     isDigitalOnly: Boolean
     minimumAmountForFreeShipping: Int
+    categories: [String!]
     info: ShopInformations
     address: AddressShop
     products(
@@ -420,6 +421,7 @@ const typeDefs = gql`
     profilePhoto: String
     isDigitalOnly: Boolean!
     minimumAmountForFreeShipping: Int
+    categories: [String]!
     info: ShopInputInfo!
     address: AddressShopInput!
   }
@@ -523,6 +525,7 @@ const typeDefs = gql`
     profilePhoto: String
     isDigitalOnly: Boolean
     minimumAmountForFreeShipping: Int
+    categories: [String!]
     info: EditShopInputInfo
     address: EditAddressShopInput
   }
