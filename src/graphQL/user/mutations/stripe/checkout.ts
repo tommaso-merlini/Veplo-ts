@@ -12,6 +12,7 @@ import Product from "../../../../schemas/Product.model.js";
 import dotenv from "dotenv";
 import { generateCode } from "../../../../controllers/generateCode.js";
 import shopById from "../../../../controllers/queries/shopById.js";
+import { GraphQLError } from "graphql";
 dotenv.config();
 
 export const checkout = async (
@@ -96,6 +97,7 @@ export const checkout = async (
         },
       },
     });
+
     if (product == null) {
       customError({
         code: "400",
