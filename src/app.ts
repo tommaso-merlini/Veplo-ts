@@ -88,9 +88,9 @@ app.get("/categories", (req, res: Response) => {
   res.send(categories);
 });
 
-app.get("/loaderio-04cbc2e6e8994582817d57faa8742ee5", function (req, res) {
+app.get("/loaderio-e8f96505a8202bb0f8de181c532eff56", function (req, res) {
   res.sendFile(
-    path.resolve("./loaderio-04cbc2e6e8994582817d57faa8742ee5.html")
+    path.resolve("./loaderio-e8f96505a8202bb0f8de181c532eff56.html")
   );
 });
 
