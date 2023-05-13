@@ -783,7 +783,7 @@ export type ShopProductsArgs = {
 };
 
 export type ShopFilters = {
-  cap?: InputMaybe<Scalars['String']>;
+  categories?: InputMaybe<Array<Scalars['String']>>;
   name?: InputMaybe<Scalars['String']>;
 };
 

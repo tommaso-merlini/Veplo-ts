@@ -343,8 +343,9 @@ const typeDefs = gql`
   }
 
   input ShopFilters {
-    cap: String
+    #cap: String
     name: String
+    categories: [String!]
   }
 
   input LocationInput {

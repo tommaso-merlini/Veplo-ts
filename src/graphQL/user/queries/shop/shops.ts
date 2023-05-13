@@ -13,13 +13,15 @@ export const shops = async (
 
   // const coordinates = searchedCap.location.coordinates;
 
+  const filtersInfo: any[] = [];
+
   const checkName = () => {
     if (filters.name != null) {
       return {
         text: {
           query: filters.name,
           path: "name",
-          score: { boost: { value: 1 } },
+          score: { boost: { value: 15 } },
           fuzzy: {
             maxEdits: 2,
             prefixLength: 4,
@@ -35,33 +37,46 @@ export const shops = async (
     }
   };
 
+  const checkCategories = () => {
+    if (filters.categories != null) {
+      filtersInfo.push({
+        phrase: {
+          query: filters.categories,
+          path: "categories",
+          score: {
+            boost: {
+              value: 2,
+            },
+          },
+        },
+      });
+    }
+  };
+
+  const checkAllFilters = () => {
+    checkCategories();
+  };
+
+  checkAllFilters();
+
   const shops = await Shop.aggregate([
     {
       $search: {
         index: "ShopSearchIndex",
         compound: {
-          must: [
-            checkName(),
-            // {
-            //   geoWithin: {
-            //     path: "address.location",
-            //     score: {
-            //       boost: {
-            //         value: 3,
-            //       },
-            //     },
-            //     circle: {
-            //       center: {
-            //         type: "Point",
-            //         coordinates: [coordinates[0], coordinates[1]],
-            //       },
-            //       radius: range,
-            //     },
-            //   },
-            // },
+          filter: [
+            ...filtersInfo,
+            {
+              text: {
+                query: "active",
+                path: "status",
+                score: { constant: { value: 0 } },
+              },
+            },
           ],
           should: [
             //!get the best ranked name on the top of the list
+            checkName(),
             {
               near: {
                 path: "createdAt",
@@ -78,10 +93,13 @@ export const shops = async (
         },
       },
     },
+
     {
-      $match: {
-        status: "active",
-      },
+      $skip: offset,
+    },
+
+    {
+      $limit: limit,
     },
 
     {
@@ -93,9 +111,7 @@ export const shops = async (
         id: "$_id",
       },
     },
-  ])
-    .skip(offset)
-    .limit(limit);
+  ]);
 
   return shops;
 };
