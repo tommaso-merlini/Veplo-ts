@@ -672,6 +672,7 @@ export type Query = {
   shopByFirebaseId?: Maybe<Shop>;
   /** get a list of shops, you can use the filters */
   shops: Array<Shop>;
+  shopsAutoComplete: Array<Shop>;
   /** get a single user - id provided by the jwt */
   user?: Maybe<User>;
 };
@@ -731,6 +732,11 @@ export type QueryShopsArgs = {
   filters: ShopFilters;
   limit: Scalars['Int'];
   offset: Scalars['Int'];
+};
+
+
+export type QueryShopsAutoCompleteArgs = {
+  query: Scalars['String'];
 };
 
 export type RecipientOrder = {

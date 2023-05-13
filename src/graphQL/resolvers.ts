@@ -58,6 +58,7 @@ import { productsAutoComplete } from "./user/queries/product/productsAutoComplet
 import { BetterInputGenerator } from "../controllers/BetterInputGenerator.js";
 import { editShop } from "./user/mutations/shop/editShop.js";
 import mongoose from "mongoose";
+import { shopsAutoComplete } from "./user/queries/shop/shopsAutoComplete.js";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -82,6 +83,7 @@ const resolvers = {
     order,
     adminSeeAllOrders,
     productsAutoComplete,
+    shopsAutoComplete,
   },
 
   Mutation: {

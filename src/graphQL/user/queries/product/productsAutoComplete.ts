@@ -13,6 +13,8 @@ export const productsAutoComplete = async (
   __: any,
   info: any
 ) => {
+  const LIMIT = 3;
+
   if (query.length <= 2) {
     customError({
       code: "400",
@@ -75,7 +77,7 @@ export const productsAutoComplete = async (
       },
     },
     {
-      $limit: 3,
+      $limit: LIMIT,
     },
 
     {

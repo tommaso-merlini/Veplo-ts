@@ -587,6 +587,8 @@ const typeDefs = gql`
       filters: ShopFilters!
     ): [Shop!]!
 
+    shopsAutoComplete(query: String!): [Shop!]!
+
     #===================BUSINESS===================
     """
     check if the account is a business
