@@ -57,6 +57,7 @@ import authenticateToken from "../../src/controllers/authenticateToken.js";
 import { productsAutoComplete } from "./user/queries/product/productsAutoComplete.js";
 import { BetterInputGenerator } from "../controllers/BetterInputGenerator.js";
 import { editShop } from "./user/mutations/shop/editShop.js";
+import mongoose from "mongoose";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -134,7 +135,7 @@ const resolvers = {
       } else {
         token = {
           firebaseId: "prova",
-          mongoId: "641f209eca22d34c3ca1ec1f",
+          mongoId: "641f209eca22d34c3ca1ec1fs",
           isBusiness: true,
         };
       }
@@ -171,10 +172,25 @@ const resolvers = {
   Product: {
     productsLikeThis: async (
       product: any,
-      { limit, offset }: ProductProductsLikeThisArgs,
+      { limit, offset, shopId }: ProductProductsLikeThisArgs,
       _: any,
       info: any
     ) => {
+      let checkShopId: any = {
+        exists: {
+          path: "shopInfo.id",
+          score: { constant: { value: 0 } },
+        },
+      };
+      if (shopId != null) {
+        checkShopId = {
+          equals: {
+            value: new mongoose.Types.ObjectId(shopId),
+            path: "shopInfo.id",
+            score: { constant: { value: 0 } },
+          },
+        };
+      }
       let productsLikeThis: any = await Product.aggregate([
         {
           $search: {
@@ -186,6 +202,7 @@ const resolvers = {
                     like: product,
                   },
                 },
+                checkShopId,
               ],
               mustNot: [
                 {

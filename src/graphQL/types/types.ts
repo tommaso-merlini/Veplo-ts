@@ -160,6 +160,7 @@ export type EditProductInput = {
 
 export type EditShopInput = {
   address?: InputMaybe<EditAddressShopInput>;
+  categories?: InputMaybe<Array<Scalars['String']>>;
   info?: InputMaybe<EditShopInputInfo>;
   isDigitalOnly?: InputMaybe<Scalars['Boolean']>;
   minimumAmountForFreeShipping?: InputMaybe<Scalars['Int']>;
@@ -525,6 +526,7 @@ export type Product = {
 export type ProductProductsLikeThisArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
+  shopId?: InputMaybe<Scalars['ID']>;
 };
 
 export type ProductFilters = {
@@ -750,6 +752,7 @@ export type Shop = {
   address?: Maybe<AddressShop>;
   businessId?: Maybe<Scalars['ID']>;
   businessStatus?: Maybe<Scalars['String']>;
+  categories?: Maybe<Array<Scalars['String']>>;
   createdAt?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   info?: Maybe<ShopInformations>;
@@ -804,6 +807,7 @@ export type ShopInformations = {
 
 export type ShopInput = {
   address: AddressShopInput;
+  categories: Array<InputMaybe<Scalars['String']>>;
   info: ShopInputInfo;
   isDigitalOnly: Scalars['Boolean'];
   minimumAmountForFreeShipping?: InputMaybe<Scalars['Int']>;
