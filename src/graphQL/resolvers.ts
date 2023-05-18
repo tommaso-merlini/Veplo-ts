@@ -193,19 +193,12 @@ const resolvers = {
           },
         };
       }
-      let productsLikeThis: any = await Product.aggregate([
+
+      const productsLikeThis: any = await Product.aggregate([
         {
           $search: {
             index: "ProductSearchIndex",
             compound: {
-              must: [
-                {
-                  moreLikeThis: {
-                    like: product,
-                  },
-                },
-                checkShopId,
-              ],
               mustNot: [
                 {
                   equals: {
@@ -213,6 +206,14 @@ const resolvers = {
                     value: product._id,
                   },
                 },
+              ],
+              must: [
+                {
+                  moreLikeThis: {
+                    like: product,
+                  },
+                },
+                checkShopId,
               ],
               should: [
                 //boost products based on how many times it has been bought

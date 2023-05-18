@@ -123,6 +123,9 @@ const ProductSchema = new mongoose.Schema({
 //       "location": {
 //         "type": "geo"
 //       },
+//       "_id": {
+//         "type": "objectId"
+//       },
 //       "name": [
 //         {
 //           "analyzer": "lucene.italian",
@@ -147,6 +150,9 @@ const ProductSchema = new mongoose.Schema({
 //       "shopInfo": {
 //         "dynamic": false,
 //         "fields": {
+//           "businessStatus": {
+//             "type": "string"
+//           },
 //           "id": {
 //             "type": "objectId"
 //           },
