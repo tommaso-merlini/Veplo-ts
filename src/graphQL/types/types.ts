@@ -769,6 +769,8 @@ export type Shop = {
   products: ProductsQueryResponse;
   profileCover?: Maybe<Scalars['String']>;
   profilePhoto?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Float']>;
+  shopsLikeThis?: Maybe<Array<Shop>>;
   status?: Maybe<Scalars['String']>;
 };
 
@@ -786,6 +788,12 @@ export type ShopProductsArgs = {
   offset: Scalars['Int'];
   sort?: InputMaybe<ProductSort>;
   statuses?: InputMaybe<Array<ShopProductsStatusesEnum>>;
+};
+
+
+export type ShopShopsLikeThisArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 };
 
 export type ShopFilters = {

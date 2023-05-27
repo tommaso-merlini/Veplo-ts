@@ -42,6 +42,7 @@ import {
   ProductInput,
   ProductProductsLikeThisArgs,
   QueryProductsArgs,
+  ShopShopsLikeThisArgs,
 } from "./types/types.js";
 import { refund } from "./user/mutations/stripe/refund.js";
 import { productsNotAvailableRefund } from "./user/mutations/stripe/productsNotAvailableRefund.js";
@@ -169,6 +170,56 @@ const resolvers = {
       return products;
     },
     orders,
+    shopsLikeThis: async (
+      shop: any,
+      { limit, offset }: ShopShopsLikeThisArgs,
+      _: any,
+      info: any
+    ) => {
+      const shopsLikeThis: any = await Shop.aggregate([
+        {
+          $search: {
+            index: "ShopSearchIndex",
+            compound: {
+              mustNot: [
+                {
+                  equals: {
+                    path: "_id",
+                    value: shop._id,
+                  },
+                },
+              ],
+              must: [
+                {
+                  moreLikeThis: {
+                    like: [{ categories: shop.categories }],
+                  },
+                },
+              ],
+            },
+          },
+        },
+        {
+          $skip: offset,
+        },
+
+        {
+          $limit: limit,
+        },
+
+        {
+          $project: {
+            score: { $meta: "searchScore" },
+
+            ...getRequestedFields(info),
+            _id: 0,
+            id: "$_id",
+          },
+        },
+      ]);
+
+      return shopsLikeThis;
+    },
   },
 
   Product: {

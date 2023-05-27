@@ -61,6 +61,9 @@ const ShopSchema = new mongoose.Schema({
 //   "mappings": {
 //     "dynamic": false,
 //     "fields": {
+//     "_id": {
+//       "type": "objectId"
+//     },
 //       "address": {
 //         "fields": {
 //           "location": {

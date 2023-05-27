@@ -172,6 +172,7 @@ const typeDefs = gql`
     id: ID
     businessId: ID
     businessStatus: String
+    score: Float
     name: String
     createdAt: String
     status: String
@@ -190,6 +191,7 @@ const typeDefs = gql`
       statuses: [ShopProductsStatusesEnum!]
     ): ProductsQueryResponse!
     orders(statuses: [String!], limit: Int!, offset: Int!): [Order!]
+    shopsLikeThis(offset: Int!, limit: Int!): [Shop!]
   }
 
   type CreateProductResponse {
