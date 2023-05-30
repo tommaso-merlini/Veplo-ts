@@ -25,15 +25,16 @@ export const productsNotAvailableRefund = async (
   } else {
     token = {
       mongoId: "641f178dca22d34c3ca1ec01",
-      isBusiness: true,
+      isBusiness: false,
       email: "prova@prova.it",
       user_id: "firebaseId",
+      isAdmin: true,
     };
   }
 
   const shop = await shopById(String(order.shop.id));
 
-  if (process.env.NODE_ENV !== "development")
+  if (process.env.NODE_ENV !== "development" && !token.isAdmin)
     //token operations
     authenticateToken({
       tokenId: token?.mongoId,
