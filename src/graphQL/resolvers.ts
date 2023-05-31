@@ -60,6 +60,7 @@ import { BetterInputGenerator } from "../controllers/BetterInputGenerator.js";
 import { editShop } from "./user/mutations/shop/editShop.js";
 import mongoose from "mongoose";
 import { shopsAutoComplete } from "./user/queries/shop/shopsAutoComplete.js";
+import { returnedOrderHasArrived } from "./user/mutations/order/returnedOrderHasArrived.js";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -119,6 +120,7 @@ const resolvers = {
     adminOrderHasArrived,
     returnOrder,
     editShop,
+    returnedOrderHasArrived,
   },
 
   Shop: {

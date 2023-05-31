@@ -12,7 +12,6 @@ export const returnedOrderHasArrived = async (
   { admin, req, stripe }: Context
 ) => {
   const status = "RET02";
-  const order = await orderById(id);
   let token;
 
   if (process.env.NODE_ENV !== "development") {
@@ -30,16 +29,16 @@ export const returnedOrderHasArrived = async (
     };
   }
 
+  const order = await orderById(id);
   const shop = await shopById(String(order.shop.id));
-
   if (process.env.NODE_ENV !== "development")
-    //token operations
     authenticateToken({
       tokenId: token?.mongoId,
       ids: [String(shop.businessId)],
       isBusiness: token?.isBusiness,
     });
 
+  //get the refund
   const session = await stripe.checkout.sessions.retrieve(
     order.checkoutSessionId
   );
@@ -48,6 +47,7 @@ export const returnedOrderHasArrived = async (
     payment_intent: paymentIntent.toString(),
   });
 
+  //update order
   await Order.updateOne(
     {
       _id: id,
@@ -63,5 +63,6 @@ export const returnedOrderHasArrived = async (
       },
     }
   );
+
   return true;
 };
