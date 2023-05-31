@@ -26,12 +26,13 @@ export const returnedOrderHasArrived = async (
       isBusiness: true,
       email: "prova@prova.it",
       user_id: "firebaseId",
+      isAdmin: false,
     };
   }
 
   const order = await orderById(id);
   const shop = await shopById(String(order.shop.id));
-  if (process.env.NODE_ENV !== "development")
+  if (process.env.NODE_ENV !== "development" && !token.isAdmin)
     authenticateToken({
       tokenId: token?.mongoId,
       ids: [String(shop.businessId)],

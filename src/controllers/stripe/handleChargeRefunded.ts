@@ -13,8 +13,10 @@ export const handleChargeRefunded = async (session: any) => {
         break;
       case "CANC02":
         var status = "REF03";
+        break;
       case "RET02":
         var status = "REF02";
+        break;
       default: //TODO vedere bene come gestire meglio questo errore
         throw new Error("can't refund");
         break;

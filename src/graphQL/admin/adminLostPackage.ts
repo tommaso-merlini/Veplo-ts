@@ -14,10 +14,20 @@ export const adminLostPackage = async (
 
   let token;
 
-  try {
-    token = await admin.auth().verifyIdToken(req.headers.authorization);
-  } catch (e) {
-    checkFirebaseErrors(e);
+  if (process.env.NODE_ENV !== "development") {
+    try {
+      token = await admin.auth().verifyIdToken(req.headers.authorization);
+    } catch (e) {
+      checkFirebaseErrors(e);
+    }
+  } else {
+    token = {
+      mongoId: "641f178dca22d34c3ca1ec01",
+      isBusiness: false,
+      email: "prova@prova.it",
+      user_id: "firebaseId",
+      isAdmin: true,
+    };
   }
 
   if (!token.isAdmin || token.isAdmin === null) {
