@@ -32,13 +32,12 @@ export const denyReturn = async (
   }
 
   const order = await orderById(orderId);
-  const oldStatus = order.status;
 
-  if (oldStatus != "RET01") {
+  if (order.status != "RET01") {
     customError({
       code: "400",
       path: "order status",
-      message: `order status must be ${oldStatus} in order to make it ${newStatus}`,
+      message: `order status must be RET01 in order to make it ${newStatus}`,
     });
   }
 
