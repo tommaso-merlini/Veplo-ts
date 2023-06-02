@@ -13,6 +13,7 @@ import dotenv from "dotenv";
 import { generateCode } from "../../../../controllers/generateCode.js";
 import shopById from "../../../../controllers/queries/shopById.js";
 import { GraphQLError } from "graphql";
+import { calculateApplicationFeeAmount } from "../../../../controllers/stripe/calculateApplicationFeeAmount.js";
 dotenv.config();
 
 export const checkout = async (
@@ -28,21 +29,7 @@ export const checkout = async (
   const variationsIds: string[] = [];
   const variationsInCart = [];
   const veploFee: number | undefined = +process.env.VEPLO_FEE;
-  const transactionFeePercentage: number | undefined =
-    +process.env.TRANSACTION_FEE;
-  const transactionFeeFixed: number | undefined =
-    +process.env.TRANSACTION_FEE_FIXED_IN_CENTS;
-  if (
-    veploFee == undefined ||
-    transactionFeePercentage == undefined ||
-    transactionFeeFixed == undefined
-  ) {
-    customError({
-      code: "400",
-      path: "checkout",
-      message: "internal server error, contact the assistency",
-    });
-  }
+
   let successUrl;
   let shippingRate;
   let cancelUrl;
@@ -259,19 +246,10 @@ export const checkout = async (
       message: "total must be grather than 5 euros",
     });
   }
-  // const applicationFeeAmount = Math.round(
-  //   (total * veploFee +
-  //     total * transactionFeePercentage +
-  //     transactionFeeFixed) *
-  //     100
-  // );
-
-  const totalInCents = total * 100;
-  const applicationFeeAmount = (
-    totalInCents * veploFee +
-    totalInCents * transactionFeePercentage +
-    transactionFeeFixed
-  ).toFixed(0);
+  const applicationFeeAmount = calculateApplicationFeeAmount({
+    total,
+    fee: veploFee,
+  });
 
   const shop = await shopById(shopId);
 

@@ -6,6 +6,7 @@ import checkFirebaseErrors from "../../../../../src/controllers/checkFirebaseErr
 import authenticateToken from "../../../../../src/controllers/authenticateToken.js";
 import shopById from "../../../../../src/controllers/queries/shopById.js";
 import dotenv from "dotenv";
+import { calculateApplicationFeeAmount } from "../../../../../src/controllers/stripe/calculateApplicationFeeAmount.js";
 dotenv.config();
 
 export const productsNotAvailableRefund = async (
@@ -53,13 +54,6 @@ export const productsNotAvailableRefund = async (
     reverse_transfer: true,
     refund_application_fee: false,
   });
-
-  console.log("===========================");
-  console.log(chargeId);
-  console.log("===========================");
-  console.log("+++++++++++++++++++++++++++");
-  console.log(refund.charge);
-  console.log("+++++++++++++++++++++++++++");
 
   await Order.updateOne(
     {
