@@ -43,6 +43,7 @@ export const returnedOrderHasArrived = async (
   const session = await stripe.checkout.sessions.retrieve(
     order.checkoutSessionId
   );
+
   const paymentIntent = session.payment_intent;
   const refund = await stripe.refunds.create({
     payment_intent: paymentIntent.toString(),
