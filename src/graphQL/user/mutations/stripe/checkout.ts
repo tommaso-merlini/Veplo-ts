@@ -29,9 +29,9 @@ export const checkout = async (
   const variationsInCart = [];
   const veploFee: number | undefined = +process.env.VEPLO_FEE;
   const transactionFeePercentage: number | undefined =
-    +process.env.TRANSACTION_FEE_PERCENTAGE;
+    +process.env.TRANSACTION_FEE;
   const transactionFeeFixed: number | undefined =
-    +process.env.TRANSACTION_FEE_FIXED;
+    +process.env.TRANSACTION_FEE_FIXED_IN_CENTS;
   if (
     veploFee == undefined ||
     transactionFeePercentage == undefined ||
@@ -259,12 +259,19 @@ export const checkout = async (
       message: "total must be grather than 5 euros",
     });
   }
-  const applicationFeeAmount = Math.round(
-    (total * veploFee +
-      total * transactionFeePercentage +
-      transactionFeeFixed) *
-      100
-  );
+  // const applicationFeeAmount = Math.round(
+  //   (total * veploFee +
+  //     total * transactionFeePercentage +
+  //     transactionFeeFixed) *
+  //     100
+  // );
+
+  const totalInCents = total * 100;
+  const applicationFeeAmount = (
+    totalInCents * veploFee +
+    totalInCents * transactionFeePercentage +
+    transactionFeeFixed
+  ).toFixed(0);
 
   const shop = await shopById(shopId);
 
@@ -304,7 +311,7 @@ export const checkout = async (
       },
       receipt_email: token?.email,
       setup_future_usage: "off_session",
-      application_fee_amount: applicationFeeAmount,
+      application_fee_amount: +applicationFeeAmount,
       transfer_data: {
         destination: business.stripe.id,
       },

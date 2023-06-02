@@ -2,10 +2,11 @@ import { Context } from "apollo/context.js";
 import orderById from "../../../../controllers/queries/orderById.js";
 import { MutationProductsNotAvailableRefundArgs } from "src/graphQL/types/types.js";
 import Order from "../../../../../src/schemas/Order.model.js";
-import customError from "../../../../../src/controllers/errors/customError.js";
 import checkFirebaseErrors from "../../../../../src/controllers/checkFirebaseErrors.js";
 import authenticateToken from "../../../../../src/controllers/authenticateToken.js";
 import shopById from "../../../../../src/controllers/queries/shopById.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const productsNotAvailableRefund = async (
   _: any,
@@ -48,6 +49,8 @@ export const productsNotAvailableRefund = async (
   const paymentIntent = session.payment_intent;
   const refund = await stripe.refunds.create({
     payment_intent: paymentIntent.toString(),
+    reverse_transfer: true,
+    refund_application_fee: false,
   });
 
   await Order.updateOne(
