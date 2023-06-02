@@ -715,6 +715,11 @@ const typeDefs = gql`
       productsNotAvailable: [productsNotAvailableInput!]
     ): Boolean
 
+    """
+    shop deny the refund requested by the user
+    """
+    denyReturn(orderId: ID!): Boolean
+
     #===================CART===================
     """
     add products to the cart

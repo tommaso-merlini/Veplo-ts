@@ -259,6 +259,8 @@ export type Mutation = {
   deleteProduct: Scalars['ID'];
   /** delete a variation */
   deleteVariation?: Maybe<Scalars['Boolean']>;
+  /** shop deny the refund requested by the user */
+  denyReturn?: Maybe<Scalars['Boolean']>;
   /** edit a cart (you can add or remove) */
   editCart?: Maybe<Scalars['Boolean']>;
   /** edit an order */
@@ -385,6 +387,11 @@ export type MutationDeleteProductArgs = {
 
 export type MutationDeleteVariationArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationDenyReturnArgs = {
+  orderId: Scalars['ID'];
 };
 
 
