@@ -3,6 +3,16 @@ import customError from "../errors/customError.js";
 import { calculateApplicationFeeAmount } from "./calculateApplicationFeeAmount.js";
 import stripe from "../../../stripe/stripe.js";
 
+const calculateApplicationFeeAmountRefund = ({
+  total,
+  fee,
+}: {
+  total: number;
+  fee: number;
+}) => {
+  return +(total * 100 * fee).toFixed(0);
+};
+
 export const handleChargeRefunded = async (session: any) => {
   const veploFee: number | undefined = +process.env.VEPLO_FEE;
   const fine: number | undefined = +process.env.VEPLO_SHOP_REFUND_FINE;
@@ -16,7 +26,7 @@ export const handleChargeRefunded = async (session: any) => {
         var status = "REF01";
         const fee = veploFee - fine;
         const applicationFeeAmountOrderCancelled =
-          calculateApplicationFeeAmount({
+          calculateApplicationFeeAmountRefund({
             total: order.totalDetails.subTotal,
             fee,
           });
@@ -29,11 +39,13 @@ export const handleChargeRefunded = async (session: any) => {
         break;
       case "RET02":
         var status = "REF02";
-        const applicationFeeAmountOrderReturned = +(
-          order.totalDetails.subTotal *
-          100 *
-          veploFee
-        ).toFixed(0);
+
+        const applicationFeeAmountOrderReturned =
+          calculateApplicationFeeAmountRefund({
+            total: order.totalDetails.subTotal,
+            fee: veploFee,
+          });
+
         await stripe.applicationFees.createRefund(session.application_fee, {
           amount: applicationFeeAmountOrderReturned,
         });
