@@ -61,6 +61,7 @@ import { editShop } from "./user/mutations/shop/editShop.js";
 import mongoose from "mongoose";
 import { shopsAutoComplete } from "./user/queries/shop/shopsAutoComplete.js";
 import { returnedOrderHasArrived } from "./user/mutations/order/returnedOrderHasArrived.js";
+import { denyReturn } from "./user/mutations/stripe/denyReturn.js";
 
 interface ShopProductsArgs extends QueryProductsArgs {
   statuses: string[];
@@ -121,6 +122,7 @@ const resolvers = {
     returnOrder,
     editShop,
     returnedOrderHasArrived,
+    denyReturn,
   },
 
   Shop: {
