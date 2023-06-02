@@ -15,22 +15,28 @@ export const handleChargeRefunded = async (session: any) => {
       case "CANC01":
         var status = "REF01";
         const fee = veploFee - fine;
-        const applicationFeeAmount = calculateApplicationFeeAmount({
-          total: order.totalDetails.subTotal,
-          fee,
+        const applicationFeeAmountOrderCancelled =
+          calculateApplicationFeeAmount({
+            total: order.totalDetails.subTotal,
+            fee,
+          });
+        await stripe.applicationFees.createRefund(session.application_fee, {
+          amount: applicationFeeAmountOrderCancelled,
         });
-        const feeRefund = await stripe.applicationFees.createRefund(
-          session.application_fee,
-          {
-            amount: applicationFeeAmount,
-          }
-        );
         break;
       case "CANC02":
         var status = "REF03";
         break;
       case "RET02":
         var status = "REF02";
+        const applicationFeeAmountOrderReturned = +(
+          order.totalDetails.subTotal *
+          100 *
+          veploFee
+        ).toFixed(0);
+        await stripe.applicationFees.createRefund(session.application_fee, {
+          amount: applicationFeeAmountOrderReturned,
+        });
         break;
       default: //TODO vedere bene come gestire meglio questo errore
         throw new Error("can't refund");

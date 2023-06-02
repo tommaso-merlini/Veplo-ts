@@ -39,14 +39,14 @@ export const returnedOrderHasArrived = async (
       isBusiness: token?.isBusiness,
     });
 
-  //get the refund
-  const session = await stripe.checkout.sessions.retrieve(
-    order.checkoutSessionId
-  );
+  const paymentIntentId = order.paymentIntentId;
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-  const paymentIntent = session.payment_intent;
+  const chargeId = paymentIntent.latest_charge;
   const refund = await stripe.refunds.create({
-    payment_intent: paymentIntent.toString(),
+    charge: chargeId.toString(),
+    reverse_transfer: true,
+    refund_application_fee: false,
   });
 
   //update order
