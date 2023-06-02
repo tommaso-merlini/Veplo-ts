@@ -15,6 +15,7 @@ export const editOrder = async (
 ) => {
   let token;
   let status = "SHIP01";
+  const updateOrderOptionalActions: any[] = [];
   if (process.env.NODE_ENV !== "development") {
     try {
       token = await admin.auth().verifyIdToken(req.headers.authorization);
@@ -30,7 +31,7 @@ export const editOrder = async (
   }
 
   //if the user is not an amdin
-  if (token?.isAdmin !== true) {
+  if (!token?.isAdmin) {
     if (options.url != null) {
       //can't modify the url
       delete options.url;
@@ -41,12 +42,29 @@ export const editOrder = async (
         path: "input",
         message: "you need to input the code and the courier",
       });
+    } else {
+      updateOrderOptionalActions.push({
+        $push: {
+          history: {
+            status,
+            date: new Date(),
+          },
+        },
+      });
     }
   }
 
   if (options.url != null) {
     //if the admin inputted the url
     status = "SHIP02";
+    updateOrderOptionalActions.push({
+      $push: {
+        history: {
+          status,
+          date: new Date(),
+        },
+      },
+    });
   }
 
   const order = await orderById(id);
@@ -69,6 +87,7 @@ export const editOrder = async (
     {
       shipping: mergedShipping,
       status: status,
+      ...updateOrderOptionalActions[0], //index zero because it is only the first object
     }
   );
 
