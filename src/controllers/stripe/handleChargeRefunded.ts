@@ -16,7 +16,7 @@ export const handleChargeRefunded = async (session: any) => {
         var status = "REF01";
         const fee = veploFee - fine;
         const applicationFeeAmount = calculateApplicationFeeAmount({
-          total: order.totalDetails.total,
+          total: order.totalDetails.subTotal,
           fee,
         });
         const feeRefund = await stripe.applicationFees.createRefund(
