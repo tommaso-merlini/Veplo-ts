@@ -54,6 +54,13 @@ export const productsNotAvailableRefund = async (
     refund_application_fee: false,
   });
 
+  console.log("===========================");
+  console.log(chargeId);
+  console.log("===========================");
+  console.log("+++++++++++++++++++++++++++");
+  console.log(refund.charge);
+  console.log("+++++++++++++++++++++++++++");
+
   await Order.updateOne(
     {
       _id: orderId,
