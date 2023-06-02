@@ -43,12 +43,13 @@ export const productsNotAvailableRefund = async (
       isBusiness: token?.isBusiness,
     });
 
-  const session = await stripe.checkout.sessions.retrieve(
-    order.checkoutSessionId
-  );
-  const paymentIntent = session.payment_intent;
+  const paymentIntentId = order.paymentIntentId;
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+  const chargeId = paymentIntent.latest_charge;
+
   const refund = await stripe.refunds.create({
-    payment_intent: paymentIntent.toString(),
+    charge: chargeId.toString(),
     reverse_transfer: true,
     refund_application_fee: false,
   });

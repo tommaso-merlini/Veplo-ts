@@ -250,6 +250,7 @@ const typeDefs = gql`
     code: String
     createdAt: String
     checkoutSessionId: String
+    paymentIntentId: String
     chargeId: String
     history: [HistoryOrder!]
     user: UserOrder

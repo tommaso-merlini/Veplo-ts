@@ -101,6 +101,7 @@ export const handleCheckoutCompleted = async (session: any) => {
     status,
     createdAt: new Date(),
     checkoutSessionId: session.id,
+    paymentIntentId: session.payment_intent,
     history: [
       {
         status,
