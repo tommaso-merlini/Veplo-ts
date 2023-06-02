@@ -38,7 +38,7 @@ export const denyReturn = async (
     customError({
       code: "400",
       path: "order status",
-      message: `order status must be ${oldStatus} in order to make it ${status}`,
+      message: `order status must be ${oldStatus} in order to make it ${newStatus}`,
     });
   }
 
