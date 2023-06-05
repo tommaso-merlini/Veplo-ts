@@ -83,9 +83,9 @@ export const getOrderReceived = (order: Order) => {
                 </div>
 
                 <div style="float: right; text-align: end;">
-                    <p style="font-size: 10px; font-weight: 400;">${getStandardItalianPrice(order.totalDetails.subTotal)}&euro;</p>
+                    <p style="font-size: 10px; font-weight: 400;">${getStandardItalianPrice(order.totalDetails.subTotal)}€</p>
                     <p style="font-size: 10px; font-weight: 400;">
-                    ${order.totalDetails.amountShipping == 0 ? "gratis" : getStandardItalianPrice(order.totalDetails.amountShipping)}&euro;
+                    ${order.totalDetails.amountShipping == 0 ? "gratis" : getStandardItalianPrice(order.totalDetails.amountShipping) + "€"}
                     </p>
                 </div>
             </div>
@@ -100,7 +100,7 @@ export const getOrderReceived = (order: Order) => {
                 </div>
 
                 <div style="float: right;" style="text-align: end;">
-                    <p style="font-size: 10px; font-weight: 400;">${getStandardItalianPrice(order.totalDetails.total)}&euro;</p>
+                    <p style="font-size: 10px; font-weight: 400;">${getStandardItalianPrice(order.totalDetails.total)}€</p>
                 </div>
             </div>
         </td>
