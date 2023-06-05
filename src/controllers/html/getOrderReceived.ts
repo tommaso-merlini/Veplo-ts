@@ -45,7 +45,7 @@ export const getOrderReceived = (order: Order) => {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 </head>
-<body style="background-color: #F5FDFF; text-align: center; margin: 0 auto; padding: 20px; width: 400px; font-family: 'Work Sans', sans-serif; font-weight: 400">
+<body style="background-color: #F5FDFF; text-align: center; margin: 0 auto; padding: 20px; width: 600px; font-family: 'Work Sans', sans-serif; font-weight: 400">
     <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
     <tr>
         <td>
