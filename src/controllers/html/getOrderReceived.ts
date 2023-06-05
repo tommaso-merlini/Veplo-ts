@@ -62,7 +62,7 @@ export const getOrderReceived = (order: Order) => {
             <div style="width: 300px; height: 100%; background-color: #DFF9FF; border-radius: 15px; padding: 16px 32px; margin: 28px auto;">
                 <p style="font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;">Ciao ${order.recipient.name},</p>
                 <p style="font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;">Abbiamo ricevuto il tuo ordine! Ti informeremo non appena il pacco verrà spedito.</p>
-                <a href="https://www.veplo.it/" target="_blank"><button style="background-color: #37D1A9; border: none; padding: 8px 16px; border-radius: 5px; color: white; font-size: 12px; font-weight: 600; margin-top: 12px; cursor: pointer;">MONITORA ORDINE</button></a>
+                <a href="https://www.veplo.it/orders/${String(order.id)}" target="_blank"><button style="background-color: #37D1A9; border: none; padding: 8px 16px; border-radius: 5px; color: white; font-size: 12px; font-weight: 600; margin-top: 12px; cursor: pointer;">MONITORA ORDINE</button></a>
             </div>
         </td>
     </tr>
