@@ -14,7 +14,7 @@ export const orderItem = (item: ProductVariationsOrder) => {
                     </div>
                 </div>
                 <div style="float: right; margin-top: 60px;">
-                    <span class="text-responsive" style="font-size: 16px; font-weight: 400;">${getStandardItalianPrice(+item.price)}€</span>
+                    <span class="text-responsive" style="font-size: 16px; font-weight: 400;">${getStandardItalianPrice(item.price.v2)}€</span>
                 </div>
             </td>
         </tr>

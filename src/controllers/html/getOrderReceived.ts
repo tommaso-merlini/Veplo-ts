@@ -78,7 +78,7 @@ export const getOrderReceived = (order: Order) => {
         <tr>
             <td>
                 <div style="height: 100%; background-color: #DFF9FF; border-radius: 15px; padding: 16px 32px; margin: auto;">
-                    <p style="font-family: 'Work Sans', sans-serif; font-size: 18px; font-weight: 500;">Ciao {{recipientName}},</p>
+                    <p style="font-family: 'Work Sans', sans-serif; font-size: 18px; font-weight: 500;">Ciao ${order.recipient.name},</p>
                     <p style="font-family: 'Work Sans', sans-serif; font-size: 18px; font-weight: 500;">Abbiamo ricevuto il tuo ordine! Ti informeremo non appena il pacco verrà spedito.</p>
                     <a href="https://www.veplo.it/" target="_blank" style="cursor: pointer;"><button style="background-color: #37D1A9; border: none; padding: 12px 24px; border-radius: 5px; color: white; font-size: 16px; font-weight: 600; margin-top: 6px; margin-bottom:8px;">MONITORA ORDINE</button></a>
                 </div>
