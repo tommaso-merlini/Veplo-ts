@@ -3,20 +3,20 @@ import { getStandardItalianPrice } from "../getStandardItalianPrice.js";
 
 export const orderItem = (item: ProductVariationsOrder) => {
   return `
-  <tr>
-        <td>
-            <div style="height: 100%; float: left;">
-                <img style="width: 80px; height: 80px; border-radius: 5px; margin-right: 10px;" src="https://veplo-images.fra1.cdn.digitaloceanspaces.com/${item.photo}" alt="immagine non trovata" />
-                <div style="float: right;"> 
-                    <p style="text-align: left; font-size: 10px; margin: 3px; font-size: 10px; font-weight: 600;">${item.name} (${item.color})</p>
-                    <p style="text-align: left; font-size: 10px; margin: 3px; font-size: 8px; font-weight: 400;">${item.brand}</p>
-                    <p style="text-align: left; font-size: 10px; margin: 3px; font-size: 8px; font-weight: 400;">${item.size} / Quantità ${item.quantity}</p>
+        <tr>
+            <td>
+                <div style="height: 100%; float: left; margin-top: 5px; margin-bottom: 5px; display: flex; align-items: center;">
+                    <img class="image-responsive" style="width: 110px; height: 110px; border-radius: 5px; margin-right: 10px;" src="https://loremflickr.com/100/100" alt="immagine non trovata" />
+                    <div style="float: right;">
+                        <p class="text-responsive" style="text-align: left; font-size: 16px; margin: 3px;  font-weight: 600;">${item.name} (${item.color})</p>
+                        <p class="text-responsive" style="text-align: left; font-size: 14px; margin: 3px; font-weight: 400; color: #8F8F8F;">${item.brand}</p>
+                        <p class="text-responsive" style="text-align: left; font-size: 14px; margin: 3px; font-weight: 400;">${item.size} / Quantità ${item.quantity}</p>
+                    </div>
                 </div>
-            </div>
-            <div style="float: right;"">
-                <p style="font-size: 10px; font-weight: 400;">${getStandardItalianPrice(item.price.v2)}€</p>
-            </div>
-        </td>
-    </tr>
+                <div style="float: right; margin-top: 60px;">
+                    <span class="text-responsive" style="font-size: 16px; font-weight: 400;">${getStandardItalianPrice(+item.price)}€</span>
+                </div>
+            </td>
+        </tr>
   `;
 };
