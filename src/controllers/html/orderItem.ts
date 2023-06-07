@@ -13,7 +13,7 @@ export const orderItem = (item: ProductVariationsOrder) => {
                         <p class="text-responsive" style="text-align: left; font-size: 14px; margin: 3px; font-weight: 400;">${item.size} / Quantità ${item.quantity}</p>
                     </div>
                 </div>
-                <div style="float: right; margin-top: 60px;">
+                <div style="float: right">
                     <span class="text-responsive" style="font-size: 16px; font-weight: 400;">${item.price.v2 != null ? getStandardItalianPrice(item.price.v2) : getStandardItalianPrice(item.price.v1)}€</span>
                 </div>
             </td>
