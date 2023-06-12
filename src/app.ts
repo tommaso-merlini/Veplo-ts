@@ -71,6 +71,8 @@ if (process.env.NODE_ENV === "production") {
     process.env.STRIPE_WEBHOOK_CHECKOUT_SECRET_PROD || "";
 }
 
+app.options('*', cors());
+
 //========/REST API/========/
 app.get("/", (req, res: Response) => {
   res.send({ status: "ok", process_id: appId });
