@@ -432,7 +432,7 @@ const typeDefs = gql`
 
   input UserInput {
     name: String!
-    surname: String!
+    surname: String
     location: LocationInput
     gender: String
     dateOfBirth: String
